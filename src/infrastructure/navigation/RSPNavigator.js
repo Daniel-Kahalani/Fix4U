@@ -3,8 +3,7 @@ import { useDispatch } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme/colors';
-import { CalendarNavigator } from './RSP/CalendarNavigator';
-import { CalendarScreen } from '../../features/account/screens/RSP/CalendarScreen.js';
+import RSPCalendarNavigator from './RSPCalendarNavigator.js';
 import SettingsNavigator from './SettingsNavigator';
 import { loadPhoto } from '../../features/account/slices/userSlice';
 
@@ -34,7 +33,7 @@ export default function RSPNavigator() {
 
   return (
     <Tab.Navigator
-      initialRouteName='Settings'
+      initialRouteName='Calendar'
       screenOptions={createScreenOptions}
       tabBarOptions={{
         activeTintColor: colors.brand.primary,
@@ -42,8 +41,8 @@ export default function RSPNavigator() {
       }}
     >
       <Tab.Screen name='Settings' component={SettingsNavigator} />
-      {/* <Tab.Screen name="History" component={History} /> */}
-      {/* <Tab.Screen name='Calendar' component={CalendarScreen} /> */}
+      {/* <Tab.Screen name="History" component={History} /> */} 
+      {<Tab.Screen name='Calendar' component={RSPCalendarNavigator} />}
     </Tab.Navigator>
   );
 }
