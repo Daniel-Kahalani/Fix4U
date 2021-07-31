@@ -4,10 +4,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import AccountNavigator from './AccountNavigator';
 import AppNavigator from './AppNavigator';
 import { isLoggedIn } from '../../features/account/slices/userSlice';
+import {UserType} from "../constants.js"
+import RSPNavigator from "./RSPNavigator"
+import CustomerNavigator from "./CustomerNavigator"
 
 export default function Navigation() {
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, info } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(isLoggedIn());
@@ -16,7 +19,7 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       {isAuthenticated !== null &&
-        (isAuthenticated ? <AppNavigator /> : <AccountNavigator />)}
+        (isAuthenticated ? (info.userType == UserType.RSP ? <RSPNavigator /> : <CustomerNavigator />) : <AccountNavigator />)}
     </NavigationContainer>
   );
 }
