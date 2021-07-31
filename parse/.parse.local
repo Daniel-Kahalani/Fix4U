@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "Fix4U": {
+      "applicationId": "07Fb0bRf3rQO93M9iFPPpWqsweUOzK0qHCDtSr2I"
+    },
+    "_default": {
+      "link": "Fix4U"
+    }
+  }
+}
