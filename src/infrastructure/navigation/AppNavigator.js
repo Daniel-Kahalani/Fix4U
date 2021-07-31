@@ -1,25 +1,48 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../features/account/slices/userSlice';
-import { Text, View, Button } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import SettingsNavigator from './SettingsNavigator';
+import { loadPhoto } from '../../features/account/slices/userSlice';
+import { colors } from '../../infrastructure/theme/colors';
+
+const Tab = createBottomTabNavigator();
+
+const TAB_ICON = {
+  Restaurants: 'md-restaurant',
+  Map: 'md-map',
+  Checkout: 'md-cart',
+  Settings: 'md-settings',
+};
+
+const createScreenOptions = ({ route }) => {
+  const iconName = TAB_ICON[route.name];
+  return {
+    tabBarIcon: ({ size, color }) => (
+      <Ionicons name={iconName} size={size} color={color} />
+    ),
+  };
+};
 
 export default function AppNavigator() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadPhoto());
+  }, [dispatch]);
+
   return (
-    <View
-      // eslint-disable-next-line react-native/no-inline-styles
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+    <Tab.Navigator
+      screenOptions={createScreenOptions}
+      tabBarOptions={{
+        activeTintColor: colors.brand.primary,
+        inactiveTintColor: colors.brand.muted,
       }}
     >
-      <Text>Hello, world!</Text>
-      <Button
-        onPress={() => dispatch(logout())}
-        title='logout'
-        color='#841584'
-      />
-    </View>
+      {/* <Tab.Screen name='Restaurants' component={SettingsNavigator} />
+      <Tab.Screen name='Checkout' component={SettingsNavigator} />
+      <Tab.Screen name='Map' component={SettingsNavigator} /> */}
+      <Tab.Screen name='Settings' component={SettingsNavigator} />
+    </Tab.Navigator>
   );
 }

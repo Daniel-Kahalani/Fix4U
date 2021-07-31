@@ -38,7 +38,7 @@ export default function UserForm({ userType, handleRegister }) {
       hasPasswordErrors() ||
       hasRepeatedPasswordErrors() ||
       !phone ||
-      !address
+      (userType === UserType.CUSTOMER && !address)
     );
   };
 
