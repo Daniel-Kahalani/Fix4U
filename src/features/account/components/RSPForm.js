@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
 import { AuthInput, AuthButton } from '../components/AccountStyles';
+import { HelperText } from 'react-native-paper';
 import Spacer from '../../../components/utils/Spacer';
 
 export default function RSPForm({ goToPersonalInfoScreen }) {
   const [businessName, setBusinessName] = useState('');
   const [businessAddress, setBusinessAddress] = useState('');
   const [visitCost, setVisitCost] = useState('');
+  const [errorCheck, setErrorCheck] = useState(false);
+
+  const hasVisitCostErrors = () => {
+    const num = parseInt(visitCost, 10);
+    return isNaN(num) || num <= 0 ? true : false;
+  };
+
+  const hasInputErrors = () => {
+    return !businessName || !businessAddress || hasVisitCostErrors();
+  };
 
   const handleNext = () => {
-    goToPersonalInfoScreen({
-      businessName,
-      businessAddress,
-      visitCost,
-    });
+    setErrorCheck(true);
+    !hasInputErrors() &&
+      goToPersonalInfoScreen({
+        businessName,
+        businessAddress,
+        visitCost,
+      });
   };
 
   return (
@@ -26,6 +39,9 @@ export default function RSPForm({ goToPersonalInfoScreen }) {
           autoCapitalize='none'
           onChangeText={(u) => setBusinessName(u)}
         />
+        <HelperText type='error' visible={errorCheck && !businessName}>
+          Business name is invalid!
+        </HelperText>
       </Spacer>
       <Spacer size='large'>
         <AuthInput
@@ -36,6 +52,9 @@ export default function RSPForm({ goToPersonalInfoScreen }) {
           autoCapitalize='none'
           onChangeText={(u) => setBusinessAddress(u)}
         />
+        <HelperText type='error' visible={errorCheck && !businessAddress}>
+          Business address is invalid!
+        </HelperText>
       </Spacer>
       <Spacer size='large'>
         <AuthInput
@@ -46,6 +65,9 @@ export default function RSPForm({ goToPersonalInfoScreen }) {
           autoCapitalize='none'
           onChangeText={(u) => setVisitCost(u)}
         />
+        <HelperText type='error' visible={errorCheck && hasVisitCostErrors()}>
+          Visit Cost is invalid!(a positive integer Number)
+        </HelperText>
       </Spacer>
       <Spacer size='large'>
         <AuthButton mode='contained' onPress={handleNext}>

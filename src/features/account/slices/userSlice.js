@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { UserType } from '../../../infrastructure/constants';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import Parse from 'parse/react-native';
 const initialState = {
@@ -11,60 +10,37 @@ const initialState = {
 };
 
 export const isLoggedIn = createAsyncThunk('user/isLoggedIn', async () => {
-  const user = await Parse.User.currentAsync();
-  return { username: user.get('username'), email: user.get('email') };
+  const generalUser = await Parse.User.currentAsync();
+  return generalUser
+    ? await Parse.Cloud.run('getUserDataByGeneraUser', {
+        generalUser: JSON.stringify(generalUser),
+      })
+    : null;
 });
 
 export const login = createAsyncThunk(
   'user/login',
   async ({ email, password }) => {
-    const user = await Parse.User.logIn(email, password);
-    return { username: user.get('username'), email: user.get('email') };
+    try {
+      const generalUser = await Parse.User.logIn(email, password);
+
+      const userInfo = await Parse.Cloud.run('getUserDataByGeneraUser', {
+        generalUser: JSON.stringify(generalUser),
+      });
+      return userInfo;
+    } catch (e) {
+      if (e.code === 101) {
+        throw new Error('Invalid email/password.');
+      }
+      return e;
+    }
   }
 );
 
-export const register = createAsyncThunk('user/register', async (userInfo) => {
-  const { email, password, repeatedPassword, userType } = userInfo;
-  if (password !== repeatedPassword) {
-    throw Error('Error: Passwords do not match');
-  }
-  const user = await Parse.User.signUp(email, password, {
-    email: email,
-    role: userType,
-  });
-  userType === UserType.RSP
-    ? await registerRSP(userInfo)
-    : await registerCustomer(userInfo);
-  return { username: user.get('username'), email: user.get('email') };
+export const register = createAsyncThunk('user/register', async (userInput) => {
+  const userInfo = await Parse.Cloud.run('register', { ...userInput });
+  return userInfo;
 });
-
-async function registerRSP({
-  fullName,
-  phone,
-  email,
-  businessAddress,
-  businessName,
-  visitCost,
-  expertise,
-}) {
-  const RSP = new Parse.Object('RSP');
-  RSP.set({
-    email,
-    fullName,
-    phone: Number(phone),
-    businessAddress,
-    businessName,
-    visitCost: Number(visitCost),
-    expertise,
-  });
-  return await RSP.save();
-}
-
-async function registerCustomer({ fullName, address, phone, email }) {
-  const Customer = new Parse.Object('Customer');
-  Customer.set({ email, fullName, address, phone: Number(phone) });
-  return await Customer.save();
-}
 
 export const logout = createAsyncThunk('user/logout', async () => {
   return await Parse.User.logOut();
