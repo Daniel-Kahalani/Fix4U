@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme/colors';
 import { CalendarNavigator } from './RSP/CalendarNavigator';
-
+import { CalendarScreen } from "../../features/account/screens/RSP/CalendarScreen.js";
 
 const Tab = createBottomTabNavigator();
 
@@ -31,7 +31,7 @@ const History = () => <Text>History</Text>
 const Settings = () => <Text>Settings</Text>
 
 
-export default function AppNavigator() {
+export default function RSPNavigator() {
   const dispatch = useDispatch();
   
   return (
@@ -43,9 +43,9 @@ export default function AppNavigator() {
               inactiveTintColor: colors.brand.muted,
             }}
           >
-            <Tab.Screen name="Settings" component={Settings} />
-            <Tab.Screen name="History" component={History} />
-            <Tab.Screen name="Calendar" component={CalendarNavigator} />
+            {/* <Tab.Screen name="Settings" component={Settings} />
+            <Tab.Screen name="History" component={History} /> */}
+            <Tab.Screen name="Calendar" component={CalendarScreen} />
           </Tab.Navigator>
   );
 }
