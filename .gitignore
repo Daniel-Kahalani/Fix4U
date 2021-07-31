@@ -10,6 +10,8 @@ npm-debug.*
 *.orig.*
 web-build/
 logs/
+parse/.parse.project
+App.js
 
 # macOS
 .DS_Store
