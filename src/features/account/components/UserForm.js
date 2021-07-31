@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ActivityIndicator, Colors } from 'react-native-paper';
+import { ActivityIndicator, Colors, HelperText } from 'react-native-paper';
 import Spacer from '../../../components/utils/Spacer';
 import Text from '../../../components/utils/Text';
 import {
@@ -16,8 +16,45 @@ export default function UserForm({ userType, handleRegister }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
-  const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+
+  const [errorCheck, setErrorCheck] = useState(false);
+
+  const hasEmailErrors = () => {
+    return !email.includes('@');
+  };
+  const hasPasswordErrors = () => {
+    return password.length < 6;
+  };
+  const hasRepeatedPasswordErrors = () => {
+    return password !== repeatedPassword;
+  };
+
+  const hasInputErrors = () => {
+    return (
+      !fullName ||
+      hasEmailErrors() ||
+      hasPasswordErrors() ||
+      hasRepeatedPasswordErrors() ||
+      !phone ||
+      !address
+    );
+  };
+
+  const handleRegisterButtonClick = () => {
+    setErrorCheck(true);
+    !hasInputErrors() &&
+      handleRegister({
+        fullName,
+        email,
+        password,
+        repeatedPassword,
+        address,
+        phone,
+      });
+  };
+
   return (
     <>
       <AuthInput
@@ -28,6 +65,9 @@ export default function UserForm({ userType, handleRegister }) {
         autoCapitalize='none'
         onChangeText={(u) => setFullName(u)}
       />
+      <HelperText type='error' visible={errorCheck && !fullName}>
+        Full name is invalid!
+      </HelperText>
       <Spacer size='large'>
         <AuthInput
           label='E-mail'
@@ -37,6 +77,9 @@ export default function UserForm({ userType, handleRegister }) {
           autoCapitalize='none'
           onChangeText={(u) => setEmail(u)}
         />
+        <HelperText type='error' visible={errorCheck && hasEmailErrors()}>
+          Email address is invalid!
+        </HelperText>
       </Spacer>
       <Spacer size='large'>
         <AuthInput
@@ -47,6 +90,9 @@ export default function UserForm({ userType, handleRegister }) {
           autoCapitalize='none'
           onChangeText={(p) => setPassword(p)}
         />
+        <HelperText type='error' visible={errorCheck && hasPasswordErrors()}>
+          Password address is invalid!(at least 6 letters)
+        </HelperText>
       </Spacer>
       <Spacer size='large'>
         <AuthInput
@@ -57,6 +103,12 @@ export default function UserForm({ userType, handleRegister }) {
           autoCapitalize='none'
           onChangeText={(p) => setRepeatedPassword(p)}
         />
+        <HelperText
+          type='error'
+          visible={errorCheck && hasRepeatedPasswordErrors()}
+        >
+          Passwords do not match
+        </HelperText>
       </Spacer>
       <Spacer size='large'>
         <AuthInput
@@ -67,6 +119,9 @@ export default function UserForm({ userType, handleRegister }) {
           autoCapitalize='none'
           onChangeText={(u) => setPhone(u)}
         />
+        <HelperText type='error' visible={errorCheck && !phone}>
+          Phone number is invalid!
+        </HelperText>
       </Spacer>
       {userType === UserType.CUSTOMER && (
         <Spacer size='large'>
@@ -78,6 +133,9 @@ export default function UserForm({ userType, handleRegister }) {
             autoCapitalize='none'
             onChangeText={(u) => setAddress(u)}
           />
+          <HelperText type='error' visible={errorCheck && !address}>
+            Home address is invalid!
+          </HelperText>
         </Spacer>
       )}
       {error && (
@@ -90,16 +148,7 @@ export default function UserForm({ userType, handleRegister }) {
           <AuthButton
             icon='email'
             mode='contained'
-            onPress={() =>
-              handleRegister({
-                fullName,
-                email,
-                password,
-                repeatedPassword,
-                address,
-                phone,
-              })
-            }
+            onPress={handleRegisterButtonClick}
           >
             Register
           </AuthButton>
