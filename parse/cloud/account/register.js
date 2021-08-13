@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+const { createFullUserData } = require('../utils/createFullUserData.js');
+const { UserType } = require('../utils/constants.js');
 
 Parse.Cloud.define('register', async (request) => {
   const { email, password, userType } = request.params;
@@ -8,11 +10,11 @@ Parse.Cloud.define('register', async (request) => {
   });
   try {
     const specificUser =
-      userType === 'rsp'
+      userType === UserType.RSP
         ? await registerRSP(request.params)
         : await registerCustomer(request.params);
 
-    return createFullUserData(generalUser, specificUser, request.params);
+    return createFullUserData(generalUser, specificUser);
   } catch (e) {
     await generalUser.destroy({ useMasterKey: true });
     throw e;
@@ -45,13 +47,4 @@ async function registerCustomer({ fullName, address, phone, email }) {
   const Customer = new Parse.Object('Customer');
   Customer.set({ email, fullName, address, phone });
   return await Customer.save();
-}
-
-function createFullUserData(generalUser, specificUser, params) {
-  return {
-    generalUserId: generalUser.id,
-    specificUserId: specificUser.id,
-    username: params.email,
-    ...params,
-  };
 }

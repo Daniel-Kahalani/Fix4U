@@ -1,0 +1,2 @@
+require('./updatePersonalInfo');
+require('./updateBusinessInfo');

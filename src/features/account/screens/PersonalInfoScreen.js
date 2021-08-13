@@ -1,17 +1,11 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../slices/userSlice';
-import UserForm from '../components/UserForm';
-import {
-  AccountCover,
-  AccountContainer,
-  Title,
-} from '../components/AccountStyles';
-import {
-  SafeScrollView,
-  ScrollBackground,
-  PresonalInfoContainer,
-} from '../components/RegisterStyles';
+import { ScrollView } from 'react-native';
+import PersonalInfoForm from '../components/PersonalInfoForm';
+import Spacer from '../../../components/utils/Spacer';
+import { AccountCover, FormContainer, Title } from '../styles/accountStyles';
+import { ScrollBackground, RegisterContainer } from '../styles/registerStyles';
 
 export default function PersonalInfoScreen({ route }) {
   const dispatch = useDispatch();
@@ -23,17 +17,18 @@ export default function PersonalInfoScreen({ route }) {
   return (
     <ScrollBackground>
       <AccountCover />
-      <SafeScrollView>
-        <PresonalInfoContainer>
+      <ScrollView>
+        <RegisterContainer>
           <Title>Personal Information</Title>
-          <AccountContainer>
-            <UserForm
+          <Spacer size='large' />
+          <FormContainer>
+            <PersonalInfoForm
               userType={route.params.userType}
               handleRegister={registerNewUser}
             />
-          </AccountContainer>
-        </PresonalInfoContainer>
-      </SafeScrollView>
+          </FormContainer>
+        </RegisterContainer>
+      </ScrollView>
     </ScrollBackground>
   );
 }

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { expertiseArr } from '../../../infrastructure/constants';
-import Spacer from '../../../components/utils/Spacer';
-import { AccountCover, AuthButton } from '../components/AccountStyles';
 import { HelperText } from 'react-native-paper';
+import Spacer from '../../../components/utils/Spacer';
+import MultiSelect from '../../../components/utils/MultiSelect';
 
+import { AccountCover, AuthButton } from '../styles/accountStyles';
 import {
   ExpertiseContainer,
   ScrollBackground,
   GrowConainer,
-  RegisterMultiSelect,
-} from '../components/RegisterStyles';
+} from '../styles/registerStyles';
 
 export default function ExpertiseScreen({ navigation, route }) {
   const [expertise, setExpertise] = useState([]);
@@ -32,7 +32,7 @@ export default function ExpertiseScreen({ navigation, route }) {
     <ScrollBackground>
       <AccountCover />
       <ExpertiseContainer>
-        <RegisterMultiSelect
+        <MultiSelect
           items={expertiseArr}
           uniqueKey='name'
           onSelectedItemsChange={(selectedItems) => setExpertise(selectedItems)}

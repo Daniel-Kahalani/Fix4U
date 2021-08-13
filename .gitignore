@@ -16,3 +16,6 @@ App.js
 # macOS
 .DS_Store
 App.js
+parse/.parse.project
+.gitignore
+notes

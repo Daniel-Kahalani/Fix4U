@@ -19,11 +19,31 @@ export default function AccountNavigator() {
       }}
     >
       <Stack.Screen name='Main' component={WelcomeScreen} />
-      <Stack.Screen name='Login' component={LoginScreen} />
-      <Stack.Screen name='UserType' component={UserTypeScreen} />
-      <Stack.Screen name='BusinessInfo' component={BusinessInfoScreen} />
-      <Stack.Screen name='Expertise' component={ExpertiseScreen} />
-      <Stack.Screen name='PersonalInfo' component={PersonalInfoScreen} />
+      <Stack.Screen
+        name='Login'
+        component={LoginScreen}
+        options={{ title: 'Login' }}
+      />
+      <Stack.Screen
+        name='UserType'
+        component={UserTypeScreen}
+        options={{ title: 'Register' }}
+      />
+      <Stack.Screen
+        name='BusinessInfo'
+        component={BusinessInfoScreen}
+        options={{ title: 'Register' }}
+      />
+      <Stack.Screen
+        name='Expertise'
+        component={ExpertiseScreen}
+        options={{ title: 'Register' }}
+      />
+      <Stack.Screen
+        name='PersonalInfo'
+        component={PersonalInfoScreen}
+        options={{ title: 'Register' }}
+      />
     </Stack.Navigator>
   );
 }

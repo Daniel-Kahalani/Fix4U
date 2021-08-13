@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import AccountNavigator from './AccountNavigator';
-import AppNavigator from './AppNavigator';
 import { isLoggedIn } from '../../features/account/slices/userSlice';
 import { UserType } from '../constants.js';
 import RSPNavigator from './RSPNavigator';

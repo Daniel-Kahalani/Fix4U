@@ -1,31 +1,28 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { UserType } from '../../../infrastructure/constants';
 import { ActivityIndicator, Colors, HelperText } from 'react-native-paper';
 import Spacer from '../../../components/utils/Spacer';
 import Text from '../../../components/utils/Text';
-import {
-  AuthInput,
-  ErrorContainer,
-  AuthButton,
-} from '../components/AccountStyles';
-import { UserType } from '../../../infrastructure/constants';
+import { AuthInput, ErrorContainer, AuthButton } from '../styles/settingStyles';
 
-export default function UserForm({ userType, handleRegister }) {
-  const { error, loading } = useSelector((state) => state.user);
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
+export default function EditPersonalProfileForm({ handleUpdate }) {
+  const { info, error, loading } = useSelector((state) => state.user);
+  const [fullName, setFullName] = useState(info.fullName);
+  const [email, setEmail] = useState(info.email);
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState(info.phone);
+  const [address, setAddress] = useState(info.address);
 
   const [errorCheck, setErrorCheck] = useState(false);
+  const isCustomer = info.userType === UserType.CUSTOMER ? true : false;
 
   const hasEmailErrors = () => {
     return !email.includes('@');
   };
   const hasPasswordErrors = () => {
-    return password.length < 6;
+    return password.length > 0 && password.length < 6;
   };
   const hasRepeatedPasswordErrors = () => {
     return password !== repeatedPassword;
@@ -38,18 +35,17 @@ export default function UserForm({ userType, handleRegister }) {
       hasPasswordErrors() ||
       hasRepeatedPasswordErrors() ||
       !phone ||
-      (userType === UserType.CUSTOMER && !address)
+      (isCustomer && !address)
     );
   };
 
-  const handleRegisterButtonClick = () => {
+  const handleUpdateButtonClick = () => {
     setErrorCheck(true);
     !hasInputErrors() &&
-      handleRegister({
+      handleUpdate({
         fullName,
         email,
         password,
-        repeatedPassword,
         address,
         phone,
       });
@@ -91,7 +87,7 @@ export default function UserForm({ userType, handleRegister }) {
           onChangeText={(p) => setPassword(p)}
         />
         <HelperText type='error' visible={errorCheck && hasPasswordErrors()}>
-          Password address is invalid!(at least 6 letters)
+          Password is invalid!(at least 6 letters)
         </HelperText>
       </Spacer>
       <Spacer size='large'>
@@ -123,7 +119,7 @@ export default function UserForm({ userType, handleRegister }) {
           Phone number is invalid!
         </HelperText>
       </Spacer>
-      {userType === UserType.CUSTOMER && (
+      {isCustomer && (
         <Spacer size='large'>
           <AuthInput
             label='Home Address'
@@ -148,9 +144,9 @@ export default function UserForm({ userType, handleRegister }) {
           <AuthButton
             icon='email'
             mode='contained'
-            onPress={handleRegisterButtonClick}
+            onPress={handleUpdateButtonClick}
           >
-            Register
+            Update
           </AuthButton>
         ) : (
           <ActivityIndicator animating={true} color={Colors.blue300} />

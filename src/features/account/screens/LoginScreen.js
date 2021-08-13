@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, clearError } from '../slices/userSlice';
+import LottieView from 'lottie-react-native';
 import { ActivityIndicator, Colors } from 'react-native-paper';
+import Text from '../../../components/utils/Text';
+import Spacer from '../../../components/utils/Spacer';
 import {
   AccountBackground,
   AccountCover,
-  AccountContainer,
-  AuthButton,
+  FormContainer,
   AuthInput,
   ErrorContainer,
-} from '../components/AccountStyles.js';
-import Text from '../../../components/utils/Text';
-import Spacer from '../../../components/utils/Spacer';
+  AuthButton,
+} from '../styles/accountStyles.js';
+import { AnimationWrapper } from '../styles/loginStyles';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -28,7 +30,15 @@ export default function LoginScreen({ navigation }) {
   return (
     <AccountBackground>
       <AccountCover />
-      <AccountContainer>
+      <AnimationWrapper>
+        <LottieView
+          key='animation'
+          autoPlay
+          loop
+          source={require('../../../../assets/animations/login.json')}
+        />
+      </AnimationWrapper>
+      <FormContainer>
         <AuthInput
           label='E-mail'
           value={email}
@@ -65,7 +75,7 @@ export default function LoginScreen({ navigation }) {
             <ActivityIndicator animating={true} color={Colors.blue300} />
           )}
         </Spacer>
-      </AccountContainer>
+      </FormContainer>
     </AccountBackground>
   );
 }
