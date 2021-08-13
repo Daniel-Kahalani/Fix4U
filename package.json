@@ -38,6 +38,7 @@
     "react-native-gesture-handler": "~1.10.2",
     "react-native-lite-credit-card-input": "^1.0.10",
     "react-native-maps": "0.27.1",
+    "react-native-modal": "^12.0.3",
     "react-native-multiple-select": "^0.5.6",
     "react-native-paper": "^4.8.1",
     "react-native-reanimated": "~2.1.0",
