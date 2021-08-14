@@ -1,10 +1,11 @@
 /* eslint-disable no-undef */
+const { UserType } = require('../utils/constants.js');
 
 Parse.Cloud.define('getUserDataByGeneraUser', async (request) => {
   let { generalUser } = request.params;
   generalUser = JSON.parse(generalUser);
   let query = new Parse.Query(
-    generalUser.userType === 'rsp' ? 'RSP' : 'Customer'
+    generalUser.userType === UserType.RSP ? 'RSP' : 'Customer'
   );
   query.equalTo('email', generalUser.email);
   const {

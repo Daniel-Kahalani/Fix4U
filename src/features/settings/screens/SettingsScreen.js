@@ -1,89 +1,90 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TouchableOpacity } from 'react-native';
 import { logout } from '../../account/slices/userSlice';
+import { UserType } from '../../../infrastructure/constants';
 import { colors } from '../../../infrastructure/theme/colors';
+import { TouchableOpacity, ScrollView } from 'react-native';
 import { List, Avatar } from 'react-native-paper';
-import Text from '../../../components/utils/Text';
 import Spacer from '../../../components/utils/Spacer';
 import {
-  SettingsItem,
+  ScrollBackground,
+  SettingCover,
   AvatarContainer,
-  TransparentSafeArea,
-  SettingsBackground,
-} from '../components/settingStyles';
+  SettingsItem,
+  Title,
+} from '../styles/settingStyles';
 
 export default function SettingsScreen({ navigation }) {
   const dispatch = useDispatch();
   const { info, photo } = useSelector((state) => state.user);
+  const isRsp = info.userType === UserType.RSP ? true : false;
 
   const handleLogout = async () => {
     await dispatch(logout());
   };
 
   return (
-    <SettingsBackground>
-      <TransparentSafeArea>
+    <ScrollBackground>
+      <SettingCover />
+      <ScrollView>
         <AvatarContainer>
-          <TouchableOpacity onPress={() => navigation.navigate('Camera')}>
-            {photo ? (
-              <Avatar.Image
-                size={180}
-                source={{ uri: photo }}
-                backgroundColor='#2182BD'
-              />
-            ) : (
-              <Avatar.Icon
-                size={180}
-                icon='human'
-                backgroundColor={colors.brand.primary}
-              />
-            )}
-          </TouchableOpacity>
-          <Spacer position='top' size='large'>
-            <Text variant='label'>{info ? info.email : ''}</Text>
+          <Spacer size='large'>
+            <TouchableOpacity onPress={() => navigation.navigate('Camera')}>
+              {photo ? (
+                <Avatar.Image
+                  size={180}
+                  source={{ uri: photo }}
+                  backgroundColor='#2182BD'
+                />
+              ) : (
+                <Avatar.Icon
+                  size={180}
+                  icon='human'
+                  backgroundColor={colors.brand.primary}
+                />
+              )}
+            </TouchableOpacity>
           </Spacer>
+          <Title>{info.fullName}</Title>
         </AvatarContainer>
-
         <List.Section>
           <SettingsItem
-            title='Favorites'
-            description='View your favorites'
-            left={(props) => (
-              <List.Icon {...props} color={colors.ui.error} icon='heart' />
-            )}
-            onPress={() => navigation.navigate('Favorites')}
-          />
-          <Spacer />
-          <SettingsItem
-            title='Payment'
-            left={(props) => (
-              <List.Icon {...props} color={colors.ui.secondary} icon='cart' />
-            )}
-            onPress={() => null}
-          />
-          <Spacer />
-          <SettingsItem
-            title='Past Orders'
+            title='Edit Profile'
+            description='Edit your personal information'
             left={(props) => (
               <List.Icon
                 {...props}
-                color={colors.ui.secondary}
-                icon='history'
+                color={colors.ui.primary}
+                icon='account-edit'
               />
             )}
-            onPress={() => null}
+            onPress={() => navigation.navigate('EditPersonalProfile')}
           />
+          <Spacer />
+          {isRsp && (
+            <SettingsItem
+              title='Edit Business Profile'
+              description='Edit your business information'
+              left={(props) => (
+                <List.Icon
+                  {...props}
+                  color={colors.ui.primary}
+                  icon='briefcase-edit'
+                />
+              )}
+              onPress={() => navigation.navigate('EditBusinessInfo')}
+            />
+          )}
           <Spacer />
           <SettingsItem
             title='Logout'
             left={(props) => (
-              <List.Icon {...props} color={colors.ui.secondary} icon='door' />
+              <List.Icon {...props} color={colors.ui.primary} icon='logout' />
             )}
             onPress={handleLogout}
           />
         </List.Section>
-      </TransparentSafeArea>
-    </SettingsBackground>
+      </ScrollView>
+    </ScrollBackground>
   );
 }

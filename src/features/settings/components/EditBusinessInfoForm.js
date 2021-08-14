@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { AuthInput, AuthButton } from '../components/AccountStyles';
+import { useSelector } from 'react-redux';
 import { HelperText } from 'react-native-paper';
 import Spacer from '../../../components/utils/Spacer';
+import { AuthInput, AuthButton } from '../styles/settingStyles';
 
-export default function RSPForm({ goToPersonalInfoScreen }) {
-  const [businessName, setBusinessName] = useState('');
-  const [businessAddress, setBusinessAddress] = useState('');
-  const [visitCost, setVisitCost] = useState('');
+export default function EditBusinessInfoForm({ goToNextScreen }) {
+  const { info } = useSelector((state) => state.user);
+  const [businessName, setBusinessName] = useState(info.businessName);
+  const [businessAddress, setBusinessAddress] = useState(info.businessAddress);
+  const [visitCost, setVisitCost] = useState(info.visitCost.toString());
   const [errorCheck, setErrorCheck] = useState(false);
 
   const hasVisitCostErrors = () => {
@@ -21,7 +23,7 @@ export default function RSPForm({ goToPersonalInfoScreen }) {
   const handleNext = () => {
     setErrorCheck(true);
     !hasInputErrors() &&
-      goToPersonalInfoScreen({
+      goToNextScreen({
         businessName,
         businessAddress,
         visitCost,

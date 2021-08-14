@@ -22,8 +22,7 @@ export const login = createAsyncThunk(
   'user/login',
   async ({ email, password }) => {
     try {
-      const generalUser = await Parse.User.logIn(email, password);
-
+      const generalUser = await Parse.User.logIn(email.toLowerCase(), password);
       const userInfo = await Parse.Cloud.run('getUserDataByGeneraUser', {
         generalUser: JSON.stringify(generalUser),
       });
@@ -64,6 +63,32 @@ export const loadPhoto = createAsyncThunk(
   }
 );
 
+export const updatePersonalInfo = createAsyncThunk(
+  'user/updatePersonalInfo',
+  async (userInput, { getState }) => {
+    const { user } = getState();
+    const userInfo = await Parse.Cloud.run('updatePersonalInfo', {
+      ...userInput,
+      specificUserId: user.info.specificUserId,
+      generalUserId: user.info.generalUserId,
+    });
+    return userInfo;
+  }
+);
+
+export const updateBusinessInfo = createAsyncThunk(
+  'user/updateBusinessInfo',
+  async (userInput, { getState }) => {
+    const { user } = getState();
+    const userInfo = await Parse.Cloud.run('updateBusinessInfo', {
+      ...userInput,
+      specificUserId: user.info.specificUserId,
+      generalUserId: user.info.generalUserId,
+    });
+    return userInfo;
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -92,6 +117,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.info = action.payload;
       state.isAuthenticated = true;
+      state.error = null;
     },
     [login.rejected]: (state, action) => {
       state.loading = false;
@@ -106,6 +132,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.info = action.payload;
       state.isAuthenticated = true;
+      state.error = null;
     },
     [register.rejected]: (state, action) => {
       state.loading = false;
@@ -125,9 +152,65 @@ const userSlice = createSlice({
     [loadPhoto.fulfilled]: (state, action) => {
       state.photo = action.payload;
     },
+    [updatePersonalInfo.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [updatePersonalInfo.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.info = action.payload;
+      state.error = null;
+    },
+    [updatePersonalInfo.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [updateBusinessInfo.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [updateBusinessInfo.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.info = action.payload;
+      state.error = null;
+    },
+    [updateBusinessInfo.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
   },
 });
 
 export const { clearError } = userSlice.actions;
 
 export default userSlice.reducer;
+
+/*
+info structure
+
+--------customer-------------
+Object {
+  "address": String,
+  "email": String,
+  "fullName": String,
+  "generalUserId": String,
+  "phone": String,
+  "specificUserId": String,
+  "userType": String,
+  "username": String,
+}
+
+-----------rsp-------------
+Object {
+  "businessAddress": String,
+  "businessName": String,
+  "email": String,
+  "expertise": Array [],
+  "fullName": String,
+  "generalUserId": String,
+  "phone": String,
+  "specificUserId": String,
+  "userType": String,
+  "username": String,
+  "visitCost": Number,
+}
+
+*/
