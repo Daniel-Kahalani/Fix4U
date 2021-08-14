@@ -10,7 +10,7 @@ Parse.Cloud.define('updatePersonalInfo', async (request) => {
   const isUserRSP = user.get('userType') === UserType.RSP ? true : false;
 
   const specificUser = await updateSpedificUser(request.params, isUserRSP);
-  user.set({ email, username: email });
+  user.set({ email: email.toLowerCase(), username: email.toLowerCase() });
   if (password) {
     user.set({ password });
   }
@@ -24,9 +24,13 @@ async function updateSpedificUser(
 ) {
   let query = isUserRSP ? new Parse.Query('RSP') : new Parse.Query('Customer');
   const specificUser = await query.get(specificUserId);
-  specificUser.set({ fullName, phone, email });
+  specificUser.set({
+    fullName: fullName.toLowerCase(),
+    phone,
+    email: email.toLowerCase(),
+  });
   if (!isUserRSP) {
-    specificUser.set({ address });
+    specificUser.set({ address: address.toLowerCase() });
   }
   await specificUser.save();
   return specificUser;

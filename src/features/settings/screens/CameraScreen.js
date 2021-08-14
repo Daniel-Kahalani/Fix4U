@@ -10,9 +10,11 @@ export default function CameraScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const cameraRef = useRef();
   const dispatch = useDispatch();
+  let isTaken = false;
 
   const snap = async () => {
-    if (cameraRef) {
+    if (cameraRef && !isTaken) {
+      isTaken = true;
       const photo = await cameraRef.current.takePictureAsync();
       dispatch(savePhoto(photo));
       navigation.goBack();

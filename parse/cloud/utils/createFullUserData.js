@@ -12,6 +12,7 @@ module.exports.createFullUserData = (generalUser, specificUser) => {
     updatedAt: generalUpdatedAt,
     sessionToken,
     ACL,
+    password,
     ...generalUserData
   } = generalUser.toJSON();
 

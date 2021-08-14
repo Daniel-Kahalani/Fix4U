@@ -11,31 +11,21 @@ const initialState = {
 
 export const isLoggedIn = createAsyncThunk('user/isLoggedIn', async () => {
   const generalUser = await Parse.User.currentAsync();
-  // return generalUser
-  //   ? await Parse.Cloud.run('getUserDataByGeneraUser', {
-  //       generalUser: JSON.stringify(generalUser),
-  //     })
-  //   : null;
-
-  const data = generalUser
+  return generalUser
     ? await Parse.Cloud.run('getUserDataByGeneraUser', {
         generalUser: JSON.stringify(generalUser),
       })
     : null;
-  console.log('isloggedIn', data);
-  return data;
 });
 
 export const login = createAsyncThunk(
   'user/login',
   async ({ email, password }) => {
     try {
-      const generalUser = await Parse.User.logIn(email, password);
+      const generalUser = await Parse.User.logIn(email.toLowerCase(), password);
       const userInfo = await Parse.Cloud.run('getUserDataByGeneraUser', {
         generalUser: JSON.stringify(generalUser),
       });
-      console.log('login:', userInfo);
-
       return userInfo;
     } catch (e) {
       if (e.code === 101) {
@@ -48,7 +38,6 @@ export const login = createAsyncThunk(
 
 export const register = createAsyncThunk('user/register', async (userInput) => {
   const userInfo = await Parse.Cloud.run('register', { ...userInput });
-  console.log('register', userInfo);
   return userInfo;
 });
 
@@ -83,7 +72,6 @@ export const updatePersonalInfo = createAsyncThunk(
       specificUserId: user.info.specificUserId,
       generalUserId: user.info.generalUserId,
     });
-    console.log('updatePersonalInfo', userInfo);
     return userInfo;
   }
 );
@@ -97,7 +85,6 @@ export const updateBusinessInfo = createAsyncThunk(
       specificUserId: user.info.specificUserId,
       generalUserId: user.info.generalUserId,
     });
-    console.log('updateBusinessInfo', userInfo);
     return userInfo;
   }
 );

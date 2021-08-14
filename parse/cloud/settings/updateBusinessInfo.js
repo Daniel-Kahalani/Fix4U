@@ -15,8 +15,8 @@ Parse.Cloud.define('updateBusinessInfo', async (request) => {
   let query = new Parse.Query('RSP');
   const specificUser = await query.get(specificUserId);
   specificUser.set({
-    businessName,
-    businessAddress,
+    businessName: businessName.toLowerCase(),
+    businessAddress: businessAddress.toLowerCase(),
     visitCost: Number(visitCost),
     expertise,
   });

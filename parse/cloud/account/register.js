@@ -4,8 +4,8 @@ const { UserType } = require('../utils/constants.js');
 
 Parse.Cloud.define('register', async (request) => {
   const { email, password, userType } = request.params;
-  const generalUser = await Parse.User.signUp(email, password, {
-    email,
+  const generalUser = await Parse.User.signUp(email.toLowerCase(), password, {
+    email: email.toLowerCase(),
     userType,
   });
   try {
@@ -32,11 +32,11 @@ async function registerRSP({
 }) {
   const RSP = new Parse.Object('RSP');
   RSP.set({
-    email,
-    fullName,
+    email: email.toLowerCase(),
+    fullName: fullName.toLowerCase(),
     phone,
-    businessAddress,
-    businessName,
+    businessAddress: businessAddress.toLowerCase(),
+    businessName: businessName.toLowerCase(),
     visitCost: Number(visitCost),
     expertise,
   });
@@ -45,6 +45,11 @@ async function registerRSP({
 
 async function registerCustomer({ fullName, address, phone, email }) {
   const Customer = new Parse.Object('Customer');
-  Customer.set({ email, fullName, address, phone });
+  Customer.set({
+    email: email.toLowerCase(),
+    fullName: fullName.toLowerCase(),
+    address: address.toLowerCase(),
+    phone,
+  });
   return await Customer.save();
 }

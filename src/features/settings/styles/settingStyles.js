@@ -28,6 +28,7 @@ export const SettingsItem = styled(List.Item)`
 export const Title = styled(Text)`
   font-size: 35px;
   font-weight: 700;
+  text-transform: capitalize;
 `;
 
 export const AuthButton = styled(Button).attrs({
