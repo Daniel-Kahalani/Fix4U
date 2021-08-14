@@ -1,5 +1,5 @@
-import styled from "styled-components/native";
-import { Card } from "react-native-paper";
+import styled from 'styled-components/native';
+import { Card } from 'react-native-paper';
 
 export const AppointmentCardContainer = styled.View`
   flex-direction: row-reverse;
@@ -30,7 +30,7 @@ export const AppointmentInfoCard = styled(Card)`
   flex-direction: row-reverse;
   background-color: ${(props) => props.theme.colors.ui.quaternary};
   width: 70%;
-  margin-right: 10%; 
+  margin-right: 10%;
 `;
 
 export const AppointmentInfoCardCover = styled(Card.Cover)`
@@ -55,7 +55,6 @@ export const ClientName = styled.Text`
 `;
 
 export const Description = styled.View`
-    font-family: ${(props) => props.theme.fonts.body};
-    font-size: ${(props) => props.theme.fontSizes.caption};
+  font-family: ${(props) => props.theme.fonts.body};
+  font-size: ${(props) => props.theme.fontSizes.caption};
 `;
-

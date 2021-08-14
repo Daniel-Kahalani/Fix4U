@@ -1,11 +1,10 @@
-import styled from "styled-components/native";
-
+import styled from 'styled-components/native';
 
 export const ModalContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   width: 100%;
   height: 100%;
   position: absolute;
@@ -20,7 +19,7 @@ export const ModalBody = styled.View`
 
 export const ModalTitle = styled.Text`
   font-weight: bold;
-  font-size: 20px; 
+  font-size: 20px;
   padding: 5px;
   color: #000;
 `;
@@ -48,5 +47,5 @@ export const YesButton = styled.TouchableOpacity`
 `;
 
 export const ButtonText = styled.Text`
-    color: #fff;
+  color: #fff;
 `;

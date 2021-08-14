@@ -1,10 +1,11 @@
-import styled, { StyledComponent } from "styled-components";
+import styled from 'styled-components';
 
 export const EmptyDateContainer = styled.View`
-    margin: 5%;
-    border-top-width: 2px;
-    borderTopColor: #dddddd;
-    padding: 15px;
+  align-items: center;
+  margin: 5%;
+  border-top-width: 2px;
+  border-top-color: #dddddd;
+  padding: 15px;
 `;
 
 export const Title = styled.Text`

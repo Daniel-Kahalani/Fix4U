@@ -12,6 +12,7 @@ web-build/
 logs/
 parse/.parse.project
 App.js
+.vscode/
 
 # macOS
 .DS_Store
