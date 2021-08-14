@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const RSPCalendar = styled.View`
-    justify-content: center; 
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 `;
