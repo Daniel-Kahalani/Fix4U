@@ -41,7 +41,7 @@ export default function RSPNavigator() {
       }}
     >
       <Tab.Screen name='Settings' component={SettingsNavigator} />
-      {/* <Tab.Screen name="History" component={History} /> */} 
+      {/* <Tab.Screen name="History" component={History} /> */}
       {<Tab.Screen name='Calendar' component={RSPCalendarNavigator} />}
     </Tab.Navigator>
   );
