@@ -5,13 +5,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme/colors';
 import RSPCalendarNavigator from './RSPCalendarNavigator.js';
 import SettingsNavigator from './SettingsNavigator';
+import HistoryNavigator from './HistoryNavigator';
 import { loadPhoto } from '../../features/account/slices/userSlice';
 
 const Tab = createBottomTabNavigator();
 
 const TAB_ICON = {
   Calendar: 'calendar-outline',
-  History: 'construct-sharp',
+  History: 'stats-chart',
   Settings: 'settings-outline',
 };
 
@@ -41,7 +42,7 @@ export default function RSPNavigator() {
       }}
     >
       <Tab.Screen name='Settings' component={SettingsNavigator} />
-      {/* <Tab.Screen name="History" component={History} /> */}
+      <Tab.Screen name='History' component={HistoryNavigator} />
       {<Tab.Screen name='Calendar' component={RSPCalendarNavigator} />}
     </Tab.Navigator>
   );

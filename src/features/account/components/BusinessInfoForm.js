@@ -20,12 +20,13 @@ export default function BusinessInfoForm({ goToPersonalInfoScreen }) {
 
   const handleNext = () => {
     setErrorCheck(true);
-    !hasInputErrors() &&
+    if (!hasInputErrors()) {
       goToPersonalInfoScreen({
         businessName,
         businessAddress,
         visitCost,
       });
+    }
   };
 
   return (

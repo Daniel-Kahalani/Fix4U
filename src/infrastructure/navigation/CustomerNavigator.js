@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme/colors';
 import { loadPhoto } from '../../features/account/slices/userSlice';
 import SettingsNavigator from './SettingsNavigator';
+import HistoryNavigator from './HistoryNavigator';
 import SearchNavigator from './SearchNavigator';
 
 const Tab = createBottomTabNavigator();
@@ -12,7 +13,7 @@ const Tab = createBottomTabNavigator();
 const TAB_ICON = {
   Search: 'md-search-outline',
   History: 'construct-sharp',
-  Settings: 'settings-outline',
+  Settings: 'stats-chart',
 };
 
 const createScreenOptions = ({ route }) => {
@@ -41,6 +42,7 @@ export default function CustomerNavigator() {
       }}
     >
       <Tab.Screen name='Settings' component={SettingsNavigator} />
+      <Tab.Screen name='History' component={HistoryNavigator} />
       <Tab.Screen name='Search' component={SearchNavigator} />
     </Tab.Navigator>
   );
