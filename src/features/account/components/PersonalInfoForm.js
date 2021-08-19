@@ -40,7 +40,7 @@ export default function PersonalInfoForm({ userType, handleRegister }) {
 
   const handleRegisterButtonClick = () => {
     setErrorCheck(true);
-    !hasInputErrors() &&
+    if (!hasInputErrors()) {
       handleRegister({
         fullName,
         email,
@@ -49,6 +49,7 @@ export default function PersonalInfoForm({ userType, handleRegister }) {
         address,
         phone,
       });
+    }
   };
 
   return (

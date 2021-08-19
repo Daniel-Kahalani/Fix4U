@@ -21,11 +21,12 @@ export default function ExpertiseScreen({ navigation, route }) {
 
   const handleNext = () => {
     setErrorCheck(true);
-    !hasInputErrors() &&
+    if (!hasInputErrors()) {
       navigation.navigate('PersonalInfo', {
         expertise,
         ...route.params,
       });
+    }
   };
 
   return (

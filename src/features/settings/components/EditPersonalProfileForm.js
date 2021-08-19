@@ -41,7 +41,7 @@ export default function EditPersonalProfileForm({ handleUpdate }) {
 
   const handleUpdateButtonClick = () => {
     setErrorCheck(true);
-    !hasInputErrors() &&
+    if (!hasInputErrors()) {
       handleUpdate({
         fullName,
         email,
@@ -49,6 +49,7 @@ export default function EditPersonalProfileForm({ handleUpdate }) {
         address,
         phone,
       });
+    }
   };
 
   return (
