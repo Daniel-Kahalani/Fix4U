@@ -2,3 +2,4 @@
 
 const Account = require('./account/index.js');
 const Settings = require('./settings/index.js');
+const SearchRsp = require('./sreachRSP/index.js');
