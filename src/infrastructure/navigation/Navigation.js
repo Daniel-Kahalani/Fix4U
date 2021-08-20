@@ -6,6 +6,7 @@ import { isLoggedIn } from '../../features/account/slices/userSlice';
 import { UserType } from '../constants.js';
 import RSPNavigator from './RSPNavigator';
 import CustomerNavigator from './CustomerNavigator';
+import '../../../assets/backgrounds/home.jpg';
 
 export default function Navigation() {
   const dispatch = useDispatch();

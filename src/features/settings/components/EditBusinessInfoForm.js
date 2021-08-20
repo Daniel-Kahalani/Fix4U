@@ -22,12 +22,13 @@ export default function EditBusinessInfoForm({ goToNextScreen }) {
 
   const handleNext = () => {
     setErrorCheck(true);
-    !hasInputErrors() &&
+    if (!hasInputErrors()) {
       goToNextScreen({
         businessName,
         businessAddress,
         visitCost,
       });
+    }
   };
 
   return (
