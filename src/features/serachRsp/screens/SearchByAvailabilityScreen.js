@@ -18,7 +18,7 @@ import {
   Title,
 } from '../components/SearchStyles.js';
 
-export default function SearchScreen({ navigation }) {
+export default function SearchByAvailabilityScreen({ navigation }) {
   const dispatch = useDispatch();
   const { error, loading } = useSelector((state) => state.user);
   const [fullName, setFullName] = useState('');
