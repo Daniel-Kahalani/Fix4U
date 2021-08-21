@@ -9,25 +9,46 @@ const initialState = {
 
 export const getAvailableRSPs = createAsyncThunk(
   'user/getAvailableRSPs',
-  async (searchInput) => {
-    const availableRSPs = await Parse.Cloud.run('getAvailableRSPs', {
-      ...searchInput,
-    });
-    console.log('getAvailableRSPs: ', availableRSPs);
-
-    return availableRSPs;
+  async (searchInput, { rejectWithValue }) => {
+    try {
+      const availableRSPs = await Parse.Cloud.run('getAvailableRSPs', {
+        ...searchInput,
+      });
+      console.log('getAvailableRSPs: ', availableRSPs);
+      return availableRSPs;
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
   }
 );
 
 export const getRSPAvailableHours = createAsyncThunk(
   'user/getRSPAvailableHours',
-  async (searchInput) => {
-    const rspAvailability = await Parse.Cloud.run('getRSPAvailableHours', {
-      ...searchInput,
-    });
-    console.log('getRSPAvailableHours: ', rspAvailability);
+  async (searchInput, { rejectWithValue }) => {
+    try {
+      const rspAvailability = await Parse.Cloud.run('getRSPAvailableHours', {
+        ...searchInput,
+      });
+      console.log('getRSPAvailableHours: ', rspAvailability);
+      return rspAvailability;
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
+  }
+);
 
-    return rspAvailability;
+export const scheduleAppointment = createAsyncThunk(
+  'user/scheduleAppointment',
+  async (scheduleInput, { rejectWithValue }) => {
+    try {
+      const success = await Parse.Cloud.run('scheduleAppointment', {
+        ...scheduleInput,
+      });
+      console.log('scheduleAppointment: ', success);
+      return success;
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
   }
 );
 
@@ -50,7 +71,10 @@ const searchRSPSlice = createSlice({
     },
     [getAvailableRSPs.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
+      state.error = {
+        message: action.payload.message,
+        code: action.payload.code,
+      };
     },
     [getRSPAvailableHours.pending]: (state, action) => {
       state.loading = true;
@@ -62,7 +86,26 @@ const searchRSPSlice = createSlice({
     },
     [getRSPAvailableHours.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
+      state.error = {
+        message: action.payload.message,
+        code: action.payload.code,
+      };
+    },
+    [scheduleAppointment.pending]: (state, action) => {
+      state.loading = true;
+      state.success = null;
+    },
+    [scheduleAppointment.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.success = true;
+    },
+    [scheduleAppointment.rejected]: (state, action) => {
+      state.loading = false;
+      state.success = false;
+      state.error = {
+        message: action.payload.message,
+        code: action.payload.code,
+      };
     },
   },
 });

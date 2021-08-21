@@ -1,12 +1,11 @@
 /* eslint-disable no-undef */
-const {
-  convertTimeToNum,
-  convertTimeToStr,
-} = require('../utils/convertTimeFormat.js');
+const { createRSPAvailableHours } = require('../utils/searchRSPUtils.js');
 
 Parse.Cloud.define('getAvailableRSPs', async (request) => {
   const { faultType, date } = request.params;
-
+  if (!faultType || !date) {
+    throw new Parse.Error(1, 'Missing at least one function params');
+  }
   let query = new Parse.Query('RSP');
   query.containedIn('expertise', [faultType]);
   query.descending('rank');
@@ -21,6 +20,9 @@ async function createRspResults(topRsps, date) {
       const { fullName, businessName, visitCost, rank } = rsp.attributes;
       const rspId = rsp._getId();
       const availableHours = await createRSPAvailableHours(rspId, date);
+      if (availableHours.length === 0) {
+        return null;
+      }
       return {
         rspId,
         fullName,
@@ -31,41 +33,8 @@ async function createRspResults(topRsps, date) {
       };
     })
   );
-  return resultsData;
-}
-
-async function createRSPAvailableHours(rspId, date) {
-  const query = new Parse.Query('Appointment');
-  query.equalTo('rspID', rspId);
-  query.equalTo('date', date);
-  const appointments = await query.find();
-  let availableHours = [];
-  for (let time = 8; time <= 16; time = time + 0.5) {
-    if (
-      appointments.length === 0 ||
-      isTwoHoursWindowExist(appointments, time)
-    ) {
-      availableHours.push(convertTimeToStr(time));
-    }
+  if (resultsData.every((element) => element === null)) {
+    throw new Parse.Error(14, `There no RSP available on the ${date}`);
   }
-  return availableHours;
-}
-
-function isTwoHoursWindowExist(appointments, startTime) {
-  return appointments.find((appointment) => {
-    const startTimeNum = convertTimeToNum(appointment.get('startTime'));
-    const endTimeNum = convertTimeToNum(appointment.get('endTime'));
-
-    return (
-      startTimeNum === startTime ||
-      startTimeNum === startTime + 0.5 ||
-      startTimeNum === startTime + 1 ||
-      startTimeNum === startTime + 1.5 ||
-      endTimeNum === startTime + 0.5 ||
-      endTimeNum === startTime + 1 ||
-      endTimeNum === startTime + 1.5
-    );
-  })
-    ? false
-    : true;
+  return resultsData;
 }

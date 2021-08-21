@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Parse from 'parse/react-native';
+import { getPushToken } from '../../../utils/getPushToken';
 const initialState = {
   info: {},
   isAuthenticated: null,
@@ -11,18 +12,34 @@ const initialState = {
 
 export const isLoggedIn = createAsyncThunk('user/isLoggedIn', async () => {
   const generalUser = await Parse.User.currentAsync();
-  return generalUser
+
+  // return generalUser
+  //   ? await Parse.Cloud.run('getUserDataByGeneraUser', {
+  //       generalUser: JSON.stringify(generalUser),
+  //     })
+  //   : null;
+  const result = generalUser
     ? await Parse.Cloud.run('getUserDataByGeneraUser', {
         generalUser: JSON.stringify(generalUser),
       })
     : null;
+  console.log('isLoggedIn:', result);
+  return result;
 });
 
 export const login = createAsyncThunk(
   'user/login',
   async ({ email, password }) => {
     try {
-      const generalUser = await Parse.User.logIn(email.toLowerCase(), password);
+      const pushToken = await getPushToken();
+      let generalUser = await Parse.User.logIn(email.toLowerCase(), password);
+      if (generalUser.pushToken && generalUser.pushToken.includes(pushToken)) {
+        generalUser = await await Parse.Cloud.run('updateUserPushToken', {
+          userId: generalUser.objectId,
+          pushToken,
+        });
+      }
+      console.log('login:', generalUser);
       const userInfo = await Parse.Cloud.run('getUserDataByGeneraUser', {
         generalUser: JSON.stringify(generalUser),
       });
@@ -37,7 +54,11 @@ export const login = createAsyncThunk(
 );
 
 export const register = createAsyncThunk('user/register', async (userInput) => {
-  const userInfo = await Parse.Cloud.run('register', { ...userInput });
+  const pushToken = await getPushToken();
+  const userInfo = await Parse.Cloud.run('register', {
+    ...userInput,
+    pushToken,
+  });
   return userInfo;
 });
 
