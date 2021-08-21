@@ -17,10 +17,15 @@ export const addAppointment = createAsyncThunk(
             generalUser: JSON.stringify(generalUser),
           })
         : null;
+      console.log(generalUser);
+      console.log('-----------');
+      console.log(appointmentInput);
       const appointment = await Parse.Cloud.run('addAppointment', {
         ...appointmentInput,
         ...userInfo,
       });
+      console.log('-----------');
+      console.log(appointment);
       return appointment;
     } catch (e) {
       throw new Error('unknown');

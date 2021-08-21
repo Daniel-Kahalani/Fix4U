@@ -4,13 +4,23 @@
 const { UserType } = require('../utils/constants.js');
 
 Parse.Cloud.define('addAppointment', async (request) => {
-  const { startTime, endTime, title, description, specificUserId, userType } =
-    request.params;
+  const {
+    date,
+    startTime,
+    endTime,
+    appointmentType,
+    title,
+    description,
+    specificUserId,
+    userType,
+  } = request.params;
   const Appointment = new Parse.Object('Appointment');
-  Appointment.set('description', description);
-  Appointment.set('title', title);
+  Appointment.set('date', date);
   Appointment.set('startTime', startTime);
   Appointment.set('endTime', endTime);
+  Appointment.set('appointmentType', appointmentType);
+  Appointment.set('title', title);
+  Appointment.set('description', description);
   Appointment.set('rspID', specificUserId);
   try {
     let result = await (await Appointment.save()).toJSON();
