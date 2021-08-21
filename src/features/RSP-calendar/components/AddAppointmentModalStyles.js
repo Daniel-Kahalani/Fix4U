@@ -26,8 +26,9 @@ export const ModalTitle = styled.Text`
   color: #00f;
 `;
 
-export const ButtonsSection = styled.View`
+export const Section = styled.View`
   flex-direction: row-reverse;
+  align-items: center;
   justify-content: space-between;
 `;
 
@@ -53,4 +54,16 @@ export const ButtonText = styled.Text`
 
 export const AuthInput = styled(TextInput)`
   width: 300px;
+`;
+
+export const ChooseButton = styled.TouchableOpacity`
+  background-color: #21ba45;
+  border-radius: 10px;
+  margin-horizontal: 15px;
+  padding-vertical: 5px;
+  padding-horizontal: 5px;
+`;
+
+export const Label = styled(TextInput)`
+  width: 200px;
 `;

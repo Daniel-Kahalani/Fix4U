@@ -4,8 +4,17 @@ import { FAB } from 'react-native-paper';
 import { AddAppointmentModal } from '../components/AddAppointmentModal.js';
 import RSPAgenda from '../components/RSPAgenda.js';
 import { colors } from '../../../infrastructure/theme/colors.js';
+import { useDispatch } from 'react-redux';
+import { addAppointment } from '../slices/calendarSlice.js';
 
 export default function CalendarScreen() {
+  const dispatch = useDispatch();
+
+  const addNewAppointment = (appointment) => {
+    dispatch(addAppointment({ ...appointment }));
+    console.log('appointment added successufully');
+  };
+
   const [isFormVisible, setFormVisible] = useState(false);
 
   return (
@@ -15,6 +24,7 @@ export default function CalendarScreen() {
         style={styles.modal}
         isModalVisible={isFormVisible}
         setModalVisible={setFormVisible}
+        handleAddAppointment={addNewAppointment}
       />
       <FAB
         style={styles.fab}
