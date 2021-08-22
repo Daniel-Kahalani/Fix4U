@@ -24,8 +24,8 @@ Parse.initialize(
   '07Fb0bRf3rQO93M9iFPPpWqsweUOzK0qHCDtSr2I',
   'A88NlTl5shLVU7Bo5bbsnIp13yDV6EpbbmXIoRfo'
 );
-//Parse.serverURL = 'http://192.168.1.19:1337/parse';
-Parse.serverURL = 'https://parseapi.back4app.com/';
+Parse.serverURL = 'http://192.168.1.19:1337/parse';
+// Parse.serverURL = 'https://parseapi.back4app.com/';
 
 // const firebaseConfig = {
 //   apiKey: 'AIzaSyAjuZ2rnVzO1eDCjEAlcVQfYpKuBdV26Us',

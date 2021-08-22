@@ -17,7 +17,7 @@
       "**/*"
     ],
     "notification":{
-      "icon": "./assets/newtest2.png",
+      "icon": "./assets/iconPush.png",
       "color":"#696AC3"
     },
     "ios": {

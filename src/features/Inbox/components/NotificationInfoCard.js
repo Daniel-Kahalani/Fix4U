@@ -1,53 +1,61 @@
 import React from 'react';
-import { View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import Spacer from '../../../components/utils/Spacer';
+import { useDispatch } from 'react-redux';
+import { acceptAppointment, declineAppointment } from '../slices/inboxSlice';
 import Text from '../../../components/utils/Text';
+import NotificationDetails from './NotificationDetails';
+import {
+  NotificationCard,
+  CardContainer,
+  NotificationIconContainer,
+  NotificationIcon,
+  InfoContainer,
+  Info,
+  CardActions,
+  AcceptButton,
+  DeclineButton,
+} from '../styles/inboxStyles';
+import Spacer from '../../../components/utils/Spacer';
 
-// import {
-//   RestaurantCard,
-//   RestaurantCardCover,
-//   Info,
-//   Rating,
-//   Icon,
-//   Address,
-// } from './RestaurantInfoCardStyles';
+export default function NotificationInfoCard({ notification, isFullDispaly }) {
+  const { title, startTime, endTime, date } = notification.attributes;
+  const dispatch = useDispatch();
 
-export default function NotificationInfoCard({ restaurant = {} }) {
-  //   const { name, icon, photos, address, isOpenNow, rating, placeId } =
-  //     restaurant;
+  const handleAccept = () => {
+    dispatch(acceptAppointment(notification));
+  };
 
-  //   const ratingArray = Array.from(new Array(Math.floor(rating)));
+  const handleDecline = () => {
+    dispatch(declineAppointment(notification));
+  };
 
-  return null;
-  // <RestaurantCard elevation={2}>
-  //   <View>
-  //     <Favorite restaurant={restaurant} />
-  //     <RestaurantCardCover key={name} source={{ uri: photos[0] }} />
-  //   </View>
-  //   <Info>
-  //     <Text variant='label'>{name}</Text>
-  //     <Rating>
-  //       {ratingArray.map((elem, i) => (
-  //         <SvgXml
-  //           key={`star-${placeId}-${i}`}
-  //           xml={star}
-  //           width={20}
-  //           height={20}
-  //         />
-  //       ))}
-  //       <Spacer position='left' size='auto'>
-  //         {isOpenNow ? (
-  //           <SvgXml xml={open} width={20} height={20} />
-  //         ) : (
-  //           <Text variant='error'>CLOSED TEMPORARILY</Text>
-  //         )}
-  //       </Spacer>
-  //       <Spacer position='left' size='large'>
-  //         <Icon source={{ uri: icon }} />
-  //       </Spacer>
-  //     </Rating>
-  //     <Address>{address}</Address>
-  //   </Info>
-  // </RestaurantCard>
+  return (
+    <NotificationCard elevation={2}>
+      <CardContainer>
+        <NotificationIconContainer>
+          <NotificationIcon icon='calendar-clock' />
+        </NotificationIconContainer>
+        <InfoContainer>
+          <Text variant='label'>{title}</Text>
+          <Info>{`Date: ${date}`}</Info>
+          <Info>{`Time: ${startTime}-${endTime}`}</Info>
+        </InfoContainer>
+      </CardContainer>
+      {isFullDispaly && (
+        <>
+          <Spacer size='large'>
+            <NotificationDetails notification={notification} />
+          </Spacer>
+
+          <CardActions>
+            <AcceptButton mode='contained' onPress={handleAccept}>
+              Accept
+            </AcceptButton>
+            <DeclineButton mode='contained' onPress={handleDecline}>
+              Cancel
+            </DeclineButton>
+          </CardActions>
+        </>
+      )}
+    </NotificationCard>
+  );
 }

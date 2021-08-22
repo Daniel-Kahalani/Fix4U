@@ -5,9 +5,16 @@ const {
   convertTimeToStr,
 } = require('../utils/convertTimeFormat');
 
-Parse.Cloud.define('scheduleAppointment', async (request) => {
-  const { customerId, rspId, date, time, location, faultDescripton } =
-    request.params;
+Parse.Cloud.define('sendAppointmentRequest', async (request) => {
+  const {
+    customerId,
+    rspId,
+    date,
+    time,
+    location,
+    faultDescripton,
+    customerName,
+  } = request.params;
 
   const rspQuery = new Parse.Query('RSP');
   const rsp = await rspQuery.get(rspId);
@@ -21,19 +28,19 @@ Parse.Cloud.define('scheduleAppointment', async (request) => {
   const Appointment = new Parse.Object('Appointment');
   Appointment.set({
     rspID: rspId,
-    title: 'customer appointment',
+    title: 'Customer Appointment',
     appointmentType: 'customer',
     startTime: time,
     endTime: convertTimeToStr(convertTimeToNum(time) + 2),
     location,
     description: faultDescripton,
     customerID: customerId,
+    customerName: customerName,
     date,
     status: 'pending',
   });
   let appointment = await Appointment.save();
-
-  return true;
+  return appointment.id;
 });
 
 async function sendPushNotifications(pushData, rspPushTokens) {

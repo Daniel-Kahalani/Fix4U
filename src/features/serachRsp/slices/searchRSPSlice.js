@@ -1,20 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import Parse from 'parse/react-native';
+
+import Parse, { useParseQuery } from 'parse/react-native';
 const initialState = {
   results: [],
   error: null,
   loading: null,
-  success: null,
+  appointmentRequestId: null,
+  appointmentStatus: null,
 };
 
 export const getAvailableRSPs = createAsyncThunk(
-  'user/getAvailableRSPs',
+  'searchRSP/getAvailableRSPs',
   async (searchInput, { rejectWithValue }) => {
     try {
       const availableRSPs = await Parse.Cloud.run('getAvailableRSPs', {
         ...searchInput,
       });
-      console.log('getAvailableRSPs: ', availableRSPs);
       return availableRSPs;
     } catch (e) {
       throw rejectWithValue(e);
@@ -23,13 +24,12 @@ export const getAvailableRSPs = createAsyncThunk(
 );
 
 export const getRSPAvailableHours = createAsyncThunk(
-  'user/getRSPAvailableHours',
+  'searchRSP/getRSPAvailableHours',
   async (searchInput, { rejectWithValue }) => {
     try {
       const rspAvailability = await Parse.Cloud.run('getRSPAvailableHours', {
         ...searchInput,
       });
-      console.log('getRSPAvailableHours: ', rspAvailability);
       return rspAvailability;
     } catch (e) {
       throw rejectWithValue(e);
@@ -37,15 +37,47 @@ export const getRSPAvailableHours = createAsyncThunk(
   }
 );
 
-export const scheduleAppointment = createAsyncThunk(
-  'user/scheduleAppointment',
-  async (scheduleInput, { rejectWithValue }) => {
+export const sendAppointmentRequest = createAsyncThunk(
+  'searchRSP/sendAppointmentRequest',
+  async (AppointmentInput, { rejectWithValue }) => {
     try {
-      const success = await Parse.Cloud.run('scheduleAppointment', {
-        ...scheduleInput,
+      const appointmentId = await Parse.Cloud.run('sendAppointmentRequest', {
+        ...AppointmentInput,
       });
-      console.log('scheduleAppointment: ', success);
-      return success;
+      return appointmentId;
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
+  }
+);
+
+export const getAppointmentRequestStatus = createAsyncThunk(
+  'searchRSP/getAppointmentRequestStatus',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { searchRSP } = getState();
+      const query = new Parse.Query('Appointment');
+      const appointment = await query.get(searchRSP.appointmentRequestId);
+      if (appointment.get('status') === 'rejected') {
+        await appointment.destroy();
+      }
+      return appointment.get('status');
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
+  }
+);
+
+export const abortAppointmentRequest = createAsyncThunk(
+  'searchRSP/abortAppointmentRequest',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { searchRSP } = getState();
+      const query = new Parse.Query('Appointment');
+      const appointment = await query.get(searchRSP.appointmentRequestId);
+      appointment.set({ status: 'rejected' });
+      await appointment.save();
+      return 'rejected';
     } catch (e) {
       throw rejectWithValue(e);
     }
@@ -91,17 +123,35 @@ const searchRSPSlice = createSlice({
         code: action.payload.code,
       };
     },
-    [scheduleAppointment.pending]: (state, action) => {
+    [sendAppointmentRequest.pending]: (state, action) => {
       state.loading = true;
-      state.success = null;
+      state.appointmentRequestId = null;
+      state.appointmentStatus = null;
     },
-    [scheduleAppointment.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.success = true;
+    [sendAppointmentRequest.fulfilled]: (state, action) => {
+      state.appointmentRequestId = action.payload;
+      state.appointmentStatus = 'pending';
     },
-    [scheduleAppointment.rejected]: (state, action) => {
+    [sendAppointmentRequest.rejected]: (state, action) => {
       state.loading = false;
-      state.success = false;
+      state.error = {
+        message: action.payload.message,
+        code: action.payload.code,
+      };
+    },
+    [getAppointmentRequestStatus.fulfilled]: (state, action) => {
+      state.appointmentStatus = action.payload;
+    },
+    [getAppointmentRequestStatus.rejected]: (state, action) => {
+      state.error = {
+        message: action.payload.message,
+        code: action.payload.code,
+      };
+    },
+    [abortAppointmentRequest.fulfilled]: (state, action) => {
+      state.appointmentStatus = action.payload;
+    },
+    [abortAppointmentRequest.rejected]: (state, action) => {
       state.error = {
         message: action.payload.message,
         code: action.payload.code,
