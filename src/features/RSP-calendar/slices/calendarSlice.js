@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Parse from 'parse/react-native';
 
 const initialState = {
@@ -17,16 +16,33 @@ export const addAppointment = createAsyncThunk(
             generalUser: JSON.stringify(generalUser),
           })
         : null;
-      console.log(generalUser);
-      console.log('-----------');
-      console.log(appointmentInput);
       const appointment = await Parse.Cloud.run('addAppointment', {
         ...appointmentInput,
         ...userInfo,
       });
-      console.log('-----------');
-      console.log(appointment);
       return appointment;
+    } catch (e) {
+      throw new Error('unknown');
+    }
+  }
+);
+
+export const loadAppointments = createAsyncThunk(
+  'calendar/loadAppointments',
+  async ({ year, month }) => {
+    try {
+      const generalUser = await Parse.User.currentAsync();
+      let userInfo = generalUser
+        ? await Parse.Cloud.run('getUserDataByGeneraUser', {
+            generalUser: JSON.stringify(generalUser),
+          })
+        : null;
+      const appointmentsArr = await Parse.Cloud.run('loadAppointmentsByMonth', {
+        year,
+        month,
+        ...userInfo,
+      });
+      return appointmentsArr;
     } catch (e) {
       throw new Error('unknown');
     }
