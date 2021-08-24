@@ -13,7 +13,9 @@ export const SearchBackground = styled.ImageBackground.attrs({
   align-items: center;
   justify-content: center;
 `;
-
+export const Label = styled(TextInput)`
+  width: 200px;
+`;
 export const SearchCover = styled.View`
   position: absolute;
   width: 100%;
@@ -38,6 +40,9 @@ export const Info = styled.View`
 export const Section = styled.View`
   flex-direction: row;
   align-items: center;
+`;
+export const SmallSpace = styled.View`
+  padding-left: 16px;
 `;
 
 export const Rating = styled.View`
