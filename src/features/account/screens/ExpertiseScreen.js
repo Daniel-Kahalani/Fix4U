@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { expertiseArr } from '../../../infrastructure/constants';
+import { expertiseArr } from '../../../infrastructure/utils/constants';
 import { HelperText } from 'react-native-paper';
 import Spacer from '../../../components/utils/Spacer';
 import MultiSelect from '../../../components/utils/MultiSelect';

@@ -7,7 +7,7 @@ import {
   AvatarContainer,
   Time,
   Info,
-  ClientName,
+  Title,
   ButtonsSection,
 } from './AppointmentCardStyles.js';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,16 +16,10 @@ import Spacer from '../../../components/utils/Spacer.js';
 import { RemoveAppointmentModal } from '../components/RemoveAppointmentModal.js';
 import { EditAppointmentModal } from '../components/EditAppointmentModal.js';
 
-export const AppointmentCard = ({ appointment = {} }) => {
-  const {
-    startTime = '10',
-    endTime = '11',
-    clientName = 'moti',
-    title = 'Fix toilet',
-    description = 'nothing',
-  } = appointment;
+export const AppointmentCard = ({ appointment }) => {
+  const { startTime, endTime, title, description } = appointment;
   const iconSize = 28;
-  const clientAvatarText = clientName.toString().slice(0, 1).toUpperCase();
+  const clientAvatarText = title.toString().slice(0, 1).toUpperCase();
 
   const [isRemoveFormVisible, setRemoveFormVisible] = useState(false);
   const [isEditFormVisible, setEditFormVisible] = useState(false);
@@ -72,10 +66,10 @@ export const AppointmentCard = ({ appointment = {} }) => {
             </Text>
             <Divider />
           </Time>
-          <ClientName>
-            <Text variant='label'>{clientName}</Text>
+          <Title>
+            <Text variant='label'>{title}</Text>
             <Divider />
-          </ClientName>
+          </Title>
           <Text variant='label'>{description}</Text>
         </Info>
       </AppointmentInfoCard>

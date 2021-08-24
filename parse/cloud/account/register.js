@@ -1,12 +1,19 @@
 /* eslint-disable no-undef */
 const { createFullUserData } = require('../utils/createFullUserData.js');
+const { validateBusinessName } = require('../utils/validateBusinessName.js');
+
 const { UserType } = require('../utils/constants.js');
 
 Parse.Cloud.define('register', async (request) => {
-  const { email, password, userType } = request.params;
+  const { email, password, userType, pushToken, businessName } = request.params;
+
+  if (userType === UserType.RSP) {
+    await validateBusinessName(businessName);
+  }
   const generalUser = await Parse.User.signUp(email.toLowerCase(), password, {
     email: email.toLowerCase(),
     userType,
+    pushTokens: [pushToken],
   });
   try {
     const specificUser =

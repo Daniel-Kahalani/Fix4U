@@ -20,7 +20,7 @@ import {
 } from '../components/AddAppointmentModalStyles.js';
 import { colors } from '../../../infrastructure/theme/colors.js';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { rspAppointmentTypeArr } from '../../../infrastructure/constants';
+import { rspAppointmentTypeArr } from '../../../infrastructure/utils/constants';
 
 const createAppointmentTypeArray = () => {
   let appointmentTypeArray = [];

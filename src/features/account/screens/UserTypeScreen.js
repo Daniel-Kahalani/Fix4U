@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { clearError } from '../slices/userSlice';
-import { UserType } from '../../../infrastructure/constants';
+import React, { useState } from 'react';
+import { UserType } from '../../../infrastructure/utils/constants';
 import { ScrollView } from 'react-native';
 import { ToggleButton } from 'react-native-paper';
 import Spacer from '../../../components/utils/Spacer';
@@ -17,13 +15,6 @@ import {
 
 export default function UserTypeScreen({ navigation }) {
   const [userType, setUserType] = useState(UserType.CUSTOMER);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    navigation.addListener('beforeRemove', (e) => {
-      dispatch(clearError());
-    });
-  }, [dispatch, navigation]);
 
   return (
     <ScrollBackground>

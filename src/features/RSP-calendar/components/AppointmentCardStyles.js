@@ -49,7 +49,7 @@ export const Time = styled.Text`
   font-weight: ${(props) => props.theme.fontWeights.medium};
 `;
 
-export const ClientName = styled.Text`
+export const Title = styled.Text`
   font-family: ${(props) => props.theme.fonts.monospace};
   font-size: ${(props) => props.theme.fontSizes.body};
 `;

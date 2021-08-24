@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { UserType } from '../../../infrastructure/constants';
+import { UserType } from '../../../infrastructure/utils/constants';
 import { ActivityIndicator, Colors, HelperText } from 'react-native-paper';
 import Spacer from '../../../components/utils/Spacer';
 import Text from '../../../components/utils/Text';
@@ -137,7 +137,7 @@ export default function PersonalInfoForm({ userType, handleRegister }) {
       )}
       {error && (
         <ErrorContainer size='large'>
-          <Text variant='error'>{error}</Text>
+          <Text variant='error'>{error.message}</Text>
         </ErrorContainer>
       )}
       <Spacer size='large'>
@@ -150,7 +150,11 @@ export default function PersonalInfoForm({ userType, handleRegister }) {
             Register
           </AuthButton>
         ) : (
-          <ActivityIndicator animating={true} color={Colors.blue300} />
+          <ActivityIndicator
+            animating={true}
+            color={Colors.blue300}
+            size='large'
+          />
         )}
       </Spacer>
     </>
