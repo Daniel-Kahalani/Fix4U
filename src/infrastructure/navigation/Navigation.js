@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import AccountNavigator from './AccountNavigator';
 import { isLoggedIn } from '../../features/account/slices/userSlice';
-import { UserType } from '../constants.js';
+import { UserType } from '../utils/constants';
 import RSPNavigator from './RSPNavigator';
 import CustomerNavigator from './CustomerNavigator';
 import '../../../assets/backgrounds/home.jpg';

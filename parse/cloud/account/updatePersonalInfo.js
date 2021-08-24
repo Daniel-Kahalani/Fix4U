@@ -8,13 +8,12 @@ Parse.Cloud.define('updatePersonalInfo', async (request) => {
   let query = new Parse.Query('User');
   const user = await query.get(generalUserId);
   const isUserRSP = user.get('userType') === UserType.RSP ? true : false;
-
-  const specificUser = await updateSpedificUser(request.params, isUserRSP);
   user.set({ email: email.toLowerCase(), username: email.toLowerCase() });
   if (password) {
     user.set({ password });
   }
   await user.save(null, { useMasterKey: true });
+  const specificUser = await updateSpedificUser(request.params, isUserRSP);
   return createFullUserData(user, specificUser);
 });
 

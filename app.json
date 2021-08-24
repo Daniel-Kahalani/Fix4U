@@ -16,6 +16,10 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "notification":{
+      "icon": "./assets/iconPush.png",
+      "color":"#696AC3"
+    },
     "ios": {
       "supportsTablet": true
     },

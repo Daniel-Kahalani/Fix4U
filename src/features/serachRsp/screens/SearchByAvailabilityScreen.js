@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearError } from '../slices/searchResultSlice';
+// import { clearError } from '../slices/searchResultSlice';
 import { ActivityIndicator, Colors } from 'react-native-paper';
 import Text from '../../../components/utils/Text';
 import Spacer from '../../../components/utils/Spacer';
-import { expertiseArr } from '../../../infrastructure/constants';
+import { expertiseArr } from '../../../infrastructure/utils/constants';
 import SelectDropdown from 'react-native-select-dropdown';
 
 import {
@@ -28,7 +28,7 @@ export default function SearchByAvailabilityScreen({ navigation }) {
 
   useEffect(() => {
     navigation.addListener('beforeRemove', (e) => {
-      dispatch(clearError());
+      // dispatch(clearError());
     });
   }, [dispatch, navigation]);
 

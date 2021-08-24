@@ -59,7 +59,7 @@ export default function LoginScreen({ navigation }) {
         </Spacer>
         {error && (
           <ErrorContainer size='large'>
-            <Text variant='error'>{error}</Text>
+            <Text variant='error'>{error.message}</Text>
           </ErrorContainer>
         )}
         <Spacer size='large'>
@@ -72,7 +72,11 @@ export default function LoginScreen({ navigation }) {
               Login
             </AuthButton>
           ) : (
-            <ActivityIndicator animating={true} color={Colors.blue300} />
+            <ActivityIndicator
+              animating={true}
+              color={Colors.blue300}
+              size='large'
+            />
           )}
         </Spacer>
       </FormContainer>

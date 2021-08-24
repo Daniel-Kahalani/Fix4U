@@ -18,6 +18,7 @@ Parse.Cloud.define('getUserDataByGeneraUser', async (request) => {
     generalUserId: generalUser.objectId,
     username: generalUser.username,
     userType: generalUser.userType,
+    pushTokens: generalUser.pushTokens,
     specificUserId,
     ...data,
   };
