@@ -45,7 +45,7 @@ export default function RSPNavigator() {
 
   return (
     <Tab.Navigator
-      initialRouteName='Calendar'
+      initialRouteName='Settings'
       screenOptions={createScreenOptions}
       tabBarOptions={{
         activeTintColor: colors.brand.primary,
