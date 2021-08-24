@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearError } from '../slices/searchResultSlice';
-import { ActivityIndicator, Colors } from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Colors,
+  HelperText,
+  Divider,
+} from 'react-native-paper';
 import Text from '../../../components/utils/Text';
 import Spacer from '../../../components/utils/Spacer';
 import { expertiseArr } from '../../../infrastructure/constants';
 import SelectDropdown from 'react-native-select-dropdown';
-// import DatePicker from 'react-native-date-picker';
-import DropDownPicker from 'react-native-dropdown-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import {
   SearchCover,
@@ -18,22 +22,54 @@ import {
   AuthInput,
   ErrorContainer,
   Title,
+  Label,
+  ChooseButton,
+  Section,
+  ButtonText,
+  SmallSpace,
 } from '../components/SearchStyles.js';
+import { View } from 'react-native';
 
 export default function SearchByNameScreen({ navigation }) {
   const dispatch = useDispatch();
   const { error, loading } = useSelector((state) => state.user);
   const [businessName, setBusinessName] = useState('');
-  const [location, setLocation] = useState('');
   const [expertise, setExpertise] = useState([]);
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState(new Date());
+
+  const [errorCheck, setErrorCheck] = useState(false);
+  const [dateChosen, setDateChosen] = useState('');
+  const [date, setDate] = useState(null);
+  const [isDatePickerShow, setIsDatePickerShow] = useState(false);
 
   useEffect(() => {
     navigation.addListener('beforeRemove', (e) => {
       dispatch(clearError());
     });
   }, [dispatch, navigation]);
+
+  const showDatePicker = () => {
+    setDate(new Date());
+    setIsDatePickerShow(true);
+  };
+
+  const onChangeDate = (event, value) => {
+    setIsDatePickerShow(false);
+    if (value) {
+      setDate(value);
+      const dateStr = convertDateToString(value);
+      setDateChosen(dateStr);
+    }
+  };
+  const convertDateToString = (value) => {
+    return (
+      value.getFullYear() +
+      '-' +
+      (value.getMonth() > 9 ? value.getMonth() : '0' + value.getMonth()) +
+      '-' +
+      value.getDate()
+    );
+  };
 
   return (
     <ScrollBackground>
@@ -84,7 +120,39 @@ export default function SearchByNameScreen({ navigation }) {
               <Text variant='error'>{error}</Text>
             </ErrorContainer>
           )}
-          {/* <DatePicker date={date} onDateChange={setDate} /> */}
+          <Spacer size='large'>
+            <Section>
+              <AuthButton
+                icon='timetable'
+                mode='contained'
+                onPress={showDatePicker}
+              >
+                Pick Date
+              </AuthButton>
+              <SmallSpace />
+              <AuthInput
+                label='Date choosen'
+                value={dateChosen}
+                textContentType='none'
+                keyboardType='email-address'
+                autoCapitalize='none'
+                editable={false}
+                selectTextOnFocus={false}
+              />
+              {isDatePickerShow && (
+                <DateTimePicker
+                  value={date}
+                  mode={'date'}
+                  is24Hour={true}
+                  onChange={onChangeDate}
+                />
+              )}
+            </Section>
+            <HelperText type='error' visible={errorCheck && !dateChosen}>
+              Date Is Missing!
+            </HelperText>
+            <Divider backgroundColor='gray' />
+          </Spacer>
           <Spacer size='large'>
             {!loading ? (
               <AuthButton
