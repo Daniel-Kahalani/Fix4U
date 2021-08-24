@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { AppointmentStatus } from '../../../infrastructure/utils/constants';
 
-import Parse, { useParseQuery } from 'parse/react-native';
+import Parse from 'parse/react-native';
 const initialState = {
   results: [],
   error: null,
@@ -58,11 +59,14 @@ export const getAppointmentRequestStatus = createAsyncThunk(
       const { searchRSP } = getState();
       const query = new Parse.Query('Appointment');
       const appointment = await query.get(searchRSP.appointmentRequestId);
-      if (appointment.get('status') === 'rejected') {
+      if (appointment.get('status') === AppointmentStatus.REJECTED) {
         await appointment.destroy();
       }
       return appointment.get('status');
     } catch (e) {
+      if (e.code === 101) {
+        return AppointmentStatus.REJECTED;
+      }
       throw rejectWithValue(e);
     }
   }
@@ -75,11 +79,12 @@ export const abortAppointmentRequest = createAsyncThunk(
       const { searchRSP } = getState();
       const query = new Parse.Query('Appointment');
       const appointment = await query.get(searchRSP.appointmentRequestId);
-      appointment.set({ status: 'rejected' });
-      await appointment.save();
-      return 'rejected';
+      await appointment.destroy();
+      return;
     } catch (e) {
-      throw rejectWithValue(e);
+      if (e.code !== 101) {
+        throw rejectWithValue(e);
+      }
     }
   }
 );
@@ -95,11 +100,11 @@ const searchRSPSlice = createSlice({
   extraReducers: {
     [getAvailableRSPs.pending]: (state, action) => {
       state.loading = true;
+      state.error = null;
     },
     [getAvailableRSPs.fulfilled]: (state, action) => {
       state.loading = false;
       state.results = action.payload;
-      state.error = null;
     },
     [getAvailableRSPs.rejected]: (state, action) => {
       state.loading = false;
@@ -110,11 +115,11 @@ const searchRSPSlice = createSlice({
     },
     [getRSPAvailableHours.pending]: (state, action) => {
       state.loading = true;
+      state.error = null;
     },
     [getRSPAvailableHours.fulfilled]: (state, action) => {
       state.loading = false;
       state.results = action.payload;
-      state.error = null;
     },
     [getRSPAvailableHours.rejected]: (state, action) => {
       state.loading = false;
@@ -127,10 +132,11 @@ const searchRSPSlice = createSlice({
       state.loading = true;
       state.appointmentRequestId = null;
       state.appointmentStatus = null;
+      state.error = null;
     },
     [sendAppointmentRequest.fulfilled]: (state, action) => {
       state.appointmentRequestId = action.payload;
-      state.appointmentStatus = 'pending';
+      state.appointmentStatus = AppointmentStatus.PENDING;
     },
     [sendAppointmentRequest.rejected]: (state, action) => {
       state.loading = false;
@@ -140,6 +146,9 @@ const searchRSPSlice = createSlice({
       };
     },
     [getAppointmentRequestStatus.fulfilled]: (state, action) => {
+      if (action.payload !== AppointmentStatus.PENDING) {
+        state.loading = false;
+      }
       state.appointmentStatus = action.payload;
     },
     [getAppointmentRequestStatus.rejected]: (state, action) => {
@@ -149,7 +158,8 @@ const searchRSPSlice = createSlice({
       };
     },
     [abortAppointmentRequest.fulfilled]: (state, action) => {
-      state.appointmentStatus = action.payload;
+      state.appointmentStatus = AppointmentStatus.REJECTED;
+      state.loading = false;
     },
     [abortAppointmentRequest.rejected]: (state, action) => {
       state.error = {
@@ -167,7 +177,7 @@ export default searchRSPSlice.reducer;
 /*
 results structure
 
-[
+Array[
   Object {
   "rspId":String
   "fullname": String,

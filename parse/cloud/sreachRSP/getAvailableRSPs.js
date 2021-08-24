@@ -1,15 +1,15 @@
 /* eslint-disable no-undef */
-const { createRSPAvailableHours } = require('../utils/searchRSPUtils.js');
+const { NUM_OF_SEARCH_RESULTS } = require('../utils/constants');
+const {
+  createRSPAvailableHours,
+} = require('../utils/createRSPAvailableHours.js');
 
 Parse.Cloud.define('getAvailableRSPs', async (request) => {
   const { faultType, date } = request.params;
-  if (!faultType || !date) {
-    throw new Parse.Error(1, 'Missing at least one function params');
-  }
   let query = new Parse.Query('RSP');
   query.containedIn('expertise', [faultType]);
   query.descending('rank');
-  query.limit(3);
+  query.limit(NUM_OF_SEARCH_RESULTS);
   const topRsps = await query.find();
   return await createRspResults(topRsps, date);
 });
@@ -20,9 +20,6 @@ async function createRspResults(topRsps, date) {
       const { fullName, businessName, visitCost, rank } = rsp.attributes;
       const rspId = rsp._getId();
       const availableHours = await createRSPAvailableHours(rspId, date);
-      if (availableHours.length === 0) {
-        return null;
-      }
       return {
         rspId,
         fullName,
@@ -33,8 +30,8 @@ async function createRspResults(topRsps, date) {
       };
     })
   );
-  if (resultsData.every((element) => element === null)) {
-    throw new Parse.Error(14, `There no RSP available on the ${date}`);
+  if (resultsData.every((element) => element.availableHours.length === 0)) {
+    throw new Parse.Error(320, `There no RSP available on the ${date}`);
   }
   return resultsData;
 }

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Divider, List } from 'react-native-paper';
-import { colors } from '../../../infrastructure/theme/colors';
-import { ListIcon } from '../styles/notficationDetailsStyles';
 
-export default function NotificationDetails({ notification }) {
+export default function NotificationCardInfo({ notification }) {
   const { customerName, location, description } = notification.attributes;
   const [expandTechnicalInfo, setExpandTechnicalInfo] = useState(false);
   const [expandCustomerInfo, setExpandCustomerInfo] = useState(false);

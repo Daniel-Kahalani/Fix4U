@@ -5,7 +5,7 @@ import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import { usePushNotification } from '../../utils/usePushNotification';
+import { usePushNotification } from '../utils/usePushNotification';
 
 const StatsStack = createStackNavigator();
 

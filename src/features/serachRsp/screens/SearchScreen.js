@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ActivityIndicator, Colors } from 'react-native-paper';
 import Text from '../../../components/utils/Text';
 import Spacer from '../../../components/utils/Spacer';
-import { expertiseArr } from '../../../infrastructure/constants';
+import { expertiseArr } from '../../../infrastructure/utils/constants';
 import SelectDropdown from 'react-native-select-dropdown';
 
 import {

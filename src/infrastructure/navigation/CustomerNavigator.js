@@ -12,8 +12,8 @@ const Tab = createBottomTabNavigator();
 
 const TAB_ICON = {
   Search: 'md-search-outline',
-  Stats: 'construct-sharp',
-  Settings: 'stats-chart',
+  Stats: 'stats-chart',
+  Settings: 'settings-outline',
 };
 
 const createScreenOptions = ({ route }) => {

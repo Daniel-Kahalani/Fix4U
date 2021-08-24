@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateBusinessInfo, clearError } from '../../account/slices/userSlice';
-import { expertiseArr } from '../../../infrastructure/constants';
+import { expertiseArr } from '../../../infrastructure/utils/constants';
 import { ActivityIndicator, Colors, HelperText } from 'react-native-paper';
 import MultiSelect from '../../../components/utils/MultiSelect';
 import Spacer from '../../../components/utils/Spacer';
@@ -67,7 +67,7 @@ export default function EditExpertiseScreen({ navigation, route }) {
         <GrowConainer />
         {error && (
           <ErrorContainer size='large'>
-            <Text variant='error'>{error}</Text>
+            <Text variant='error'>{error.message}</Text>
           </ErrorContainer>
         )}
         <Spacer size='large'>
@@ -76,7 +76,11 @@ export default function EditExpertiseScreen({ navigation, route }) {
               Update
             </AuthButton>
           ) : (
-            <ActivityIndicator animating={true} color={Colors.blue300} />
+            <ActivityIndicator
+              animating={true}
+              color={Colors.blue300}
+              size='large'
+            />
           )}
         </Spacer>
       </ExpertiseContainer>

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Parse from 'parse/react-native';
-import { getPushToken } from '../../../utils/getPushToken';
+import { getPushToken } from '../../../infrastructure/utils/getPushToken';
 const initialState = {
   info: {},
   isAuthenticated: null,
@@ -10,61 +10,98 @@ const initialState = {
   loading: null,
 };
 
-export const isLoggedIn = createAsyncThunk('user/isLoggedIn', async () => {
-  const generalUser = await Parse.User.currentAsync();
+/**********Account Feature***********/
 
-  // return generalUser
-  //   ? await Parse.Cloud.run('getUserDataByGeneraUser', {
-  //       generalUser: JSON.stringify(generalUser),
-  //     })
-  //   : null;
-  const result = generalUser
-    ? await Parse.Cloud.run('getUserDataByGeneraUser', {
-        generalUser: JSON.stringify(generalUser),
-      })
-    : null;
-  console.log('isLoggedIn:', result);
-  return result;
-});
+export const register = createAsyncThunk(
+  'user/register',
+  async (userInput, { rejectWithValue }) => {
+    try {
+      let pushToken;
+      pushToken = await getPushToken();
+      const userInfo = await Parse.Cloud.run('register', {
+        ...userInput,
+        pushToken,
+      });
+      return userInfo;
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
+  }
+);
 
 export const login = createAsyncThunk(
   'user/login',
-  async ({ email, password }) => {
+  async ({ email, password }, { rejectWithValue }) => {
     try {
       const pushToken = await getPushToken();
       let generalUser = await Parse.User.logIn(email.toLowerCase(), password);
-      if (generalUser.pushToken && generalUser.pushToken.includes(pushToken)) {
-        generalUser = await await Parse.Cloud.run('updateUserPushToken', {
-          userId: generalUser.objectId,
-          pushToken,
-        });
+      if (pushToken && !generalUser.get('pushTokens').includes(pushToken)) {
+        const { pushTokens } = generalUser.attributes;
+        generalUser.set({ pushTokens: [...pushTokens, pushToken] });
+        await generalUser.save();
       }
-      console.log('login:', generalUser);
       const userInfo = await Parse.Cloud.run('getUserDataByGeneraUser', {
         generalUser: JSON.stringify(generalUser),
       });
       return userInfo;
     } catch (e) {
-      if (e.code === 101) {
-        throw new Error('Invalid email/password.');
-      }
-      return e;
+      throw rejectWithValue(e);
     }
   }
 );
 
-export const register = createAsyncThunk('user/register', async (userInput) => {
-  const pushToken = await getPushToken();
-  const userInfo = await Parse.Cloud.run('register', {
-    ...userInput,
-    pushToken,
-  });
-  return userInfo;
-});
+export const isLoggedIn = createAsyncThunk(
+  'user/isLoggedIn',
+  async (_, { rejectWithValue }) => {
+    try {
+      const generalUser = await Parse.User.currentAsync();
+      const userInfo = generalUser
+        ? await Parse.Cloud.run('getUserDataByGeneraUser', {
+            generalUser: JSON.stringify(generalUser),
+          })
+        : null;
+      return userInfo;
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
+  }
+);
 
-export const logout = createAsyncThunk('user/logout', async () => {
-  return await Parse.User.logOut();
-});
+/**********Setting Feature***********/
+
+export const updatePersonalInfo = createAsyncThunk(
+  'user/updatePersonalInfo',
+  async (userInput, { getState, rejectWithValue }) => {
+    try {
+      const { user } = getState();
+      const userInfo = await Parse.Cloud.run('updatePersonalInfo', {
+        ...userInput,
+        specificUserId: user.info.specificUserId,
+        generalUserId: user.info.generalUserId,
+      });
+      return userInfo;
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
+  }
+);
+
+export const updateBusinessInfo = createAsyncThunk(
+  'user/updateBusinessInfo',
+  async (userInput, { getState, rejectWithValue }) => {
+    try {
+      const { user } = getState();
+      const userInfo = await Parse.Cloud.run('updateBusinessInfo', {
+        ...userInput,
+        specificUserId: user.info.specificUserId,
+        generalUserId: user.info.generalUserId,
+      });
+      return userInfo;
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
+  }
+);
 
 export const savePhoto = createAsyncThunk(
   'user/savePhoto',
@@ -84,31 +121,9 @@ export const loadPhoto = createAsyncThunk(
   }
 );
 
-export const updatePersonalInfo = createAsyncThunk(
-  'user/updatePersonalInfo',
-  async (userInput, { getState }) => {
-    const { user } = getState();
-    const userInfo = await Parse.Cloud.run('updatePersonalInfo', {
-      ...userInput,
-      specificUserId: user.info.specificUserId,
-      generalUserId: user.info.generalUserId,
-    });
-    return userInfo;
-  }
-);
-
-export const updateBusinessInfo = createAsyncThunk(
-  'user/updateBusinessInfo',
-  async (userInput, { getState }) => {
-    const { user } = getState();
-    const userInfo = await Parse.Cloud.run('updateBusinessInfo', {
-      ...userInput,
-      specificUserId: user.info.specificUserId,
-      generalUserId: user.info.generalUserId,
-    });
-    return userInfo;
-  }
-);
+export const logout = createAsyncThunk('user/logout', async () => {
+  return await Parse.User.logOut();
+});
 
 const userSlice = createSlice({
   name: 'user',
@@ -119,6 +134,51 @@ const userSlice = createSlice({
     },
   },
   extraReducers: {
+    [register.pending]: (state, action) => {
+      state.error = null;
+      state.loading = true;
+      state.isAuthenticated = state.isAuthenticated;
+    },
+    [register.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.info = action.payload;
+      state.isAuthenticated = true;
+    },
+    [register.rejected]: (state, action) => {
+      state.loading = false;
+      state.isAuthenticated = false;
+      state.error = {
+        message:
+          action.payload.code === 202
+            ? 'there is already an account with this email'
+            : action.payload.message,
+        code: action.payload.code,
+      };
+    },
+    [login.pending]: (state, action) => {
+      state.error = null;
+      state.loading = true;
+      state.isAuthenticated = state.isAuthenticated;
+    },
+    [login.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.info = action.payload;
+      state.isAuthenticated = true;
+    },
+    [login.rejected]: (state, action) => {
+      state.loading = false;
+
+      state.error = {
+        message:
+          action.payload.code === 101
+            ? 'invalid email/password'
+            : action.payload.code === 200
+            ? 'email is required'
+            : action.payload.message,
+        code: action.payload.code,
+      };
+      state.isAuthenticated = false;
+    },
     [isLoggedIn.fulfilled]: (state, action) => {
       if (action.payload) {
         state.info = action.payload;
@@ -130,42 +190,38 @@ const userSlice = createSlice({
     [isLoggedIn.rejected]: (state, action) => {
       state.isAuthenticated = false;
     },
-    [login.pending]: (state, action) => {
+    [updatePersonalInfo.pending]: (state, action) => {
+      state.error = null;
       state.loading = true;
-      state.isAuthenticated = state.isAuthenticated;
     },
-    [login.fulfilled]: (state, action) => {
+    [updatePersonalInfo.fulfilled]: (state, action) => {
       state.loading = false;
       state.info = action.payload;
-      state.isAuthenticated = true;
-      state.error = null;
     },
-    [login.rejected]: (state, action) => {
+    [updatePersonalInfo.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
-      state.isAuthenticated = false;
+      state.error = {
+        message:
+          action.payload.code === 202
+            ? 'there is already an account with this email'
+            : action.payload.message,
+        code: action.payload.code,
+      };
     },
-    [register.pending]: (state, action) => {
+    [updateBusinessInfo.pending]: (state, action) => {
+      state.error = null;
       state.loading = true;
-      state.isAuthenticated = state.isAuthenticated;
     },
-    [register.fulfilled]: (state, action) => {
+    [updateBusinessInfo.fulfilled]: (state, action) => {
       state.loading = false;
       state.info = action.payload;
-      state.isAuthenticated = true;
-      state.error = null;
     },
-    [register.rejected]: (state, action) => {
+    [updateBusinessInfo.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
-      state.isAuthenticated = false;
-    },
-    [logout.fulfilled]: (state, action) => {
-      state.info = initialState.info;
-      state.photo = initialState.photo;
-      state.isAuthenticated = false;
-      state.error = initialState.error;
-      state.loading = initialState.loading;
+      state.error = {
+        message: action.payload.message,
+        code: action.payload.code,
+      };
     },
     [savePhoto.fulfilled]: (state, action) => {
       state.photo = action.payload;
@@ -173,29 +229,12 @@ const userSlice = createSlice({
     [loadPhoto.fulfilled]: (state, action) => {
       state.photo = action.payload;
     },
-    [updatePersonalInfo.pending]: (state, action) => {
-      state.loading = true;
-    },
-    [updatePersonalInfo.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.info = action.payload;
-      state.error = null;
-    },
-    [updatePersonalInfo.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    },
-    [updateBusinessInfo.pending]: (state, action) => {
-      state.loading = true;
-    },
-    [updateBusinessInfo.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.info = action.payload;
-      state.error = null;
-    },
-    [updateBusinessInfo.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
+    [logout.fulfilled]: (state, action) => {
+      state.info = initialState.info;
+      state.photo = initialState.photo;
+      state.isAuthenticated = false;
+      state.error = initialState.error;
+      state.loading = initialState.loading;
     },
   },
 });
@@ -214,6 +253,7 @@ Object {
   "fullName": String,
   "generalUserId": String,
   "phone": String,
+  "pushTokens": Array[String],
   "specificUserId": String,
   "userType": String,
   "username": String,
@@ -224,10 +264,12 @@ Object {
   "businessAddress": String,
   "businessName": String,
   "email": String,
-  "expertise": Array [],
+  "expertise": Array [String],
   "fullName": String,
   "generalUserId": String,
   "phone": String,
+  "pushTokens": Array[String],
+  "rank": 5,
   "specificUserId": String,
   "userType": String,
   "username": String,

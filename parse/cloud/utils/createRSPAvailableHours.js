@@ -4,10 +4,14 @@ const {
   convertTimeToStr,
 } = require('./convertTimeFormat.js');
 
+const { AppointmentStatus } = require('./constants');
+
 module.exports.createRSPAvailableHours = async (rspId, date) => {
   const query = new Parse.Query('Appointment');
   query.equalTo('rspID', rspId);
   query.equalTo('date', date);
+  query.equalTo('status', AppointmentStatus.APPROVED);
+
   const appointments = await query.find();
   let availableHours = findTwoHoursWindow(createHoursArray(), appointments);
   return availableHours.map((time) => convertTimeToStr(time));

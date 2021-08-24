@@ -1,9 +1,10 @@
 import styled from 'styled-components/native';
 import { ActivityIndicator, Avatar, Button } from 'react-native-paper';
-import { FlatList } from 'react-native';
+import { FlatList, ScrollView } from 'react-native';
 import { getStylesForProperty } from 'css-to-react-native';
 import { Card } from 'react-native-paper';
 import { colors } from '../../../infrastructure/theme/colors';
+import Text from '../../../components/utils/Text';
 
 export const InboxContainer = styled.View`
   flex: 1;
@@ -80,4 +81,44 @@ export const DeclineButton = styled(Button).attrs({
 })`
   flex-grow: 1;
   padding: ${(props) => props.theme.space[2]};
+`;
+
+/////////////////////
+
+export const AnimationContainer = styled.View`
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+`;
+
+export const AnimationWrapper = styled.View`
+  width: 100%;
+  height: 60%;
+  position: absolute;
+  top: 10%;
+  padding: ${(props) => props.theme.space[2]};
+`;
+
+export const AnimationMsg = styled(Text)`
+  font-size: 25px;
+  font-weight: 600;
+`;
+
+export const MsgContainer = styled.View`
+  position: absolute;
+  top: 55%;
+  padding: ${(props) => props.theme.space[2]};
+`;
+
+export const RefreshScrollView = styled(ScrollView)`
+  height: 10%;
+  max-height: 10%;
+`;
+
+export const ErrorContainer = styled.View`
+  max-width: 300px;
+  align-items: center;
+  align-self: center;
+  margin-top: ${(props) => props.theme.space[2]};
+  margin-bottom: ${(props) => props.theme.space[2]};
 `;

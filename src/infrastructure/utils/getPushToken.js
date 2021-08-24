@@ -17,7 +17,7 @@ export const getPushToken = async () => {
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
   } else {
-    console.log('Must use physical device for Push Notifications');
+    return null; //not a device (emulator)
   }
 
   if (Platform.OS === 'android') {

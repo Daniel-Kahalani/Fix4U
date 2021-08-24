@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 
 const { createFullUserData } = require('../utils/createFullUserData.js');
+const { validateBusinessName } = require('../utils/validateBusinessName');
 
 Parse.Cloud.define('updateBusinessInfo', async (request) => {
   const {
@@ -12,7 +13,8 @@ Parse.Cloud.define('updateBusinessInfo', async (request) => {
     specificUserId,
   } = request.params;
 
-  let query = new Parse.Query('RSP');
+  await validateBusinessName(businessName, specificUserId);
+  query = new Parse.Query('RSP');
   const specificUser = await query.get(specificUserId);
   specificUser.set({
     businessName: businessName.toLowerCase(),

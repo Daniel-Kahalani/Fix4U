@@ -4,6 +4,13 @@ export const UserType = {
 };
 Object.freeze(UserType);
 
+export const AppointmentStatus = {
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+  PENDING: 'pending',
+};
+Object.freeze(AppointmentStatus);
+
 export const expertiseArr = [
   { name: 'Plumbing' },
   { name: 'Gas' },

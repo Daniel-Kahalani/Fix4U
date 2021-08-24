@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../account/slices/userSlice';
-import { UserType } from '../../../infrastructure/constants';
+import { UserType } from '../../../infrastructure/utils/constants';
 import { colors } from '../../../infrastructure/theme/colors';
 import { TouchableOpacity, ScrollView } from 'react-native';
 import { List, Avatar } from 'react-native-paper';
@@ -20,6 +20,8 @@ export default function SettingsScreen({ navigation }) {
   const isRsp = info.userType === UserType.RSP ? true : false;
 
   const handleLogout = async () => {
+    /// add function that delete all store reducres
+    // add abort appointment ?
     await dispatch(logout());
   };
 

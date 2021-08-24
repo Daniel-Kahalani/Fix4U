@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { AppointmentStatus } from '../../../infrastructure/utils/constants';
 import Parse from 'parse/react-native';
+
 const initialState = {
   notifications: [],
   error: null,
@@ -11,10 +13,11 @@ export const getNotifications = createAsyncThunk(
   'inbox/getNotifications',
   async (_, { getState, rejectWithValue }) => {
     try {
+      console.log('load notifications');
       const query = new Parse.Query('Appointment');
       const { user } = getState();
       query.equalTo('rspID', user.info.specificUserId);
-      query.equalTo('status', 'pending');
+      query.equalTo('status', AppointmentStatus.PENDING);
       const notifications = await query.find();
       return notifications;
     } catch (e) {
@@ -25,17 +28,29 @@ export const getNotifications = createAsyncThunk(
 
 export const acceptAppointment = createAsyncThunk(
   'inbox/acceptAppointment',
-  async (appointment, { rejectWithValue }) => {
-    appointment.set({ status: 'approved' });
-    await appointment.save();
+  async (appointmentId, { rejectWithValue }) => {
+    try {
+      const query = new Parse.Query('Appointment');
+      let appointment = await query.get(appointmentId);
+      appointment.set({ status: AppointmentStatus.APPROVED });
+      await appointment.save();
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
   }
 );
 
 export const declineAppointment = createAsyncThunk(
   'inbox/declineAppointment',
-  async (appointment, { rejectWithValue }) => {
-    appointment.set({ status: 'rejected' });
-    await appointment.save();
+  async (appointmentId, { rejectWithValue }) => {
+    try {
+      const query = new Parse.Query('Appointment');
+      let appointment = await query.get(appointmentId);
+      appointment.set({ status: AppointmentStatus.REJECTED });
+      await appointment.save();
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
   }
 );
 
@@ -49,13 +64,13 @@ const inboxSlice = createSlice({
   },
   extraReducers: {
     [getNotifications.pending]: (state, action) => {
+      state.error = null;
       state.loading = true;
       state.notifications = [];
     },
     [getNotifications.fulfilled]: (state, action) => {
       state.loading = false;
       state.notifications = action.payload;
-      state.error = null;
     },
     [getNotifications.rejected]: (state, action) => {
       state.loading = false;
@@ -67,11 +82,11 @@ const inboxSlice = createSlice({
     [acceptAppointment.pending]: (state, action) => {
       state.loading = true;
       state.success = null;
+      state.error = null;
     },
     [acceptAppointment.fulfilled]: (state, action) => {
       state.loading = false;
       state.success = true;
-      state.error = null;
     },
     [acceptAppointment.rejected]: (state, action) => {
       state.loading = false;
@@ -84,6 +99,7 @@ const inboxSlice = createSlice({
     [declineAppointment.pending]: (state, action) => {
       state.loading = true;
       state.success = null;
+      state.error = null;
     },
     [declineAppointment.fulfilled]: (state, action) => {
       state.loading = false;

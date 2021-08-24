@@ -1,3 +1,4 @@
 require('./register.js');
 require('./getUserDataByGeneraUser');
-require('./updateUserPushToken');
+require('./updatePersonalInfo');
+require('./updateBusinessInfo');
