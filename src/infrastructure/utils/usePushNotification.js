@@ -25,5 +25,5 @@ export const usePushNotification = (navigation) => {
       );
       Notifications.removeNotificationSubscription(responseListener.current);
     };
-  }, []);
+  }, [dispatch, navigation]);
 };
