@@ -14,3 +14,9 @@ export const expertiseArr = [
   { name: 'Smartphones' },
   { name: 'Windows and shutters' },
 ];
+
+export const rspAppointmentTypeArr = [
+  { name: 'Personal' },
+  { name: 'Supplier' },
+  { name: 'Customer' },
+];

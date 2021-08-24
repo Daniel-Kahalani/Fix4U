@@ -37,6 +37,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
     "react-native-calendars": "^1.1264.0",
     "react-native-date-picker": "^3.4.0",
+    "react-native-dropdown-picker": "^5.1.23",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-lite-credit-card-input": "^1.0.10",
     "react-native-maps": "0.27.1",
