@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getNotifications } from '../slices/inboxSlice';
-import { Colors, Snackbar } from 'react-native-paper';
+// import { Colors, Snackbar } from 'react-native-paper';
 import { RefreshControl, TouchableOpacity } from 'react-native';
 import Notification from '../components/Notification';
 import Spacer from '../../../components/utils/Spacer';
