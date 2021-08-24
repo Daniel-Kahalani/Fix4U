@@ -5,21 +5,24 @@ import { AddAppointmentModal } from '../components/AddAppointmentModal.js';
 import RSPAgenda from '../components/RSPAgenda.js';
 import { colors } from '../../../infrastructure/theme/colors.js';
 import { useDispatch } from 'react-redux';
-import { addAppointment } from '../slices/calendarSlice.js';
+import { addAppointment, loadAppointments } from '../slices/calendarSlice.js';
 
 export default function CalendarScreen() {
   const dispatch = useDispatch();
 
   const addNewAppointment = (appointment) => {
     dispatch(addAppointment({ ...appointment }));
-    console.log('appointment added successufully');
+  };
+
+  const loadRSPAppointments = async (year, month) => {
+    return await dispatch(loadAppointments({ year, month }));
   };
 
   const [isFormVisible, setFormVisible] = useState(false);
 
   return (
     <View style={styles.agenda}>
-      <RSPAgenda />
+      <RSPAgenda handleLoadAppointments={loadRSPAppointments} />
       <AddAppointmentModal
         style={styles.modal}
         isModalVisible={isFormVisible}
