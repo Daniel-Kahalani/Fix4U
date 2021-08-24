@@ -1,6 +1,6 @@
 import React from 'react';
-import InboxScreen from '../../features/inbox/screens/InboxScreen';
-import NotficationDetailsScreen from '../../features/inbox/screens/NotficationDetailsScreen';
+import InboxScreen from '../../features/Inbox/screens/InboxScreen';
+import NotficationDetailsScreen from '../../features/Inbox/screens/NotficationDetailsScreen';
 
 import AppBar from '../../components/utils/AppBar';
 import {
