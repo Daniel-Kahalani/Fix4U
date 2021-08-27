@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useState } from 'react';
 import { Modal } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Divider } from 'react-native-paper';
 import { HelperText } from 'react-native-paper';
@@ -19,18 +20,11 @@ import {
   ChooseButton,
 } from '../components/AddAppointmentModalStyles.js';
 import { colors } from '../../../infrastructure/theme/colors.js';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { rspAppointmentTypeArr } from '../../../infrastructure/utils/constants';
-
-const createAppointmentTypeArray = () => {
-  let appointmentTypeArray = [];
-  rspAppointmentTypeArr.forEach((element) => {
-    if (element.name !== 'Customer') {
-      appointmentTypeArray.push({ label: element.name, value: element.name });
-    }
-  });
-  return appointmentTypeArray;
-};
+import {
+  convertDateToString,
+  convertTimeToString,
+  createAppointmentTypeArray,
+} from '../utils.js';
 
 const appointmentTypeArray = createAppointmentTypeArray();
 const modalTitle = 'Add new Appointment';
@@ -84,7 +78,12 @@ export const AddAppointmentModal = ({
   // };
 
   const hasInputErrors = () => {
-    return !startTimeChoosen || !endTimeChoosen || !title || !description
+    return !dateChoosen ||
+      !startTimeChoosen ||
+      !endTimeChoosen ||
+      !appointmentType ||
+      !title ||
+      !description
       ? true
       : false;
   };
@@ -102,6 +101,7 @@ export const AddAppointmentModal = ({
   const handleAddAppointmentButtonClick = () => {
     setErrorCheck(true);
     if (hasInputErrors() === false) {
+      setModalVisible(!isModalVisible);
       handleAddAppointment({
         date: dateChoosen,
         startTime: startTimeChoosen,
@@ -154,24 +154,6 @@ export const AddAppointmentModal = ({
       const endTimeStr = convertTimeToString(value);
       setEndTimeChoosen(endTimeStr);
     }
-  };
-
-  const convertDateToString = (value) => {
-    return (
-      value.getFullYear() +
-      '-' +
-      (value.getMonth() > 9 ? value.getMonth() : '0' + value.getMonth()) +
-      '-' +
-      value.getDate()
-    );
-  };
-
-  const convertTimeToString = (value) => {
-    return (
-      value.getHours() +
-      ':' +
-      (value.getMinutes() > 9 ? value.getMinutes() : '0' + value.getMinutes())
-    );
   };
 
   return (

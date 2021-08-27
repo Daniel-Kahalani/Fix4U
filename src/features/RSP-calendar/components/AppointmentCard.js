@@ -17,7 +17,7 @@ import { RemoveAppointmentModal } from '../components/RemoveAppointmentModal.js'
 import { EditAppointmentModal } from '../components/EditAppointmentModal.js';
 
 export const AppointmentCard = ({ appointment }) => {
-  const { startTime, endTime, title, description } = appointment;
+  const { appointmentId, startTime, endTime, title, description } = appointment;
   const iconSize = 28;
   const clientAvatarText = title.toString().slice(0, 1).toUpperCase();
 
@@ -29,11 +29,13 @@ export const AppointmentCard = ({ appointment }) => {
       <RemoveAppointmentModal
         isModalVisible={isRemoveFormVisible}
         setModalVisible={setRemoveFormVisible}
+        appointmentId={appointmentId}
       />
       <EditAppointmentModal
         appointment={appointment}
         isModalVisible={isEditFormVisible}
         setModalVisible={setEditFormVisible}
+        appointmentId={appointmentId}
       />
       <ButtonsSection>
         <Spacer size='large'>

@@ -49,6 +49,48 @@ export const loadAppointments = createAsyncThunk(
   }
 );
 
+export const deleteAppointment = createAsyncThunk(
+  'calendar/deleteAppointment',
+  async ({ appointmentId }) => {
+    try {
+      const generalUser = await Parse.User.currentAsync();
+      let userInfo = generalUser
+        ? await Parse.Cloud.run('getUserDataByGeneraUser', {
+            generalUser: JSON.stringify(generalUser),
+          })
+        : null;
+      const appointment = await Parse.Cloud.run('deleteAppointment', {
+        appointmentId,
+        ...userInfo,
+      });
+      return appointment;
+    } catch (e) {
+      throw new Error('unknown');
+    }
+  }
+);
+
+export const editAppointment = createAsyncThunk(
+  'calendar/editAppointment',
+  async (appointmentInput) => {
+    try {
+      const generalUser = await Parse.User.currentAsync();
+      let userInfo = generalUser
+        ? await Parse.Cloud.run('getUserDataByGeneraUser', {
+            generalUser: JSON.stringify(generalUser),
+          })
+        : null;
+      const appointment = await Parse.Cloud.run('editAppointment', {
+        ...appointmentInput,
+        ...userInfo,
+      });
+      return appointment;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
 const calendarSlice = createSlice({
   name: 'calendar',
   initialState,

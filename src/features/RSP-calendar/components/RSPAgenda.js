@@ -1,7 +1,7 @@
 /* eslint-disable dot-notation */
 /* eslint-disable no-array-constructor */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Agenda } from 'react-native-calendars';
 import Spacer from '../../../components/utils/Spacer.js';
 import { AppointmentCard } from './AppointmentCard.js';
