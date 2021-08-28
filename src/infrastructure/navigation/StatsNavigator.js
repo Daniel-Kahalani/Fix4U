@@ -5,13 +5,10 @@ import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import { usePushNotification } from '../utils/usePushNotification';
 
 const StatsStack = createStackNavigator();
 
-export default function SistoryNavigator({ route, navigation }) {
-  usePushNotification(navigation);
-
+export default function StatsNavigator({ route, navigation }) {
   return (
     <StatsStack.Navigator
       screenOptions={{

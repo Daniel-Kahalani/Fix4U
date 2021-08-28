@@ -14,7 +14,7 @@ import { usePushNotification } from '../utils/usePushNotification';
 
 const SettingsStack = createStackNavigator();
 
-export default function SettingsNavigator({ route, navigation }) {
+export default function SettingsNavigator({ navigation, route }) {
   usePushNotification(navigation);
   return (
     <SettingsStack.Navigator
