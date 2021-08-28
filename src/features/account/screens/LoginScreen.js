@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, clearError } from '../slices/userSlice';
 import LottieView from 'lottie-react-native';
-import { ActivityIndicator, Colors } from 'react-native-paper';
+import Loader from '../../../components/utils/Loader';
 import Text from '../../../components/utils/Text';
 import Spacer from '../../../components/utils/Spacer';
 import {
@@ -72,11 +72,7 @@ export default function LoginScreen({ navigation }) {
               Login
             </AuthButton>
           ) : (
-            <ActivityIndicator
-              animating={true}
-              color={Colors.blue300}
-              size='large'
-            />
+            <Loader />
           )}
         </Spacer>
       </FormContainer>

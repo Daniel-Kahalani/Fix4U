@@ -13,10 +13,9 @@ export const usePushNotification = (navigation) => {
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log('push getNotifications');
-        dispatch(getNotifications());
-
         navigation.navigate('Inbox');
+        console.log('push click getNotifications');
+        dispatch(getNotifications());
       });
 
     return () => {

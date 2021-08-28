@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { UserType } from '../../../infrastructure/utils/constants';
-import { ActivityIndicator, Colors, HelperText } from 'react-native-paper';
+import { HelperText } from 'react-native-paper';
+import Loader from '../../../components/utils/Loader';
 import Spacer from '../../../components/utils/Spacer';
 import Text from '../../../components/utils/Text';
 import { AuthInput, ErrorContainer, AuthButton } from '../styles/settingStyles';
@@ -150,11 +151,7 @@ export default function EditPersonalProfileForm({ handleUpdate }) {
             Update
           </AuthButton>
         ) : (
-          <ActivityIndicator
-            animating={true}
-            color={Colors.blue300}
-            size='large'
-          />
+          <Loader />
         )}
       </Spacer>
     </>

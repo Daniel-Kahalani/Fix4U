@@ -5,8 +5,11 @@ import {
   declineAppointment,
   getNotifications,
 } from '../slices/inboxSlice';
-import Text from '../../../components/utils/Text';
+import { SnackBarType } from '../../../infrastructure/utils/constants';
 import NotificationCardInfo from './NotificationCardInfo';
+import Loader from '../../../components/utils/Loader';
+import Text from '../../../components/utils/Text';
+import Spacer from '../../../components/utils/Spacer';
 import {
   NotificationCard,
   CardContainer,
@@ -18,31 +21,32 @@ import {
   AcceptButton,
   DeclineButton,
   ErrorContainer,
-} from '../styles/inboxStyles';
-import Spacer from '../../../components/utils/Spacer';
-import { ActivityIndicator, Colors } from 'react-native-paper';
+} from '../styles/notificationStyles';
 
 export default function Notification({
   notification,
   isFullDispaly,
   navigation,
 }) {
-  const { title, startTime, endTime, date } = notification.attributes;
-  const { loading, success, error } = useSelector((state) => state.inbox);
   const dispatch = useDispatch();
 
+  const { title, startTime, endTime, date } = notification.attributes;
+  const { loading, error } = useSelector((state) => state.inbox);
   const handleAccept = async () => {
     const resultAction = await dispatch(acceptAppointment(notification.id));
     if (
       acceptAppointment.fulfilled.match(resultAction) ||
       (resultAction.payload && resultAction.payload.code === 101)
     ) {
-      let feedbackMsg = acceptAppointment.fulfilled.match(resultAction)
+      let type = acceptAppointment.fulfilled.match(resultAction)
+        ? SnackBarType.SUCCESS
+        : SnackBarType.ERROR;
+      let message = acceptAppointment.fulfilled.match(resultAction)
         ? 'The appointment was scheduled and added to your calendar'
         : 'Unable to schedule an appointment because Customer has been cancel his request';
-      console.log('handleAccept get notifi');
+      console.log('handle accecpt getNotifications');
       dispatch(getNotifications());
-      navigation.navigate('Inbox', { feedbackMsg });
+      navigation.navigate('Inbox', { feedback: { message, type } });
     }
   };
 
@@ -52,10 +56,13 @@ export default function Notification({
       declineAppointment.fulfilled.match(resultAction) ||
       (resultAction.payload && resultAction.payload.code === 101)
     ) {
+      console.log('handle reject getNotifications');
       dispatch(getNotifications());
-      console.log('handleDecline get notifi');
       navigation.navigate('Inbox', {
-        feedbackMsg: 'The appointment decline successfully',
+        feedback: {
+          message: 'The appointment decline successfully',
+          type: SnackBarType.SUCCESS,
+        },
       });
     }
   };
@@ -85,22 +92,20 @@ export default function Notification({
               </Text>
             </ErrorContainer>
           )}
-          {loading ? (
-            <ActivityIndicator
-              animating={true}
-              color={Colors.blue300}
-              size='large'
-            />
-          ) : (
-            <CardActions>
-              <AcceptButton mode='contained' onPress={handleAccept}>
-                Accept
-              </AcceptButton>
-              <DeclineButton mode='contained' onPress={handleDecline}>
-                Cancel
-              </DeclineButton>
-            </CardActions>
-          )}
+          <CardActions>
+            {loading ? (
+              <Loader />
+            ) : (
+              <>
+                <AcceptButton mode='contained' onPress={handleAccept}>
+                  Accept
+                </AcceptButton>
+                <DeclineButton mode='contained' onPress={handleDecline}>
+                  Cancel
+                </DeclineButton>
+              </>
+            )}
+          </CardActions>
         </>
       )}
     </NotificationCard>

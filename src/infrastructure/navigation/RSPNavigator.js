@@ -36,7 +36,7 @@ const createScreenOptions = ({ route }) => {
   };
 };
 
-export default function RSPNavigator() {
+export default function RSPNavigator(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function RSPNavigator() {
       <Tab.Screen name='Inbox' component={InboxNavigator} />
       <Tab.Screen name='Settings' component={SettingsNavigator} />
       <Tab.Screen name='Stats' component={StatsNavigator} />
-      {<Tab.Screen name='Calendar' component={RSPCalendarNavigator} />}
+      <Tab.Screen name='Calendar' component={RSPCalendarNavigator} />
     </Tab.Navigator>
   );
 }

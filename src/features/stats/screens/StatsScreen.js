@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Button } from 'react-native';
@@ -39,8 +38,10 @@ export default function StatsScreen() {
       sendAppointmentRequest({
         customerName: 'avi',
         customerId: 'gylgNmuG0R',
+        // customerId: 'ryvZ69Uxxv',
         faultDescripton: 'computer EXPLODED',
         rspId: 'GxRhrf3b2U',
+        // rspId: '3Ujj8LaiSI',
         date: '19/08/21',
         time: '09:00',
         location: 'tel aviv',
@@ -54,7 +55,7 @@ export default function StatsScreen() {
           //activate fucntions according to the result.payload (approved/rejected)
         }
       }, 6000);
-      let intervalId2 = setTimeout(async () => {
+      setTimeout(async () => {
         clearInterval(intervalId1);
         dispatch(abortAppointmentRequest());
       }, 50000);
