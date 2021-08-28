@@ -5,7 +5,7 @@ import NotficationDetailsScreen from '../../features/inbox/screens/NotficationDe
 import AppBar from '../../components/utils/AppBar';
 import {
   createStackNavigator,
-  CardStyleInterpolators,
+  TransitionPresets,
 } from '@react-navigation/stack';
 
 const SettingsStack = createStackNavigator();
@@ -15,7 +15,7 @@ export default function SettingsNavigator({ route, navigation }) {
     <SettingsStack.Navigator
       screenOptions={{
         header: (props) => <AppBar {...props} />,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        ...TransitionPresets.SlideFromRightIOS,
       }}
     >
       <SettingsStack.Screen

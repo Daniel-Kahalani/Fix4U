@@ -13,7 +13,6 @@ export const getNotifications = createAsyncThunk(
   'inbox/getNotifications',
   async (_, { getState, rejectWithValue }) => {
     try {
-      console.log('load notifications');
       const query = new Parse.Query('Appointment');
       const { user } = getState();
       query.equalTo('rspID', user.info.specificUserId);
