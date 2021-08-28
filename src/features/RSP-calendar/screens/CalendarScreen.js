@@ -7,7 +7,7 @@ import { colors } from '../../../infrastructure/theme/colors.js';
 import { useDispatch } from 'react-redux';
 import { addAppointment, loadAppointments } from '../slices/calendarSlice.js';
 
-export default function CalendarScreen() {
+export default function CalendarScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const addNewAppointment = (appointment) => {

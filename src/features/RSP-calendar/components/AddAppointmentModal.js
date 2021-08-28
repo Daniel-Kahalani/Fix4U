@@ -18,7 +18,7 @@ import {
   AuthInput,
   Label,
   ChooseButton,
-} from '../components/AddAppointmentModalStyles.js';
+} from '../styles/AddAppointmentModalStyles.js';
 import { colors } from '../../../infrastructure/theme/colors.js';
 import {
   convertDateToString,

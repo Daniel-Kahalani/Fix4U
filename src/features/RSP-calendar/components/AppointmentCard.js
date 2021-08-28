@@ -9,7 +9,7 @@ import {
   Info,
   Title,
   ButtonsSection,
-} from './AppointmentCardStyles.js';
+} from '../styles/AppointmentCardStyles.js';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Spacer from '../../../components/utils/Spacer.js';

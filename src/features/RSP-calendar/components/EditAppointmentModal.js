@@ -20,7 +20,7 @@ import {
   AuthInput,
   Label,
   ChooseButton,
-} from '../components/EditAppointmentModalStyles.js';
+} from '../styles/EditAppointmentModalStyles.js';
 import { colors } from '../../../infrastructure/theme/colors.js';
 import { editAppointment } from '../slices/calendarSlice';
 import {

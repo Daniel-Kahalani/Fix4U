@@ -1,11 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable dot-notation */
 /* eslint-disable no-array-constructor */
 
 import React, { useState, useEffect } from 'react';
 import { Agenda } from 'react-native-calendars';
+import { useSelector } from 'react-redux';
 import Spacer from '../../../components/utils/Spacer.js';
 import { AppointmentCard } from './AppointmentCard.js';
-import { EmptyDateContainer, Title } from './RSPAgendaStyles.js';
+import { EmptyDateContainer, Title } from '../styles/RSPAgendaStyles.js';
 
 const renderItem = (item) => {
   return (
@@ -46,9 +48,10 @@ export default function RSPAgenda({ handleLoadAppointments }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [loadedMonth, setLoadedMonth] = useState(null);
   const [loadedYear, setLoadedYear] = useState(null);
-  const [appointments, setAppointments] = useState({});
+  const { appointments } = useSelector((state) => state.calendar);
+  const [customAppointments, setCustomAppointments] = useState({});
 
-  const loadAppointments = (year, month) => {
+  const createCustomAppointments = (year, month) => {
     handleLoadAppointments(year, month).then((result) => {
       let appointmentsObj = {};
       const appointmentsArr = result.payload;
@@ -64,20 +67,25 @@ export default function RSPAgenda({ handleLoadAppointments }) {
         year,
         month
       );
-      setAppointments(appointmentsObj);
+      setCustomAppointments(appointmentsObj);
     });
   };
+
+  useEffect(() => {
+    createCustomAppointments(loadedYear, loadedMonth);
+  }, [loadedYear, loadedMonth, appointments]);
 
   return (
     <Agenda
       loadItemsForMonth={(date) => {
-        if (loadedMonth !== date.month || loadedYear !== date.year) {
-          loadAppointments(date.year, date.month);
+        if (date.month !== loadedMonth) {
           setLoadedMonth(date.month);
+        }
+        if (date.year !== loadedYear) {
           setLoadedYear(date.year);
         }
       }}
-      items={appointments}
+      items={customAppointments}
       selected={selectedDate}
       onDayPress={(date) => {
         if (selectedDate !== date) {

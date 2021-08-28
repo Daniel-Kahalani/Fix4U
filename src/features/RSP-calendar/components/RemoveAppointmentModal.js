@@ -10,7 +10,7 @@ import {
   ModalTitle,
   NoButton,
   YesButton,
-} from './RemoveAppointmentModalStyles';
+} from '../styles/RemoveAppointmentModalStyles';
 import { deleteAppointment } from '../slices/calendarSlice';
 
 export const RemoveAppointmentModal = ({
