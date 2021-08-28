@@ -38,15 +38,13 @@ export default function Notification({
       acceptAppointment.fulfilled.match(resultAction) ||
       (resultAction.payload && resultAction.payload.code === 101)
     ) {
-      let type = acceptAppointment.fulfilled.match(resultAction)
+      const type = acceptAppointment.fulfilled.match(resultAction)
         ? SnackBarType.SUCCESS
         : SnackBarType.ERROR;
-      let message = acceptAppointment.fulfilled.match(resultAction)
+      const message = acceptAppointment.fulfilled.match(resultAction)
         ? 'The appointment was scheduled and added to your calendar'
         : 'Unable to schedule an appointment because Customer has been cancel his request';
-      console.log('handle accecpt getNotifications');
-      dispatch(getNotifications());
-      navigation.navigate('Inbox', { feedback: { message, type } });
+      navigateToInboxScreen(message, type);
     }
   };
 
@@ -56,15 +54,16 @@ export default function Notification({
       declineAppointment.fulfilled.match(resultAction) ||
       (resultAction.payload && resultAction.payload.code === 101)
     ) {
-      console.log('handle reject getNotifications');
-      dispatch(getNotifications());
-      navigation.navigate('Inbox', {
-        feedback: {
-          message: 'The appointment decline successfully',
-          type: SnackBarType.SUCCESS,
-        },
-      });
+      navigateToInboxScreen(
+        'The appointment decline successfully',
+        SnackBarType.SUCCESS
+      );
     }
+  };
+
+  const navigateToInboxScreen = (message, type) => {
+    dispatch(getNotifications());
+    navigation.navigate('Inbox', { feedback: { message, type } });
   };
 
   return (

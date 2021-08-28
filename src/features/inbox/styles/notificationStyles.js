@@ -8,7 +8,6 @@ export const NotificationCard = styled(Card)`
   align-self: center;
 `;
 export const CardContainer = styled.View`
-  flex: 1;
   flex-direction: row;
   padding: ${(props) => props.theme.space[3]};
 `;

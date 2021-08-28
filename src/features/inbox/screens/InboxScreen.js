@@ -23,7 +23,6 @@ export default function InboxScreen({ navigation, route }) {
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    console.log('onRefresh getNotifications');
     await dispatch(getNotifications());
     setRefreshing(false);
   }, [dispatch]);
@@ -33,15 +32,8 @@ export default function InboxScreen({ navigation, route }) {
   }, [feedback]);
 
   useEffect(() => {
-    console.log('useEffect inboxScreen getNotifications');
     dispatch(getNotifications());
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   console.log('useEffect inboxScreen getNotifications');
-  //   dispatch(getNotifications());
-  //   setSnackbarVisible(feedback ? true : false);
-  // }, [feedback]);
 
   return (
     <InboxContainer>
