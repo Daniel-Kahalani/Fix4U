@@ -1,16 +1,16 @@
 import React from 'react';
-import SettingsScreen from '../../features/settings/screens/SettingsScreen';
-import CameraScreen from '../../features/settings/screens/CameraScreen';
-import EditPersonalProfileScreen from '../../features/settings/screens/EditPersonalProfileScreen';
-import EditBusinessInfoScreen from '../../features/settings/screens/EditBusinessInfoScreen';
-import EditExpertiseScreen from '../../features/settings/screens/EditExpertiseScreen';
-import EditSuccessScreen from '../../features/settings/screens/EditSuccessScreen';
-import AppBar from '../../components/utils/AppBar';
+import { usePushNotification } from '../../utils/usePushNotification';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import { usePushNotification } from '../utils/usePushNotification';
+import SettingsScreen from '../../../features/settings/screens/SettingsScreen';
+import CameraScreen from '../../../features/settings/screens/CameraScreen';
+import EditPersonalProfileScreen from '../../../features/settings/screens/EditPersonalProfileScreen';
+import EditBusinessInfoScreen from '../../../features/settings/screens/EditBusinessInfoScreen';
+import EditExpertiseScreen from '../../../features/settings/screens/EditExpertiseScreen';
+import EditSuccessScreen from '../../../features/settings/screens/EditSuccessScreen';
+import AppBar from '../../../components/utils/AppBar';
 
 const SettingsStack = createStackNavigator();
 

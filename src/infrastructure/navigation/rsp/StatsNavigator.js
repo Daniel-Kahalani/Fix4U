@@ -1,6 +1,6 @@
 import React from 'react';
-import StatsScreen from '../../features/stats/screens/StatsScreen';
-import AppBar from '../../components/utils/AppBar';
+import StatsScreen from '../../../features/stats/screens/StatsScreen';
+import AppBar from '../../../components/utils/AppBar';
 import {
   createStackNavigator,
   CardStyleInterpolators,

@@ -1,9 +1,9 @@
 import React from 'react';
-import SearchRSPScreen from '../../features/serachRsp/screens/ScreenRSPScreen';
-import SearchResultScreen from '../../features/serachRsp/screens/SearchResultScreen';
-import SearchByAvailabilityScreen from '../../features/serachRsp/screens/SearchByAvailabilityScreen';
-import SearchByNameScreen from '../../features/serachRsp/screens/SearchByNameScreen';
-import AppBar from '../../components/utils/AppBar';
+import SearchRSPScreen from '../../../features/serachRsp/screens/ScreenRSPScreen';
+import SearchResultScreen from '../../../features/serachRsp/screens/SearchResultScreen';
+import SearchByAvailabilityScreen from '../../../features/serachRsp/screens/SearchByAvailabilityScreen';
+import SearchByNameScreen from '../../../features/serachRsp/screens/SearchByNameScreen';
+import AppBar from '../../../components/utils/AppBar';
 
 import { createStackNavigator } from '@react-navigation/stack';
 

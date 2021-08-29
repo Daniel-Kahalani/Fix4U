@@ -42,7 +42,7 @@ export default function StatsScreen() {
         faultDescripton: 'computer EXPLODED',
         rspId: 'GxRhrf3b2U',
         // rspId: '3Ujj8LaiSI',
-        date: '19/08/21',
+        date: '29/08/21',
         time: '09:00',
         location: 'tel aviv',
       })
@@ -76,3 +76,9 @@ export default function StatsScreen() {
     </View>
   );
 }
+
+// import React from 'react';
+
+// export default function StatsScreen() {
+//   return null;
+// }

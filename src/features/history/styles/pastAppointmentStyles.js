@@ -3,7 +3,7 @@ import { colors } from '../../../infrastructure/theme/colors';
 import { Card, Avatar, Button, List } from 'react-native-paper';
 import Text from '../../../components/utils/Text';
 
-export const NotificationCard = styled(Card)`
+export const PastAppointmentCard = styled(Card)`
   background-color: ${(props) => props.theme.colors.bg.primary};
   width: 95%;
   align-self: center;
@@ -13,12 +13,14 @@ export const CardContainer = styled.View`
   padding: ${(props) => props.theme.space[3]};
 `;
 
-export const NotificationAvatarContainer = styled.View`
+export const AppointmentAvatarContainer = styled.View`
   margin-right: ${(props) => props.theme.space[2]};
+  padding: 0;
 `;
 
-export const NotificationIcon = styled(Avatar.Icon).attrs({
+export const AppoitmentText = styled(Avatar.Text).attrs({
   size: 46,
+  labelStyle: { textTransform: 'capitalize' },
 })`
   background-color: ${(props) => props.theme.colors.brand.primary};
 `;
@@ -52,15 +54,8 @@ export const CardActions = styled(Card.Actions)`
   align-items: center;
 `;
 
-export const AcceptButton = styled(Button).attrs({
-  color: colors.ui.success,
-})`
-  flex-grow: 1;
-  padding: ${(props) => props.theme.space[2]};
-`;
-
-export const DeclineButton = styled(Button).attrs({
-  color: colors.ui.error,
+export const FeedbackButton = styled(Button).attrs({
+  color: colors.brand.primary,
 })`
   flex-grow: 1;
   padding: ${(props) => props.theme.space[2]};

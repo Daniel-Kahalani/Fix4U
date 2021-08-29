@@ -28,7 +28,7 @@ Parse.Cloud.define('sendAppointmentRequest', async (request) => {
   Appointment.set({
     rspID: rspId,
     title: 'Customer Appointment',
-    appointmentType: 'customer',
+    appointmentType: 'Customer',
     startTime: time,
     endTime: convertTimeToStr(convertTimeToNum(time) + 2),
     location,
