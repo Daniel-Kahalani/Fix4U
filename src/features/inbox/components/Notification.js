@@ -13,7 +13,7 @@ import Spacer from '../../../components/utils/Spacer';
 import {
   NotificationCard,
   CardContainer,
-  NotificationIconContainer,
+  NotificationAvatarContainer,
   NotificationIcon,
   InfoContainer,
   Info,
@@ -69,9 +69,9 @@ export default function Notification({
   return (
     <NotificationCard elevation={2}>
       <CardContainer>
-        <NotificationIconContainer>
+        <NotificationAvatarContainer>
           <NotificationIcon icon='calendar-clock' />
-        </NotificationIconContainer>
+        </NotificationAvatarContainer>
         <InfoContainer>
           <Text variant='label'>{title}</Text>
           <Info>{`Date: ${date}`}</Info>

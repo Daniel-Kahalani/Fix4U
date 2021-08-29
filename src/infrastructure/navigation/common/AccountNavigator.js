@@ -1,13 +1,12 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-
-import WelcomeScreen from '../../features/account/screens/WelcomeScreen';
-import LoginScreen from '../../features/account/screens/LoginScreen';
-import UserTypeScreen from '../../features/account/screens/UserTypeScreen';
-import BusinessInfoScreen from '../../features/account/screens/BusinessInfoScreen';
-import PersonalInfoScreen from '../../features/account/screens/PersonalInfoScreen';
-import ExpertiseScreen from '../../features/account/screens/ExpertiseScreen';
-import AppBar from '../../components/utils/AppBar';
+import WelcomeScreen from '../../../features/account/screens/WelcomeScreen';
+import LoginScreen from '../../../features/account/screens/LoginScreen';
+import UserTypeScreen from '../../../features/account/screens/UserTypeScreen';
+import BusinessInfoScreen from '../../../features/account/screens/BusinessInfoScreen';
+import PersonalInfoScreen from '../../../features/account/screens/PersonalInfoScreen';
+import ExpertiseScreen from '../../../features/account/screens/ExpertiseScreen';
+import AppBar from '../../../components/utils/AppBar';
 
 const Stack = createStackNavigator();
 

@@ -122,7 +122,6 @@ export default inboxSlice.reducer;
 /*
 notifications structure
 
---------customer-------------
 Array[
   Object {
   "objectId": String,

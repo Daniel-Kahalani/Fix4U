@@ -183,7 +183,8 @@ Array[
   "fullname": String,
   "businessName": String,
   "visitCost": Number,
-  "rank":Number,
+  "rating":Number,
+  "votes":Number,
   "availableHours": [String],
 }]
 */

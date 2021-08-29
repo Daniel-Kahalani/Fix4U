@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "332958354126",
+    "project_id": "fix4u-f9cc6",
+    "storage_bucket": "fix4u-f9cc6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332958354126:android:c770624599c49c194e9e9f",
+        "android_client_info": {
+          "package_name": "com.fix4u.fix4u"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "332958354126-9uh8pqod561u9slb5iujgin77c1vd2qa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6PLTH5L2sAtmMpfRoah5pBx26bdrXCRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "332958354126-9uh8pqod561u9slb5iujgin77c1vd2qa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

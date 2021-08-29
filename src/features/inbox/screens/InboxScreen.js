@@ -48,7 +48,7 @@ export default function InboxScreen({ navigation, route }) {
             <ErrorIconContainer>
               <ErorIcon icon='close' bg={colors.ui.error} />
               <Text variant='body'>
-                Unable to load your inbox, please try again
+                Unable to load your inbox, please try to refresh
               </Text>
             </ErrorIconContainer>
           </>
