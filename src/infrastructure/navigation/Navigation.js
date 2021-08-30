@@ -7,6 +7,8 @@ import AccountNavigator from './common/AccountNavigator';
 import RSPNavigator from './rsp/RSPNavigator';
 import CustomerNavigator from './customer/CustomerNavigator';
 import '../../../assets/backgrounds/home.jpg';
+import '../../../assets/backgrounds/main.jpeg';
+
 
 export default function Navigation() {
   const dispatch = useDispatch();

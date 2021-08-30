@@ -5,7 +5,6 @@ import {
   ScrollBackground,
   SettingCover,
   EditContainer,
-  Title,
   FormContainer,
 } from '../styles/settingStyles';
 
@@ -19,7 +18,6 @@ export default function EditBusinessInfoScreen({ navigation }) {
       <SettingCover />
       <ScrollView>
         <EditContainer>
-          <Title>Business Information</Title>
           <FormContainer>
             <EditBusinessInfoForm goToNextScreen={handleNext} />
           </FormContainer>

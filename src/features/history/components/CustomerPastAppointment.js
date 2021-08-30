@@ -22,7 +22,8 @@ export default function CustomerPastAppointment({
   isFullDispaly,
 }) {
   const navigation = useNavigation();
-  const { date, startTime, endTime, businessName } = pastAppointment;
+  const { date, startTime, endTime, businessName, isFeedbacked } =
+    pastAppointment;
   const todayDate = format(new Date(Date.now()), 'dd/MM/yy');
 
   return (
@@ -45,8 +46,10 @@ export default function CustomerPastAppointment({
           <CardActions>
             <FeedbackButton
               mode='contained'
-              disabled={todayDate === date}
-              onPress={() => navigation.navigate('Feedback')}
+              disabled={todayDate === date || isFeedbacked}
+              onPress={() =>
+                navigation.navigate('Feedback', { ...pastAppointment })
+              }
             >
               Give A Feedback
             </FeedbackButton>

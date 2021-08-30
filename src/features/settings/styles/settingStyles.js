@@ -4,7 +4,7 @@ import Text from '../../../components/utils/Text';
 import { colors } from '../../../infrastructure/theme/colors';
 
 export const ScrollBackground = styled.ImageBackground.attrs({
-  source: require('../../../../assets/backgrounds/settings.jpeg'),
+  source: require('../../../../assets/backgrounds/main.jpeg'),
 })`
   flex: 1;
 `;

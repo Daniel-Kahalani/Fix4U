@@ -7,7 +7,7 @@ const AppbarHeader = styled(Appbar.Header)`
 `;
 
 export default function AppBar({ scene, navigation, previous, ...data }) {
-  const noAppbarScreens = ['Main', 'EditSuccess'];
+  const noAppbarScreens = ['Main', 'EditSuccess', 'FeedbackSuccess'];
   return noAppbarScreens.includes(scene.route.name) ? null : (
     <AppbarHeader statusBarHeight={15}>
       {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}

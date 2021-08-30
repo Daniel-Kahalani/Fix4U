@@ -1,8 +1,7 @@
 import React from 'react';
-import { usePushNotification } from '../../utils/usePushNotification';
 import {
   createStackNavigator,
-  CardStyleInterpolators,
+  TransitionPresets,
 } from '@react-navigation/stack';
 import SettingsScreen from '../../../features/settings/screens/SettingsScreen';
 import CameraScreen from '../../../features/settings/screens/CameraScreen';
@@ -15,12 +14,11 @@ import AppBar from '../../../components/utils/AppBar';
 const SettingsStack = createStackNavigator();
 
 export default function SettingsNavigator({ navigation, route }) {
-  usePushNotification(navigation);
   return (
     <SettingsStack.Navigator
       screenOptions={{
         header: (props) => <AppBar {...props} />,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        ...TransitionPresets.SlideFromRightIOS,
       }}
     >
       <SettingsStack.Screen

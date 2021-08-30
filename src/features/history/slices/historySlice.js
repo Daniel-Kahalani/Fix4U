@@ -5,6 +5,7 @@ const initialState = {
   pastAppointments: [],
   error: null,
   loading: null,
+  success: null,
 };
 
 export const getPastAppointments = createAsyncThunk(
@@ -20,9 +21,19 @@ export const getPastAppointments = createAsyncThunk(
         specificUserId,
         userType,
       });
-
-      // console.log('pastAppointments: ', userType, pastAppointments);
       return pastAppointments;
+    } catch (e) {
+      throw rejectWithValue(e);
+    }
+  }
+);
+
+export const addNewFeedback = createAsyncThunk(
+  'history/addNewFeedback',
+  async (feedbackInput, { rejectWithValue }) => {
+    try {
+      await Parse.Cloud.run('addNewFeedback', feedbackInput);
+      return;
     } catch (e) {
       throw rejectWithValue(e);
     }
@@ -53,6 +64,23 @@ const historySlice = createSlice({
         message: action.payload.message,
         code: action.payload.code,
       };
+    },
+    [addNewFeedback.pending]: (state, action) => {
+      state.error = null;
+      state.loading = true;
+      state.success = null;
+    },
+    [addNewFeedback.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.success = true;
+    },
+    [addNewFeedback.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = {
+        message: action.payload.message,
+        code: action.payload.code,
+      };
+      state.success = false;
     },
   },
 });

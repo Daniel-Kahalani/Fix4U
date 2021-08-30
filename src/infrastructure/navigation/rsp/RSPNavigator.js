@@ -6,10 +6,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from '../../theme/colors';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import RSPCalendarNavigator from './RSPCalendarNavigator';
-import SettingsNavigator from '../common/SettingsNavigator';
 import InboxNavigator from './InboxNavigator';
-import HistoryNavigator from '../common/HistoryNavigator';
 import StatsNavigator from './StatsNavigator';
+import HistoryNavigator from '../common/HistoryNavigator';
+import SettingsNavigator from '../common/SettingsNavigator';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -50,7 +50,7 @@ export default function RSPNavigator(props) {
 
   return (
     <Tab.Navigator
-      initialRouteName='Settings'
+      initialRouteName='Calendar'
       screenOptions={createScreenOptions}
       tabBarOptions={{
         activeTintColor: colors.brand.primary,
