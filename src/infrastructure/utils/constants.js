@@ -33,3 +33,8 @@ export const rspAppointmentTypeArr = [
   { name: 'Supplier' },
   { name: 'Customer' },
 ];
+
+export const SearchType = {
+  LOCATION: 'location',
+  NAME: 'name',
+};
