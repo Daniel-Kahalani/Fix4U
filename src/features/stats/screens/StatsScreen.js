@@ -18,7 +18,7 @@ export default function StatsScreen() {
     dispatch(
       getAvailableRSPs({
         faultType: 'Appliances',
-        date: '19/08/21',
+        date: '29/08/21',
       })
     );
   };
