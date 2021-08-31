@@ -25,12 +25,12 @@ export const NotificationIcon = styled(Avatar.Icon).attrs({
 
 export const InfoContainer = styled.View``;
 
-export const Info = styled.Text`
-  font-size: ${(props) => props.theme.fontSizes.caption};
+export const Title = styled(Text)`
   text-transform: capitalize;
 `;
 
-export const Title = styled(Text)`
+export const Info = styled.Text`
+  font-size: ${(props) => props.theme.fontSizes.caption};
   text-transform: capitalize;
 `;
 

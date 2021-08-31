@@ -20,8 +20,13 @@ Parse.Cloud.define('addNewFeedback', async (request) => {
     rating,
     description,
   });
-  await Feedback.save();
-  await updateAppointmentToFeedbacked(appointmentId);
+  const newFeedback = await Feedback.save();
+  try {
+    await updateAppointmentToFeedbacked(appointmentId);
+  } catch (e) {
+    await newFeedback.destroy({ useMasterKey: true });
+    throw e;
+  }
   await updateRSPRating(rspId, rating);
 });
 
@@ -37,6 +42,6 @@ async function updateRSPRating(rspId, feedbackRating) {
   const rsp = await query.get(rspId);
   const { votes, rating } = rsp.attributes;
   const newRating = (rating * votes + feedbackRating) / (votes + 1);
-  rsp.set({ votes: votes + 1, rating: newRating });
+  rsp.set({ votes: votes + 1, rating: parseFloat(newRating.toFixed(1)) });
   await rsp.save();
 }

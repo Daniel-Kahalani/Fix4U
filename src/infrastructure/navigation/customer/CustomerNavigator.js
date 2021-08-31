@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from '../../theme/colors';
 import { loadPhoto } from '../../../features/account/slices/userSlice';
+import { getPastAppointments } from '../../../features/history/slices/historySlice';
+
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import SearchNavigator from './SearchNavigator';
 import HistoryNavigator from '../common/HistoryNavigator';
@@ -35,6 +37,7 @@ export default function CustomerNavigator() {
 
   useEffect(() => {
     dispatch(loadPhoto());
+    dispatch(getPastAppointments());
   }, [dispatch]);
 
   return (

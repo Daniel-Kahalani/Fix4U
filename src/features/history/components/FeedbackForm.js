@@ -1,32 +1,16 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { HelperText } from 'react-native-paper';
 import Loader from '../../../components/utils/Loader';
 import Spacer from '../../../components/utils/Spacer';
 import Text from '../../../components/utils/Text';
-import RNPickerSelect from 'react-native-picker-select';
+import Picker from '../../../components/utils/Picker';
 
 import {
   FeedbackInput,
   ErrorContainer,
   SubmitButton,
 } from '../styles/feedbackStyles';
-
-const pickerSelectStyles = StyleSheet.create({
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30,
-  },
-  placeholder: {
-    color: 'black',
-  },
-});
 
 export default function FeedbackForm({ handleSubmitFeedback }) {
   const ratings = [
@@ -53,10 +37,9 @@ export default function FeedbackForm({ handleSubmitFeedback }) {
       handleSubmitFeedback({ rating, description });
     }
   };
-
   return (
     <>
-      <RNPickerSelect
+      <Picker
         placeholder={{
           label: 'Choose a rating...',
           value: null,
@@ -64,8 +47,6 @@ export default function FeedbackForm({ handleSubmitFeedback }) {
         }}
         items={ratings}
         onValueChange={(value) => setRating(value)}
-        style={pickerSelectStyles}
-        useNativeAndroidPickerStyle={false}
         value={rating}
       />
       <HelperText type='error' visible={errorCheck && !rating}>

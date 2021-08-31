@@ -5,7 +5,11 @@ import { ScrollView } from 'react-native';
 import RSPPastAppointment from '../components/RSPPastAppointment';
 import CustomerPastAppointment from '../components/CustomerPastAppointment';
 
-import { PastAppointmentDetailsContainer } from '../styles/pastAppointmentDetailsStyles';
+import {
+  PastAppointmentDetailsContainer,
+  PastAppointmentDetailsBackground,
+  PastAppointmentDetailsCover,
+} from '../styles/pastAppointmentDetailsStyles';
 
 export default function PastAppointmentDetailsScreen({ route }) {
   const { info } = useSelector((state) => state.user);
@@ -13,20 +17,24 @@ export default function PastAppointmentDetailsScreen({ route }) {
   const { pastAppointment } = route.params;
 
   return (
-    <ScrollView>
-      <PastAppointmentDetailsContainer>
-        {info.userType === UserType.RSP ? (
-          <RSPPastAppointment
-            pastAppointment={pastAppointment}
-            isFullDispaly={true}
-          />
-        ) : (
-          <CustomerPastAppointment
-            pastAppointment={pastAppointment}
-            isFullDispaly={true}
-          />
-        )}
-      </PastAppointmentDetailsContainer>
-    </ScrollView>
+    <PastAppointmentDetailsBackground>
+      <PastAppointmentDetailsCover>
+        <ScrollView>
+          <PastAppointmentDetailsContainer>
+            {info.userType === UserType.RSP ? (
+              <RSPPastAppointment
+                pastAppointment={pastAppointment}
+                isFullDispaly={true}
+              />
+            ) : (
+              <CustomerPastAppointment
+                pastAppointment={pastAppointment}
+                isFullDispaly={true}
+              />
+            )}
+          </PastAppointmentDetailsContainer>
+        </ScrollView>
+      </PastAppointmentDetailsCover>
+    </PastAppointmentDetailsBackground>
   );
 }

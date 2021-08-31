@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Parse from 'parse/react-native';
+import { ParseError } from '../../../infrastructure/utils/ParseError';
 
 const initialState = {
   pastAppointments: [],
@@ -23,7 +24,12 @@ export const getPastAppointments = createAsyncThunk(
       });
       return pastAppointments;
     } catch (e) {
-      throw rejectWithValue(e);
+      throw rejectWithValue(
+        new ParseError(
+          450,
+          'Unable to load your History, please try to refresh'
+        )
+      );
     }
   }
 );
@@ -35,7 +41,9 @@ export const addNewFeedback = createAsyncThunk(
       await Parse.Cloud.run('addNewFeedback', feedbackInput);
       return;
     } catch (e) {
-      throw rejectWithValue(e);
+      throw rejectWithValue(
+        new ParseError(451, 'Unable to send your feedback, please try again')
+      );
     }
   }
 );
@@ -46,6 +54,12 @@ const historySlice = createSlice({
   reducers: {
     clearError(state, action) {
       state.error = null;
+    },
+    clearHistory(state, action) {
+      state.pastAppointments = initialState.pastAppointments;
+      state.error = initialState.error;
+      state.loading = initialState.loading;
+      state.success = initialState.success;
     },
   },
   extraReducers: {
@@ -85,7 +99,7 @@ const historySlice = createSlice({
   },
 });
 
-export const { clearError } = historySlice.actions;
+export const { clearError, clearHistory } = historySlice.actions;
 
 export default historySlice.reducer;
 
@@ -97,35 +111,43 @@ Array [
   Object {
     "appointmentId": String,
     "appointmentType": String,
-    "businessName": String,
     "customerID": String,
     "customerName": String,
     "date": String,
     "description": String,
     "endTime": String,
-    "expertise": Array [String],
+    "isFeedbacked": false,
     "location": String,
-    "rating": Number,
-    "rspID": String,
-    "rspName": String,
+    "rsp": Object {
+      "businessName": String,
+      "expertise": Array [String],
+      "rating": Number,
+      "rspName": String,
+      "visitCost": Number,
+      "votes": Number,
+    },
+    "rspID": "GxRhrf3b2U",
     "startTime": String,
     "status": String,
     "title": String,
-    "visitCost": Number,
-    "votes": Number,
 }]
 
-  rsp
+rsp
 
   Array [
     Object {
     "appointmentId": String,
     "appointmentType": String,
+    "customerFeedback": Object {
+      "description": String,
+      "rating": Number,
+    },
     "customerID": String,
     "customerName": String,
     "date": String,
     "description": String,
     "endTime": "String,
+    "isFeedbacked":Boolean
     "location": String,
     "rspID": String,
     "startTime": String,
