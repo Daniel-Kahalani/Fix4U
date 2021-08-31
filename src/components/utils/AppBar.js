@@ -1,12 +1,17 @@
 import React from 'react';
-import { Appbar as Bar } from 'react-native-paper';
+import { Appbar } from 'react-native-paper';
+import styled from 'styled-components/native';
+
+const AppbarHeader = styled(Appbar.Header)`
+  background-color: ${(props) => props.theme.colors.brand.primary};
+`;
 
 export default function AppBar({ scene, navigation, previous, ...data }) {
-  const noAppbarScreens = ['Main', 'EditSuccess'];
+  const noAppbarScreens = ['Main', 'EditSuccess', 'FeedbackSuccess'];
   return noAppbarScreens.includes(scene.route.name) ? null : (
-    <Bar.Header>
-      {previous ? <Bar.BackAction onPress={navigation.goBack} /> : null}
-      <Bar.Content title={scene.descriptor.options.title} />
-    </Bar.Header>
+    <AppbarHeader statusBarHeight={15}>
+      {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+      <Appbar.Content title={scene.descriptor.options.title} />
+    </AppbarHeader>
   );
 }

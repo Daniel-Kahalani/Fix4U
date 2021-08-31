@@ -102,6 +102,13 @@ const searchRSPSlice = createSlice({
     clearError(state, action) {
       state.error = null;
     },
+    clearSearchRSP(state, action) {
+      state.results = initialState.results;
+      state.error = initialState.error;
+      state.loading = initialState.loading;
+      state.appointmentRequestId = initialState.appointmentRequestId;
+      state.appointmentStatus = initialState.appointmentStatus;
+    },
   },
   extraReducers: {
     [getAvailableRSPs.pending]: (state, action) => {
@@ -176,7 +183,7 @@ const searchRSPSlice = createSlice({
   },
 });
 
-export const { clearError } = searchRSPSlice.actions;
+export const { clearError, clearSearchRSP } = searchRSPSlice.actions;
 
 export default searchRSPSlice.reducer;
 
@@ -185,11 +192,26 @@ results structure
 
 Array[
   Object {
-  "rspId":String
-  "fullname": String,
-  "businessName": String,
-  "visitCost": Number,
-  "rank":Number,
-  "availableHours": [String],
+    "availableHours": Array [String],
+    "businessName": String,
+    "fullName": String,
+    "rating": Number,
+    "recentFeedbacks": Array [
+      Object {
+        "appointmentId": String,
+        "createdAt": Date,
+        "customerId": String,
+        "customerName": String,
+        "description": String,
+        "objectId": String,
+        "rating": Number,
+        "rspId": String,
+        "rspName": String,
+        "updatedAt": Date,
+      },
+    ],
+    "rspId": "String",
+    "visitCost": Number,
+    "votes": Number,
 }]
 */

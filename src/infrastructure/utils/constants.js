@@ -11,6 +11,12 @@ export const AppointmentStatus = {
 };
 Object.freeze(AppointmentStatus);
 
+export const SnackBarType = {
+  SUCCESS: 'success',
+  ERROR: 'error',
+};
+Object.freeze(SnackBarType);
+
 export const expertiseArr = [
   { name: 'Plumbing' },
   { name: 'Gas' },

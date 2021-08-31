@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateBusinessInfo, clearError } from '../../account/slices/userSlice';
 import { expertiseArr } from '../../../infrastructure/utils/constants';
-import { ActivityIndicator, Colors, HelperText } from 'react-native-paper';
+import { HelperText } from 'react-native-paper';
 import MultiSelect from '../../../components/utils/MultiSelect';
+import Loader from '../../../components/utils/Loader';
 import Spacer from '../../../components/utils/Spacer';
 import Text from '../../../components/utils/Text';
 
@@ -76,11 +77,7 @@ export default function EditExpertiseScreen({ navigation, route }) {
               Update
             </AuthButton>
           ) : (
-            <ActivityIndicator
-              animating={true}
-              color={Colors.blue300}
-              size='large'
-            />
+            <Loader />
           )}
         </Spacer>
       </ExpertiseContainer>

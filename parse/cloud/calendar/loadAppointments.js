@@ -23,7 +23,7 @@ Parse.Cloud.define('loadAppointmentsByMonth', async (request) => {
 async function createCustomRSPAppointments(appointmentsArr) {
   let customAppointments = await Promise.all(
     appointmentsArr.map(async (appointment) => {
-      const { date, startTime, endTime, title, description } =
+      const { date, startTime, endTime, appointmentType, title, description } =
         appointment.attributes;
       const appointmentId = appointment._getId();
       return {
@@ -31,6 +31,7 @@ async function createCustomRSPAppointments(appointmentsArr) {
         date,
         startTime,
         endTime,
+        appointmentType,
         title,
         description,
       };

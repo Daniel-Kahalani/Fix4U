@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import * as Notifications from 'expo-notifications';
 import { useDispatch } from 'react-redux';
-import { getNotifications } from '../../features/Inbox/slices/inboxSlice';
+import { getNotifications } from '../../features/inbox/slices/inboxSlice';
+
 export const usePushNotification = (navigation) => {
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -13,10 +14,8 @@ export const usePushNotification = (navigation) => {
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log('push getNotifications');
-        dispatch(getNotifications());
-
         navigation.navigate('Inbox');
+        dispatch(getNotifications());
       });
 
     return () => {
