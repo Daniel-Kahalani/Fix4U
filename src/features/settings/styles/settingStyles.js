@@ -4,7 +4,7 @@ import Text from '../../../components/utils/Text';
 import { colors } from '../../../infrastructure/theme/colors';
 
 export const ScrollBackground = styled.ImageBackground.attrs({
-  source: require('../../../../assets/backgrounds/settings.jpeg'),
+  source: require('../../../../assets/backgrounds/main.jpeg'),
 })`
   flex: 1;
 `;
@@ -13,7 +13,7 @@ export const SettingCover = styled.View`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.6);
 `;
 
 export const AvatarContainer = styled.View`

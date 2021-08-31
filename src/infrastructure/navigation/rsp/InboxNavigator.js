@@ -1,12 +1,11 @@
 import React from 'react';
-import InboxScreen from '../../../features/inbox/screens/InboxScreen';
-import NotficationDetailsScreen from '../../../features/inbox/screens/NotficationDetailsScreen';
-
-import AppBar from '../../../components/utils/AppBar';
 import {
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack';
+import InboxScreen from '../../../features/inbox/screens/InboxScreen';
+import NotficationDetailsScreen from '../../../features/inbox/screens/NotficationDetailsScreen';
+import AppBar from '../../../components/utils/AppBar';
 
 const InboxStack = createStackNavigator();
 

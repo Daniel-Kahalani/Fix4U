@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { format } from 'date-fns';
 
-import PastAppointmentCardInfo from './PastAppointmentCardInfo';
+import CustomerPastAppointmentCardInfo from './CustomerPastAppointmentCardInfo';
 import Spacer from '../../../components/utils/Spacer';
 
 import {
@@ -22,17 +22,17 @@ export default function CustomerPastAppointment({
   isFullDispaly,
 }) {
   const navigation = useNavigation();
-  const { date, startTime, endTime, businessName } = pastAppointment;
+  const { date, startTime, endTime, rsp, isFeedbacked } = pastAppointment;
   const todayDate = format(new Date(Date.now()), 'dd/MM/yy');
 
   return (
     <PastAppointmentCard elevation={2}>
       <CardContainer>
         <AppointmentAvatarContainer>
-          <AppoitmentText label={businessName[0]} />
+          <AppoitmentText label={rsp.businessName[0]} />
         </AppointmentAvatarContainer>
         <InfoContainer>
-          <Title variant='label'>{businessName}</Title>
+          <Title variant='label'>{rsp.businessName}</Title>
           <Info>{`Date: ${date}`}</Info>
           <Info>{`Time: ${startTime}-${endTime}`}</Info>
         </InfoContainer>
@@ -40,13 +40,17 @@ export default function CustomerPastAppointment({
       {isFullDispaly && (
         <>
           <Spacer size='large'>
-            <PastAppointmentCardInfo pastAppointment={pastAppointment} />
+            <CustomerPastAppointmentCardInfo
+              pastAppointment={pastAppointment}
+            />
           </Spacer>
           <CardActions>
             <FeedbackButton
               mode='contained'
-              disabled={todayDate === date}
-              onPress={() => navigation.navigate('Feedback')}
+              disabled={todayDate === date || isFeedbacked}
+              onPress={() =>
+                navigation.navigate('Feedback', { ...pastAppointment })
+              }
             >
               Give A Feedback
             </FeedbackButton>

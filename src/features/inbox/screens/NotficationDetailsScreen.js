@@ -4,7 +4,11 @@ import * as Notifications from 'expo-notifications';
 import { clearError } from '../slices/inboxSlice';
 import { ScrollView } from 'react-native';
 import Notification from '../components/Notification';
-import { NotificationDetailsContainer } from '../styles/notficationDetailsStyles';
+import {
+  NotificationDetailsContainer,
+  NotificationDetailsBackground,
+  NotificationDetailsCover,
+} from '../styles/notficationDetailsStyles';
 
 export default function NotficationDetailsScreen({ route, navigation }) {
   const dispatch = useDispatch();
@@ -29,14 +33,18 @@ export default function NotficationDetailsScreen({ route, navigation }) {
   }, [dispatch, navigation]);
 
   return (
-    <ScrollView>
-      <NotificationDetailsContainer>
-        <Notification
-          notification={notification}
-          isFullDispaly={true}
-          navigation={navigation}
-        />
-      </NotificationDetailsContainer>
-    </ScrollView>
+    <NotificationDetailsBackground>
+      <NotificationDetailsCover>
+        <ScrollView>
+          <NotificationDetailsContainer>
+            <Notification
+              notification={notification}
+              isFullDispaly={true}
+              navigation={navigation}
+            />
+          </NotificationDetailsContainer>
+        </ScrollView>
+      </NotificationDetailsCover>
+    </NotificationDetailsBackground>
   );
 }

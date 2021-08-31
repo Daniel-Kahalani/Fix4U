@@ -1,1 +1,2 @@
 require('./getPastAppointments');
+require('./addNewFeedback');

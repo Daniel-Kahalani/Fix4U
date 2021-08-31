@@ -3,6 +3,7 @@ const { NUM_OF_SEARCH_RESULTS } = require('../utils/constants');
 const {
   createRSPAvailableHours,
 } = require('../utils/createRSPAvailableHours.js');
+const { getRecentRSPFeedbacks } = require('../utils/getRecentRSPFeedbacks.js');
 
 Parse.Cloud.define('getAvailableRSPs', async (request) => {
   const { faultType, date } = request.params;
@@ -21,6 +22,7 @@ async function createRspResults(topRsps, date) {
         rsp.attributes;
       const rspId = rsp._getId();
       const availableHours = await createRSPAvailableHours(rspId, date);
+      const recentFeedbacks = await getRecentRSPFeedbacks(rspId);
       return {
         rspId,
         fullName,
@@ -29,6 +31,7 @@ async function createRspResults(topRsps, date) {
         rating,
         votes,
         availableHours,
+        recentFeedbacks,
       };
     })
   );
