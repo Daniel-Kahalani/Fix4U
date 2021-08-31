@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import { Avatar, Divider } from 'react-native-paper';
+import { Avatar, Divider, Portal } from 'react-native-paper';
 import {
   AppointmentCardContainer,
   AppointmentInfoCard,
@@ -13,41 +13,38 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Spacer from '../../../components/utils/Spacer.js';
-import { RemoveAppointmentModal } from '../components/RemoveAppointmentModal.js';
-import { EditAppointmentModal } from '../components/EditAppointmentModal.js';
+import { RemoveAppointmentDialog } from './RemoveAppointmentDialog.js';
+import { useNavigation } from '@react-navigation/native';
 
 export const AppointmentCard = ({ appointment }) => {
   const { appointmentId, startTime, endTime, title, description } = appointment;
   const iconSize = 28;
   const clientAvatarText = title.toString().slice(0, 1).toUpperCase();
 
-  const [isRemoveFormVisible, setRemoveFormVisible] = useState(false);
-  const [isEditFormVisible, setEditFormVisible] = useState(false);
+  const [isRemoveDialogVisible, setRemoveDialogVisible] = useState(false);
+
+  const navigation = useNavigation();
 
   return (
     <AppointmentCardContainer>
-      <RemoveAppointmentModal
-        isModalVisible={isRemoveFormVisible}
-        setModalVisible={setRemoveFormVisible}
-        appointmentId={appointmentId}
-      />
-      <EditAppointmentModal
-        appointment={appointment}
-        isModalVisible={isEditFormVisible}
-        setModalVisible={setEditFormVisible}
-        appointmentId={appointmentId}
-      />
+      <Portal>
+        <RemoveAppointmentDialog
+          isVisible={isRemoveDialogVisible}
+          setVisible={setRemoveDialogVisible}
+          appointmentId={appointmentId}
+        />
+      </Portal>
       <ButtonsSection>
         <Spacer size='large'>
           <TouchableOpacity
-            onPress={() => setEditFormVisible(!isEditFormVisible)}
+            onPress={() => navigation.navigate('EditAppointment', appointment)}
           >
             <FontAwesome5 name='edit' size={iconSize} color='black' />
           </TouchableOpacity>
         </Spacer>
         <Spacer size='large'>
           <TouchableOpacity
-            onPress={() => setRemoveFormVisible(!isRemoveFormVisible)}
+            onPress={() => setRemoveDialogVisible(!isRemoveDialogVisible)}
           >
             <Ionicons
               name='remove-circle-outline'

@@ -1,44 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { FAB } from 'react-native-paper';
-import { AddAppointmentModal } from '../components/AddAppointmentModal.js';
+import { FAB, Portal } from 'react-native-paper';
 import RSPAgenda from '../components/RSPAgenda.js';
 import { colors } from '../../../infrastructure/theme/colors.js';
 import { useDispatch } from 'react-redux';
-import { addAppointment, loadAppointments } from '../slices/calendarSlice.js';
+import { loadAppointments } from '../slices/calendarSlice.js';
 
-export default function CalendarScreen({ navigation }) {
+export default function CalendarScreen({ route, navigation }) {
   const dispatch = useDispatch();
-
-  const addNewAppointment = (appointment) => {
-    dispatch(addAppointment({ ...appointment }));
-  };
 
   const loadRSPAppointments = async (year, month) => {
     return await dispatch(loadAppointments({ year, month }));
   };
 
-  const [isFormVisible, setFormVisible] = useState(false);
-
   return (
-    <View style={styles.agenda}>
-      <RSPAgenda handleLoadAppointments={loadRSPAppointments} />
-      <AddAppointmentModal
-        style={styles.modal}
-        isModalVisible={isFormVisible}
-        setModalVisible={setFormVisible}
-        handleAddAppointment={addNewAppointment}
-      />
-      <FAB
-        style={styles.fab}
-        small
-        color={colors.brand.secondary}
-        icon='plus'
-        onPress={() => {
-          setFormVisible(true);
-        }}
-      />
-    </View>
+    <Portal.Host>
+      <View style={styles.agenda}>
+        <RSPAgenda handleLoadAppointments={loadRSPAppointments} />
+        <FAB
+          style={styles.fab}
+          small
+          color={colors.brand.secondary}
+          icon='plus'
+          onPress={() => {
+            navigation.navigate('AddAppointment');
+          }}
+        />
+      </View>
+    </Portal.Host>
   );
 }
 

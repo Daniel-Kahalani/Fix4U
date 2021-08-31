@@ -52,6 +52,7 @@ export default function RSPAgenda({ handleLoadAppointments }) {
   const [customAppointments, setCustomAppointments] = useState({});
 
   const createCustomAppointments = (year, month) => {
+    //console.log(`loading appointments: ${year} - ${month}`);
     handleLoadAppointments(year, month).then((result) => {
       let appointmentsObj = {};
       const appointmentsArr = result.payload;
@@ -73,15 +74,20 @@ export default function RSPAgenda({ handleLoadAppointments }) {
 
   useEffect(() => {
     createCustomAppointments(loadedYear, loadedMonth);
+    console.log(`appointments changed: ${JSON.stringify(appointments)}`);
   }, [loadedYear, loadedMonth, appointments]);
 
   return (
     <Agenda
       loadItemsForMonth={(date) => {
         if (date.month !== loadedMonth) {
+          //console.log(`loaded month: ${loadedMonth}`);
+          //console.log(`current month: ${date.month}`);
           setLoadedMonth(date.month);
         }
         if (date.year !== loadedYear) {
+          //console.log(`loaded year: ${loadedYear}`);
+          //console.log(`current year: ${date.year}`);
           setLoadedYear(date.year);
         }
       }}
