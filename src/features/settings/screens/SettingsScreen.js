@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../account/slices/userSlice';
 import { clearHistory } from '../../history/slices/historySlice';
 import { clearInbox } from '../../inbox/slices/inboxSlice';
-import { clearSearchRSP } from '../../serachRsp/slices/searchRSPSlice';
+import {
+  clearSearchRSP,
+  abortAppointmentRequest,
+} from '../../serachRsp/slices/searchRSPSlice';
 import { UserType } from '../../../infrastructure/utils/constants';
 import { colors } from '../../../infrastructure/theme/colors';
 import { TouchableOpacity, ScrollView } from 'react-native';
@@ -23,6 +26,7 @@ export default function SettingsScreen({ navigation }) {
   const isRsp = info.userType === UserType.RSP ? true : false;
 
   const handleLogout = async () => {
+    await dispatch(abortAppointmentRequest);
     await dispatch(logout());
     dispatch(clearHistory());
     dispatch(clearInbox());
