@@ -1,9 +1,11 @@
-import React from 'react';
-import { Text, View, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, FlatList, Button } from 'react-native';
 import { RSPInfoCard } from '../components/RSPInfoCard';
 import { SafeArea, RSPListContainer } from '../components/SearchStyles';
 import { Spacer } from '../../../components/utils/Spacer';
 import styled from 'styled-components/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, clearError } from '../slices/searchRSPSlice';
 
 const RSPList = styled(FlatList).attrs({
   contentContainerStyle: {
@@ -11,9 +13,30 @@ const RSPList = styled(FlatList).attrs({
   },
 })``;
 
-export default function SearchResultScreen({ navigation }) {
+export default function SearchResultScreen({ navigation, route }) {
+  const dispatch = useDispatch();
+  const { error, results } = useSelector((state) => state.searchRSP);
+  useEffect(() => {
+    navigation.addListener('beforeRemove', (e) => {
+      dispatch(clearError());
+    });
+  }, [dispatch, navigation]);
+
+  const handlePress1 = () => {
+    console.log('. result: ' + results);
+    console.log('. faultType: ' + route.params.faultType);
+    console.log('. date: ' + route.params.date);
+  };
   return (
     <SafeArea>
+      <View>
+        <Button onPress={handlePress1} title='test' />
+        {error && (
+          <Text>
+            {error.message} {error.code}
+          </Text>
+        )}
+      </View>
       <RSPList
         data={[
           { name: 1 },
@@ -22,14 +45,6 @@ export default function SearchResultScreen({ navigation }) {
           { name: 4 },
           { name: 5 },
           { name: 6 },
-          { name: 7 },
-          { name: 8 },
-          { name: 9 },
-          { name: 10 },
-          { name: 11 },
-          { name: 12 },
-          { name: 13 },
-          { name: 14 },
         ]}
         renderItem={() => <RSPInfoCard />} //to do add wrapping spacer
         keyExtractor={(item) => item.name}
