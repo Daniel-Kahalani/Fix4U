@@ -67,6 +67,7 @@ export const SearchContainer = styled.View`
   border-radius: 15px;
   padding: ${(props) => props.theme.space[3]};
   margin-top: ${(props) => props.theme.space[2]};
+  margin-bottom: ${(props) => props.theme.space[2]};
   border: solid 2px black;
   margin-right: 5px;
   margin-left: 5px;
@@ -85,6 +86,12 @@ export const AuthButton = styled(Button).attrs({
 
 export const AuthInput = styled(TextInput)`
   width: 300px;
+`;
+
+export const LargeAuthInput = styled(TextInput)`
+  width: 300px;
+  height: 200px;
+  text-align: left;
 `;
 export const SmallAuthInput = styled(TextInput)`
   width: 180px;
@@ -152,6 +159,8 @@ export const ScrollBackground = styled.ImageBackground.attrs({
   source: require('../../../../assets/backgrounds/home.jpg'),
 })`
   flex: 1;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const SafeScrollView = styled(ScrollView)`
