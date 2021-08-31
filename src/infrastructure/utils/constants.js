@@ -11,6 +11,12 @@ export const AppointmentStatus = {
 };
 Object.freeze(AppointmentStatus);
 
+export const SnackBarType = {
+  SUCCESS: 'success',
+  ERROR: 'error',
+};
+Object.freeze(SnackBarType);
+
 export const expertiseArr = [
   { name: 'Plumbing' },
   { name: 'Gas' },
@@ -27,3 +33,8 @@ export const rspAppointmentTypeArr = [
   { name: 'Supplier' },
   { name: 'Customer' },
 ];
+
+export const SearchType = {
+  LOCATION: 'location',
+  NAME: 'name',
+};

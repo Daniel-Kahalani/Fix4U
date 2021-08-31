@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { savePhoto } from '../../account/slices/userSlice';
 import { Camera } from 'expo-camera';
-import { View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import Text from '../../../components/utils/Text';
 import { ProfileCamera, InnerSnap } from '../styles/cameraStyles';
 
@@ -40,9 +40,9 @@ export default function CameraScreen({ navigation }) {
       ref={(camera) => (cameraRef.current = camera)}
       type={Camera.Constants.Type.front}
     >
-      <TouchableOpacity onPress={snap}>
-        <InnerSnap />
-      </TouchableOpacity>
+      <InnerSnap onPress={snap} underlayColor='black'>
+        <View />
+      </InnerSnap>
     </ProfileCamera>
   );
 }

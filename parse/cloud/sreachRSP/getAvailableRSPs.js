@@ -8,7 +8,7 @@ Parse.Cloud.define('getAvailableRSPs', async (request) => {
   const { faultType, date } = request.params;
   let query = new Parse.Query('RSP');
   query.containedIn('expertise', [faultType]);
-  query.descending('rank');
+  query.descending('rating');
   query.limit(NUM_OF_SEARCH_RESULTS);
   const topRsps = await query.find();
   return await createRspResults(topRsps, date);
@@ -17,7 +17,8 @@ Parse.Cloud.define('getAvailableRSPs', async (request) => {
 async function createRspResults(topRsps, date) {
   let resultsData = await Promise.all(
     topRsps.map(async (rsp) => {
-      const { fullName, businessName, visitCost, rank } = rsp.attributes;
+      const { fullName, businessName, visitCost, rating, votes } =
+        rsp.attributes;
       const rspId = rsp._getId();
       const availableHours = await createRSPAvailableHours(rspId, date);
       return {
@@ -25,7 +26,8 @@ async function createRspResults(topRsps, date) {
         fullName,
         businessName,
         visitCost,
-        rank,
+        rating,
+        votes,
         availableHours,
       };
     })

@@ -15,12 +15,12 @@ import { SvgXml } from 'react-native-svg';
 
 export const RSPInfoCard = ({ rsp = {} }) => {
   const {
-    name = 'Some RSP',
-    icon,
-    photos = ['http://fix4u.zapweb.co.il/img/0558/069.jpg'],
-    address = '2 Stam street',
+    businessName = 'Some RSP',
+    fullName = 'beni',
+    // icon,
+    // photos = ['http://fix4u.zapweb.co.il/img/0558/069.jpg'],
     isOpenNow = true,
-    rating = 4,
+    rating = 5,
     isClosedTemporarily,
   } = rsp;
 
@@ -28,9 +28,9 @@ export const RSPInfoCard = ({ rsp = {} }) => {
 
   return (
     <RSPCard elevation={5}>
-      <RSPCardCover key={name} source={{ uri: photos[0] }} />
+      <RSPCardCover key={businessName} />
       <Info>
-        <SmallTitle>{name}</SmallTitle>
+        <SmallTitle>{businessName}</SmallTitle>
         <Section>
           <Rating>
             {ratingArray.map(() => (
@@ -43,10 +43,9 @@ export const RSPInfoCard = ({ rsp = {} }) => {
                 CLOSED TEMPORARILY
               </Text>
             )}
-            <Image style={{ width: 15, height: 15 }} source={{ uri: icon }} />
           </SectionEnd>
         </Section>
-        <Address>{address}</Address>
+        <Address>{fullName}</Address>
       </Info>
     </RSPCard>
   );
