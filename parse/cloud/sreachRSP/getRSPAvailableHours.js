@@ -1,5 +1,8 @@
 /* eslint-disable no-undef */
-const { createRSPAvailableHours } = require('../utils/createRSPAvailableHours');
+const {
+  createRSPAvailableHours,
+} = require('../utils/createRSPAvailableHours.js');
+const { getRecentRSPFeedbacks } = require('../utils/getRecentRSPFeedbacks.js');
 
 Parse.Cloud.define('getRSPAvailableHours', async (request) => {
   const { faultType, date, businessName } = request.params;
@@ -25,19 +28,24 @@ async function createRspResults(rsp, date) {
   const { fullName, businessName, visitCost, rating, votes } = rsp.attributes;
   const rspId = rsp._getId();
   const availableHours = await createRSPAvailableHours(rspId, date);
+  const recentFeedbacks = await getRecentRSPFeedbacks(rspId);
+
   if (availableHours.length === 0) {
     throw new Parse.Error(
       332,
       `The RSP "${businessName}" is not available on ${date}`
     );
   }
-  return {
-    rspId,
-    fullName,
-    businessName,
-    visitCost,
-    rating,
-    votes,
-    availableHours,
-  };
+  return [
+    {
+      rspId,
+      fullName,
+      businessName,
+      visitCost,
+      rating,
+      votes,
+      availableHours,
+      recentFeedbacks,
+    },
+  ];
 }

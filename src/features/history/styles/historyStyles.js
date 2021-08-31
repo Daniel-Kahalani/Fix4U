@@ -8,6 +8,19 @@ export const HistoryContainer = styled.View`
   flex: 1;
 `;
 
+export const HistoryBackground = styled.ImageBackground.attrs({
+  source: require('../../../../assets/backgrounds/main.jpeg'),
+})`
+  flex: 1;
+`;
+
+export const HistoryCover = styled.View`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.6);
+`;
+
 export const ErrorIconContainer = styled.View`
   align-items: center;
   justify-content: center;
@@ -18,6 +31,11 @@ export const ErorIcon = styled(Avatar.Icon).attrs({
 })`
   background-color: ${(props) => props.bg || props.theme.colors.brand.primary};
   margin-bottom: ${(props) => props.theme.space[3]};
+`;
+
+export const Title = styled(Text)`
+  font-size: 25px;
+  font-weight: 600;
 `;
 
 export const RefreshScrollView = styled(ScrollView)`

@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Parse from 'parse/react-native';
 import { getPushToken } from '../../../infrastructure/utils/getPushToken';
+import { ParseError } from '../../../infrastructure/utils/ParseError';
+
 const initialState = {
   info: {},
   isAuthenticated: null,
@@ -24,7 +26,17 @@ export const register = createAsyncThunk(
       });
       return userInfo;
     } catch (e) {
-      throw rejectWithValue(e);
+      if (e.code === 202) {
+        throw rejectWithValue(
+          new ParseError(420, 'There is already an account with this email')
+        );
+      } else if (e.code === 310) {
+        throw rejectWithValue(e);
+      } else {
+        throw rejectWithValue(
+          new ParseError(421, 'Unable to register,please try again')
+        );
+      }
     }
   }
 );
@@ -45,7 +57,22 @@ export const login = createAsyncThunk(
       });
       return userInfo;
     } catch (e) {
-      throw rejectWithValue(e);
+      let error;
+      switch (e.code) {
+        case 101:
+          error = new ParseError(422, 'Invalid email/password');
+          break;
+        case 200:
+          error = new ParseError(423, 'Email is required');
+          break;
+        case 201:
+          error = e;
+          break;
+        default:
+          error = new ParseError(424, 'Unable to login, please try again');
+          break;
+      }
+      throw rejectWithValue(error);
     }
   }
 );
@@ -81,7 +108,12 @@ export const updatePersonalInfo = createAsyncThunk(
       });
       return userInfo;
     } catch (e) {
-      throw rejectWithValue(e);
+      throw rejectWithValue(
+        new ParseError(
+          430,
+          'Unable to update your personal profile, please try again'
+        )
+      );
     }
   }
 );
@@ -98,7 +130,14 @@ export const updateBusinessInfo = createAsyncThunk(
       });
       return userInfo;
     } catch (e) {
-      throw rejectWithValue(e);
+      throw rejectWithValue(
+        e.code === 310
+          ? e
+          : new ParseError(
+              431,
+              'Unable to update your business profile, please try again'
+            )
+      );
     }
   }
 );
@@ -148,10 +187,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.isAuthenticated = false;
       state.error = {
-        message:
-          action.payload.code === 202
-            ? 'there is already an account with this email'
-            : action.payload.message,
+        message: action.payload.message,
         code: action.payload.code,
       };
     },
@@ -167,14 +203,8 @@ const userSlice = createSlice({
     },
     [login.rejected]: (state, action) => {
       state.loading = false;
-
       state.error = {
-        message:
-          action.payload.code === 101
-            ? 'invalid email/password'
-            : action.payload.code === 200
-            ? 'email is required'
-            : action.payload.message,
+        message: action.payload.message,
         code: action.payload.code,
       };
       state.isAuthenticated = false;

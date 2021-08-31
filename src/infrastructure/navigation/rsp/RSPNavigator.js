@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadPhoto } from '../../../features/account/slices/userSlice';
+import { getPastAppointments } from '../../../features/history/slices/historySlice';
+import { getNotifications } from '../../../features/inbox/slices/inboxSlice';
+
 import * as Notifications from 'expo-notifications';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from '../../theme/colors';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import RSPCalendarNavigator from './RSPCalendarNavigator';
-import SettingsNavigator from '../common/SettingsNavigator';
 import InboxNavigator from './InboxNavigator';
-import HistoryNavigator from '../common/HistoryNavigator';
 import StatsNavigator from './StatsNavigator';
+import HistoryNavigator from '../common/HistoryNavigator';
+import SettingsNavigator from '../common/SettingsNavigator';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -46,11 +49,13 @@ export default function RSPNavigator(props) {
 
   useEffect(() => {
     dispatch(loadPhoto());
+    dispatch(getPastAppointments());
+    dispatch(getNotifications());
   }, [dispatch]);
 
   return (
     <Tab.Navigator
-      initialRouteName='Settings'
+      initialRouteName='Calendar'
       screenOptions={createScreenOptions}
       tabBarOptions={{
         activeTintColor: colors.brand.primary,

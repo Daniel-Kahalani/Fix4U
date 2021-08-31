@@ -16,6 +16,7 @@ import {
   NotificationAvatarContainer,
   NotificationIcon,
   InfoContainer,
+  Title,
   Info,
   CardActions,
   AcceptButton,
@@ -36,24 +37,21 @@ export default function Notification({
     const resultAction = await dispatch(acceptAppointment(notification.id));
     if (
       acceptAppointment.fulfilled.match(resultAction) ||
-      (resultAction.payload && resultAction.payload.code === 101)
+      (resultAction.payload && resultAction.payload.code === 441)
     ) {
       const type = acceptAppointment.fulfilled.match(resultAction)
         ? SnackBarType.SUCCESS
         : SnackBarType.ERROR;
       const message = acceptAppointment.fulfilled.match(resultAction)
         ? 'The appointment was scheduled and added to your calendar'
-        : 'Unable to schedule an appointment because Customer has been cancel his request';
+        : resultAction.payload.message;
       navigateToInboxScreen(message, type);
     }
   };
 
   const handleDecline = async () => {
     const resultAction = await dispatch(declineAppointment(notification.id));
-    if (
-      declineAppointment.fulfilled.match(resultAction) ||
-      (resultAction.payload && resultAction.payload.code === 101)
-    ) {
+    if (declineAppointment.fulfilled.match(resultAction)) {
       navigateToInboxScreen(
         'The appointment decline successfully',
         SnackBarType.SUCCESS
@@ -73,7 +71,7 @@ export default function Notification({
           <NotificationIcon icon='calendar-clock' />
         </NotificationAvatarContainer>
         <InfoContainer>
-          <Text variant='label'>{title}</Text>
+          <Title variant='label'>{title}</Title>
           <Info>{`Date: ${date}`}</Info>
           <Info>{`Time: ${startTime}-${endTime}`}</Info>
         </InfoContainer>
@@ -85,10 +83,7 @@ export default function Notification({
           </Spacer>
           {error && error.code !== 101 && (
             <ErrorContainer size='large'>
-              <Text variant='error'>
-                {error.message}
-                {error.code}
-              </Text>
+              <Text variant='error'>{error.message}</Text>
             </ErrorContainer>
           )}
           <CardActions>
@@ -100,7 +95,7 @@ export default function Notification({
                   Accept
                 </AcceptButton>
                 <DeclineButton mode='contained' onPress={handleDecline}>
-                  Cancel
+                  Decline
                 </DeclineButton>
               </>
             )}

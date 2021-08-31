@@ -1,10 +1,10 @@
 import React from 'react';
-import StatsScreen from '../../../features/stats/screens/StatsScreen';
-import AppBar from '../../../components/utils/AppBar';
 import {
   createStackNavigator,
-  CardStyleInterpolators,
+  TransitionPresets,
 } from '@react-navigation/stack';
+import StatsScreen from '../../../features/stats/screens/StatsScreen';
+import AppBar from '../../../components/utils/AppBar';
 
 const StatsStack = createStackNavigator();
 
@@ -13,7 +13,7 @@ export default function StatsNavigator({ route, navigation }) {
     <StatsStack.Navigator
       screenOptions={{
         header: (props) => <AppBar {...props} />,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        ...TransitionPresets.SlideFromRightIOS,
       }}
     >
       <StatsStack.Screen

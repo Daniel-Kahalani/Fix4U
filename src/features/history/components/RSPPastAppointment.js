@@ -1,5 +1,5 @@
 import React from 'react';
-import PastAppointmentCardInfo from './PastAppointmentCardInfo';
+import RSPPastAppointmentCardInfo from './RSPPastAppointmentCardInfo';
 import Spacer from '../../../components/utils/Spacer';
 import {
   PastAppointmentCard,
@@ -30,7 +30,7 @@ export default function RSPPastAppointment({ pastAppointment, isFullDispaly }) {
       {isFullDispaly && (
         <>
           <Spacer size='large'>
-            <PastAppointmentCardInfo pastAppointment={pastAppointment} />
+            <RSPPastAppointmentCardInfo pastAppointment={pastAppointment} />
           </Spacer>
         </>
       )}

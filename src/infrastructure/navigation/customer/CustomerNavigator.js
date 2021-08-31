@@ -3,12 +3,13 @@ import { useDispatch } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from '../../theme/colors';
 import { loadPhoto } from '../../../features/account/slices/userSlice';
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
-import SettingsNavigator from '../common/SettingsNavigator';
-import HistoryNavigator from '../common/HistoryNavigator';
+import { getPastAppointments } from '../../../features/history/slices/historySlice';
 
-import StatsNavigator from '../rsp/StatsNavigator';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import SearchNavigator from './SearchNavigator';
+import HistoryNavigator from '../common/HistoryNavigator';
+import StatsNavigator from '../rsp/StatsNavigator';
+import SettingsNavigator from '../common/SettingsNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,11 +37,12 @@ export default function CustomerNavigator() {
 
   useEffect(() => {
     dispatch(loadPhoto());
+    dispatch(getPastAppointments());
   }, [dispatch]);
 
   return (
     <Tab.Navigator
-      initialRouteName='Settings'
+      initialRouteName='Search'
       screenOptions={createScreenOptions}
       tabBarOptions={{
         activeTintColor: colors.brand.primary,

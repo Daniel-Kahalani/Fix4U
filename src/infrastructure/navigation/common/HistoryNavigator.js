@@ -1,13 +1,13 @@
 import React from 'react';
-import HistoryScreen from '../../../features/history/screens/HistoryScreen';
-import PastAppointmentDetailsScreen from '../../../features/history/screens/PastAppointmentDetailsScreen';
-import FeedbackScreen from '../../../features/history/screens/FeedbackScreen';
-
-import AppBar from '../../../components/utils/AppBar';
 import {
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack';
+import HistoryScreen from '../../../features/history/screens/HistoryScreen';
+import PastAppointmentDetailsScreen from '../../../features/history/screens/PastAppointmentDetailsScreen';
+import FeedbackScreen from '../../../features/history/screens/FeedbackScreen';
+import FeedbackSuccessScreen from '../../../features/history/screens/FeedbackSuccessScreen';
+import AppBar from '../../../components/utils/AppBar';
 
 const HistoryStack = createStackNavigator();
 
@@ -33,6 +33,10 @@ export default function HistoryNavigator({ route, navigation }) {
         name='Feedback'
         component={FeedbackScreen}
         options={{ title: 'Give a Feedback' }}
+      />
+      <HistoryStack.Screen
+        name='FeedbackSuccess'
+        component={FeedbackSuccessScreen}
       />
     </HistoryStack.Navigator>
   );
