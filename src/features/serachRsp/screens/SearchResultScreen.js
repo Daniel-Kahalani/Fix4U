@@ -5,8 +5,8 @@ import { SafeArea, RSPListContainer } from '../components/SearchStyles';
 import { Spacer } from '../../../components/utils/Spacer';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, clearError } from '../slices/searchRSPSlice';
 
+import { login, clearError } from '../slices/searchRSPSlice';
 const RSPList = styled(FlatList).attrs({
   contentContainerStyle: {
     padding: 16,
@@ -21,7 +21,6 @@ export default function SearchResultScreen({ navigation, route }) {
       dispatch(clearError());
     });
   }, [dispatch, navigation]);
-
   const handlePress1 = () => {
     console.log('. result: ' + results);
     console.log('. faultType: ' + route.params.faultType);
