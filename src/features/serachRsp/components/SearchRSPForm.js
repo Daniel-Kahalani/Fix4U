@@ -19,6 +19,8 @@ import {
   Section,
   SmallSpace,
 } from '../components/SearchStyles.js';
+import Picker from '../../../components/utils/Picker';
+
 const createExpertiseTypeArray = () => {
   let expertiseTypeArray = [];
   expertiseArr.forEach((element) => {
@@ -40,11 +42,8 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
   const [isDatePickerShow, setIsDatePickerShow] = useState(false);
   const [location, setLocation] = useState('');
   const [isSelected, setSelection] = useState(false);
-  const [isExpertiseTypePickerOpen, setIsExpertiseTypePickerOpen] =
-    useState(false);
   const [expertiseType, setExpertiseType] = useState(expertiseTypePlaceholder);
   const [errorCheck, setErrorCheck] = useState(false);
-
   const showDatePicker = () => {
     setDate(new Date());
     setIsDatePickerShow(true);
@@ -102,6 +101,7 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
         console.log('expertiseType ' + expertiseType);
         handleSearch({
           businessName,
+          location,
           faultType,
           description,
           date,
@@ -109,7 +109,9 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
       } else {
         console.log('in SearchType === SearchType.LOCATION ');
         handleSearch({
+          location,
           faultType,
+          description,
           date,
         });
       }
@@ -129,14 +131,7 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
           onChangeText={(u) => setBusinessName(u)}
         />
       ) : (
-        <AuthInput
-          label='Location'
-          value={location}
-          textContentType='name'
-          keyboardType='default'
-          autoCapitalize='none'
-          onChangeText={(u) => setLocation(u)}
-        />
+        <></>
       )}
       <HelperText
         type='error'
@@ -144,6 +139,14 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
       >
         Value must be entered!
       </HelperText>
+      <AuthInput
+        label='Address'
+        value={location}
+        textContentType='name'
+        keyboardType='default'
+        autoCapitalize='none'
+        onChangeText={(u) => setLocation(u)}
+      />
       <View>
         <Section>
           <CheckBox value={isSelected} onValueChange={setSelection} />
@@ -185,14 +188,15 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
         Date Is Missing!
       </HelperText>
       <>
-        <DropDownPicker
-          open={isExpertiseTypePickerOpen}
-          setOpen={setIsExpertiseTypePickerOpen}
-          value={expertiseType}
-          setValue={setExpertiseType}
+        <Picker
+          placeholder={{
+            label: 'Select fault type',
+            value: null,
+            color: 'Black',
+          }}
           items={expertiseTypeArray}
-          defaultIndex={0}
-          placeholder={expertiseTypePlaceholder}
+          onValueChange={(value) => setExpertiseType(value)}
+          value={expertiseType}
         />
 
         <HelperText type='error' visible={errorCheck && expertiseType === null}>

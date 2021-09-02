@@ -2,9 +2,10 @@ import styled from 'styled-components/native';
 import { Button, TextInput, ToggleButton } from 'react-native-paper';
 import Text from '../../../components/utils/Text';
 import { colors } from '../../../infrastructure/theme/colors';
-import { ScrollView, View, SafeAreaView } from 'react-native';
+import { ScrollView, View, SafeAreaView, FlatList } from 'react-native';
 import { Card } from 'react-native-paper';
 import MultiSelect from 'react-native-multiple-select';
+import { getStylesForProperty } from 'css-to-react-native';
 
 export const SearchBackground = styled.ImageBackground.attrs({
   source: require('../../../../assets/backgrounds/home.jpg'),
@@ -156,17 +157,14 @@ export const RegisterMultiSelect = styled(MultiSelect).attrs({
 })``;
 
 export const ScrollBackground = styled.ImageBackground.attrs({
-  source: require('../../../../assets/backgrounds/home.jpg'),
+  source: require('../../../../assets/backgrounds/main.jpeg'),
 })`
   flex: 1;
   align-items: center;
   justify-content: center;
 `;
 
-export const SafeScrollView = styled(ScrollView)`
-  margin-top: 15px;
-  margin-bottom: 15px;
-`;
+export const SafeScrollView = styled(ScrollView)``;
 
 export const SafeArea = styled(SafeAreaView)`
   flex: 1;
@@ -177,3 +175,7 @@ export const RSPListContainer = styled.View`
   padding: ${(props) => props.theme.space[3]}
   background-color: blue;
 `;
+
+export const PastAppointmentsFlatList = styled(FlatList).attrs((props) => ({
+  contentContainerStyle: getStylesForProperty('padding', props.theme.space[3]),
+}))``;

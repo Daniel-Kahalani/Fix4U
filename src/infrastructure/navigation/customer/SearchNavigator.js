@@ -19,16 +19,26 @@ export default function SearchNavigator() {
         ...TransitionPresets.SlideFromRightIOS,
       }}
     >
-      <SearchStack.Screen name='MainSearch' component={SearchRSPScreen} />
+      <SearchStack.Screen
+        name='MainSearch'
+        component={SearchRSPScreen}
+        options={{ title: 'Search RSP' }}
+      />
       <SearchStack.Screen
         name='SearchByAvailability'
         component={SearchByAvailabilityScreen}
+        options={{ title: 'Search By Availability' }}
       />
       <SearchStack.Screen
         name='SearchByNameScreen'
         component={SearchByNameScreen}
+        options={{ title: 'Search By Name' }}
       />
-      <SearchStack.Screen name='SearchResult' component={SearchResultScreen} />
+      <SearchStack.Screen
+        name='SearchResult'
+        component={SearchResultScreen}
+        options={{ title: 'Search Result' }}
+      />
     </SearchStack.Navigator>
   );
 }

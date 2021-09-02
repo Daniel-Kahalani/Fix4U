@@ -9,6 +9,7 @@ import {
   SearchContainer,
   ScrollBackground,
   Title,
+  SafeScrollView,
 } from '../components/SearchStyles.js';
 
 export default function SearchByNameScreen({ route, navigation }) {
@@ -28,16 +29,15 @@ export default function SearchByNameScreen({ route, navigation }) {
   return (
     <ScrollBackground>
       {/* <SearchCover /> */}
-      <Title>Search By Name</Title>
-      <Spacer size='large' />
-      {/* <SafeScrollView> */}
-      <SearchContainer>
-        <SearchRSPForm
-          searchType={SearchType.NAME}
-          handleSearch={performSearch}
-        />
-      </SearchContainer>
-      {/* </SafeScrollView> */}
+      <SafeScrollView>
+        <Spacer size='large' />
+        <SearchContainer>
+          <SearchRSPForm
+            searchType={SearchType.NAME}
+            handleSearch={performSearch}
+          />
+        </SearchContainer>
+      </SafeScrollView>
     </ScrollBackground>
   );
 }

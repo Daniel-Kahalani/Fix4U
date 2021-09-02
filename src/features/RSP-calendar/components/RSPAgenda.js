@@ -72,10 +72,10 @@ export default function RSPAgenda({ handleLoadAppointments }) {
     });
   };
 
-  useEffect(() => {
-    createCustomAppointments(loadedYear, loadedMonth);
-    console.log(`appointments changed: ${JSON.stringify(appointments)}`);
-  }, [loadedYear, loadedMonth, appointments]);
+  // useEffect(() => {
+  //   createCustomAppointments(loadedYear, loadedMonth);
+  //   console.log(`appointments changed: ${JSON.stringify(appointments)}`);
+  // }, [loadedYear, loadedMonth, appointments]);
 
   return (
     <Agenda
