@@ -1,84 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Button } from 'react-native';
+import { getChartStats } from '../slices/statsSlices';
+import { ScrollView, RefreshControl } from 'react-native';
+import Grade from '../components/Grade';
+import Charts from '../components/Charts';
 import {
-  getAvailableRSPs,
-  getRSPAvailableHours,
-  sendAppointmentRequest,
-  getAppointmentRequestStatus,
-  abortAppointmentRequest,
-} from '../../serachRsp/slices/searchRSPSlice';
-import Text from '../../../components/utils/Text';
-import { AppointmentStatus } from '../../../infrastructure/utils/constants';
+  ScrollBackground,
+  StatsCover,
+  RefreshMiniScrollView,
+  ErrorContainer,
+  ErorIcon,
+  ErrorTitle,
+  StatsContainer,
+  ChartsContainer,
+  Title,
+} from '../styles/statsStyles';
 
 export default function StatsScreen() {
   const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.searchRSP);
-  const handlePress1 = () => {
-    dispatch(
-      getAvailableRSPs({
-        faultType: 'Appliances',
-        date: '29/08/21',
-      })
-    );
-  };
+  const { error, loading } = useSelector((state) => state.stats);
+  const { info } = useSelector((state) => state.user);
+  const [numOfMonths, setNumOfMonths] = useState(3);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const handlePress2 = () => {
-    dispatch(
-      getRSPAvailableHours({
-        faultType: 'Appliances',
-        date: '19/08/21',
-        businessName: 'beni tech',
-      })
-    );
-  };
-
-  const handlePress3 = async () => {
-    const resultAction = await dispatch(
-      sendAppointmentRequest({
-        customerName: 'avi',
-        customerId: 'gylgNmuG0R',
-        // customerId: 'ryvZ69Uxxv',
-        faultDescripton: 'computer EXPLODED',
-        rspId: 'GxRhrf3b2U',
-        // rspId: '3Ujj8LaiSI',
-        date: '29/08/21',
-        time: '09:00',
-        location: 'tel aviv',
-      })
-    );
-    if (sendAppointmentRequest.fulfilled.match(resultAction)) {
-      let intervalId1 = setInterval(async () => {
-        let result = await dispatch(getAppointmentRequestStatus());
-        if (result.payload !== AppointmentStatus.PENDING) {
-          clearInterval(intervalId1);
-          //activate fucntions according to the result.payload (approved/rejected)
-        }
-      }, 6000);
-      setTimeout(async () => {
-        clearInterval(intervalId1);
-        dispatch(abortAppointmentRequest());
-      }, 50000);
-    }
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await dispatch(getChartStats(numOfMonths));
+    setRefreshing(false);
   };
 
   return (
-    <View>
-      <Button onPress={handlePress1} title='search all' />
-      <Button onPress={handlePress2} title='search spesific' />
-      <Button onPress={handlePress3} title='schedule' />
-
-      {error && (
-        <Text>
-          {error.message} {error.code}
-        </Text>
-      )}
-    </View>
+    <ScrollBackground>
+      <StatsCover>
+        {!loading &&
+          (error || !info || !info.rating ? (
+            <>
+              <RefreshMiniScrollView
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+              />
+              <ErrorContainer>
+                <ErorIcon icon='close' />
+                <ErrorTitle variant='body'>
+                  {error
+                    ? error.message
+                    : 'Unable to show your statistics,\n please try to refresh'}
+                </ErrorTitle>
+              </ErrorContainer>
+            </>
+          ) : (
+            <ScrollView
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            >
+              <StatsContainer>
+                <ChartsContainer>
+                  <Title varient='label'>Your Score</Title>
+                  <Grade grade={info.rating} />
+                  <Charts
+                    numOfMonths={numOfMonths}
+                    setNumOfMonths={setNumOfMonths}
+                  />
+                </ChartsContainer>
+              </StatsContainer>
+            </ScrollView>
+          ))}
+      </StatsCover>
+    </ScrollBackground>
   );
 }
-
-// import React from 'react';
-
-// export default function StatsScreen() {
-//   return null;
-// }

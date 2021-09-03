@@ -13,15 +13,12 @@ const initialState = {
 export const getAvailableRSPs = createAsyncThunk(
   'searchRSP/getAvailableRSPs',
   async (searchInput, { rejectWithValue }) => {
-    console.log('in getAvailableRSPs');
     try {
       const availableRSPs = await Parse.Cloud.run('getAvailableRSPs', {
         ...searchInput,
       });
-      console.log(availableRSPs);
       return availableRSPs;
     } catch (e) {
-      console.log('Sagi e: ' + e);
       throw rejectWithValue(e);
     }
   }
@@ -31,14 +28,11 @@ export const getRSPAvailableHours = createAsyncThunk(
   'searchRSP/getRSPAvailableHours',
   async (searchInput, { rejectWithValue }) => {
     try {
-      console.log('in getRSPAvailableHours');
       const rspAvailability = await Parse.Cloud.run('getRSPAvailableHours', {
         ...searchInput,
       });
-      console.log(rspAvailability);
       return rspAvailability;
     } catch (e) {
-      console.log('Sagi e: ' + e);
       throw rejectWithValue(e);
     }
   }

@@ -27,7 +27,7 @@ export const getPastAppointments = createAsyncThunk(
       throw rejectWithValue(
         new ParseError(
           450,
-          'Unable to load your History, please try to refresh'
+          'Unable to load your History,\n please try to refresh'
         )
       );
     }
