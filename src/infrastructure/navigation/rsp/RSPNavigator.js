@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { loadPhoto } from '../../../features/account/slices/userSlice';
 import { getPastAppointments } from '../../../features/history/slices/historySlice';
 import { getNotifications } from '../../../features/inbox/slices/inboxSlice';
-
+import { getChartStats } from '../../../features/stats/slices/statsSlices';
 import * as Notifications from 'expo-notifications';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from '../../theme/colors';
@@ -48,9 +48,13 @@ export default function RSPNavigator(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadPhoto());
-    dispatch(getPastAppointments());
-    dispatch(getNotifications());
+    async function fetchData() {
+      dispatch(loadPhoto());
+      dispatch(getNotifications());
+      await dispatch(getPastAppointments());
+      dispatch(getChartStats());
+    }
+    fetchData();
   }, [dispatch]);
 
   return (

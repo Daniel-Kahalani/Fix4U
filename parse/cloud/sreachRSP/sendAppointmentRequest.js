@@ -15,6 +15,7 @@ Parse.Cloud.define('sendAppointmentRequest', async (request) => {
     location,
     faultDescripton,
     customerName,
+    faultType,
   } = request.params;
 
   const rspQuery = new Parse.Query('RSP');
@@ -27,7 +28,7 @@ Parse.Cloud.define('sendAppointmentRequest', async (request) => {
   const Appointment = new Parse.Object('Appointment');
   Appointment.set({
     rspID: rspId,
-    title: 'Customer Appointment',
+    title: `Customer ${faultType} Appointment`,
     appointmentType: 'Customer',
     startTime: time,
     endTime: convertTimeToStr(convertTimeToNum(time) + 2),
