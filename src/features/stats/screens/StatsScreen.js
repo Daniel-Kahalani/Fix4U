@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getChartStats } from '../slices/statsSlices';
-import { ScrollView, RefreshControl } from 'react-native';
+import { getChartStats, getAppointmentsPerMonth } from '../slices/statsSlices';
+import { ScrollView, RefreshControl, Dimensions } from 'react-native';
 import Grade from '../components/Grade';
 import Charts from '../components/Charts';
 import {
@@ -16,12 +16,15 @@ import {
   Title,
 } from '../styles/statsStyles';
 
+const screenWidth = Dimensions.get('window').width - 32;
+
 export default function StatsScreen() {
   const dispatch = useDispatch();
   const { error, loading } = useSelector((state) => state.stats);
   const { info } = useSelector((state) => state.user);
   const [numOfMonths, setNumOfMonths] = useState(3);
   const [refreshing, setRefreshing] = useState(false);
+  const [barChartWidth, setBarChartWidth] = useState(screenWidth);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -29,11 +32,17 @@ export default function StatsScreen() {
     setRefreshing(false);
   };
 
+  const handleMonthsRangeSelected = (value) => {
+    setBarChartWidth(value < 9 ? screenWidth : screenWidth * 2);
+    setNumOfMonths(value);
+    dispatch(getAppointmentsPerMonth(value));
+  };
+
   return (
     <ScrollBackground>
       <StatsCover>
         {!loading &&
-          (error || !info || !info.rating ? (
+          (!info || !info.rating ? (
             <>
               <RefreshMiniScrollView
                 refreshControl={
@@ -46,9 +55,7 @@ export default function StatsScreen() {
               <ErrorContainer>
                 <ErorIcon icon='close' />
                 <ErrorTitle variant='body'>
-                  {error
-                    ? error.message
-                    : 'Unable to show your statistics,\n please try to refresh'}
+                  {'Unable to show your statistics,\n please try to refresh'}
                 </ErrorTitle>
               </ErrorContainer>
             </>
@@ -62,10 +69,16 @@ export default function StatsScreen() {
                 <ChartsContainer>
                   <Title varient='label'>Your Score</Title>
                   <Grade grade={info.rating} />
-                  <Charts
-                    numOfMonths={numOfMonths}
-                    setNumOfMonths={setNumOfMonths}
-                  />
+                  {error ? (
+                    <ErrorTitle variant='body'>{error.message}</ErrorTitle>
+                  ) : (
+                    <Charts
+                      numOfMonths={numOfMonths}
+                      barChartWidth={barChartWidth}
+                      pieChartWidth={screenWidth * 1.3}
+                      handleMonthsRangeSelected={handleMonthsRangeSelected}
+                    />
+                  )}
                 </ChartsContainer>
               </StatsContainer>
             </ScrollView>

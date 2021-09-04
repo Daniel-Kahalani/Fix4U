@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAppointmentsPerMonth } from '../slices/statsSlices';
-import { ScrollView, Dimensions } from 'react-native';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { ScrollView } from 'react-native';
 import Spacer from '../../../components/utils/Spacer';
 import Picker from '../../../components/utils/Picker';
 import { Title, BarChart, PieChart } from '../styles/statsStyles';
 
-const screenWidth = Dimensions.get('window').width - 32;
-
-export default function Charts({ numOfMonths, setNumOfMonths }) {
-  const dispatch = useDispatch();
+export default function Charts({
+  numOfMonths,
+  barChartWidth,
+  pieChartWidth,
+  handleMonthsRangeSelected,
+}) {
   const { charts } = useSelector((state) => state.stats);
-  const [barChartWidth, setBarChartWidth] = useState(screenWidth);
-  const [pieChartWidth] = useState(screenWidth * 1.3);
 
   const monthsRange = [
     { label: 'Last 3 months', value: 3 },
@@ -20,13 +19,6 @@ export default function Charts({ numOfMonths, setNumOfMonths }) {
     { label: 'Last 9 months', value: 9 },
     { label: 'Last 12 months', value: 12 },
   ];
-
-  const handleMonthsRangeSelected = async (value) => {
-    setBarChartWidth(value < 9 ? screenWidth : screenWidth * 2);
-    setNumOfMonths(value);
-    dispatch(getAppointmentsPerMonth(value));
-  };
-
   return (
     <>
       <Title>Appointments Per Month</Title>
