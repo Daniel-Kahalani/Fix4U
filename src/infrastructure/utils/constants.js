@@ -38,3 +38,19 @@ export const SearchType = {
   LOCATION: 'location',
   NAME: 'name',
 };
+
+export const monthNames = [
+  null,
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jum',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];

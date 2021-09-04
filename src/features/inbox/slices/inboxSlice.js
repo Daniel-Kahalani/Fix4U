@@ -22,7 +22,10 @@ export const getNotifications = createAsyncThunk(
       return notifications;
     } catch (e) {
       throw rejectWithValue(
-        new ParseError(440, 'Unable to load your inbox, please try to refresh')
+        new ParseError(
+          440,
+          'Unable to load your inbox,\n please try to refresh'
+        )
       );
     }
   }
