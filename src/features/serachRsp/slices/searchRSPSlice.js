@@ -188,6 +188,7 @@ Array[
   Object {
     "availableHours": Array [String],
     "businessName": String,
+    "businessAddress",String,
     "fullName": String,
     "rating": Number,
     "recentFeedbacks": Array [

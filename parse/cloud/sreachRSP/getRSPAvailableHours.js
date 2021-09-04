@@ -25,7 +25,8 @@ Parse.Cloud.define('getRSPAvailableHours', async (request) => {
 });
 
 async function createRspResults(rsp, date) {
-  const { fullName, businessName, visitCost, rating, votes } = rsp.attributes;
+  const { fullName, businessName, businessAddress, visitCost, rating, votes } =
+    rsp.attributes;
   const rspId = rsp._getId();
   const availableHours = await createRSPAvailableHours(rspId, date);
   const recentFeedbacks = await getRecentRSPFeedbacks(rspId);
@@ -41,6 +42,7 @@ async function createRspResults(rsp, date) {
       rspId,
       fullName,
       businessName,
+      businessAddress,
       visitCost,
       rating,
       votes,
