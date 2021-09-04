@@ -12,7 +12,6 @@ import {
 } from '../components/SearchStyles';
 import { expertiseArr } from '../../../infrastructure/utils/constants';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { CheckBox, View } from 'react-native';
 import {
   SmallAuthInput,
@@ -94,7 +93,6 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
     const faultType = expertiseType;
     let date;
     isSelected ? (date = chooseToday()) : (date = dateChosen);
-    console.log('dateChosen: ' + date);
     if (!hasInputErrors()) {
       if (searchType === SearchType.NAME) {
         console.log('in SearchType === SearchType.NAME ');
@@ -105,6 +103,7 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
           faultType,
           description,
           date,
+          searchType,
         });
       } else {
         console.log('in SearchType === SearchType.LOCATION ');
@@ -113,6 +112,7 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
           faultType,
           description,
           date,
+          searchType,
         });
       }
     }

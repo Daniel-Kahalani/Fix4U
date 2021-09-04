@@ -6,7 +6,6 @@ import { ScrollView, View, SafeAreaView, FlatList } from 'react-native';
 import { Card } from 'react-native-paper';
 import MultiSelect from 'react-native-multiple-select';
 import { getStylesForProperty } from 'css-to-react-native';
-
 export const SearchBackground = styled.ImageBackground.attrs({
   source: require('../../../../assets/backgrounds/home.jpg'),
 })`
@@ -14,6 +13,15 @@ export const SearchBackground = styled.ImageBackground.attrs({
   align-items: center;
   justify-content: center;
 `;
+export const CardContainer = styled.View`
+  flex-direction: row;
+  padding: ${(props) => props.theme.space[3]};
+`;
+export const FeedbackView = styled.View`
+borderBottomColor: 'black',
+borderBottomWidth: 1,
+`;
+
 export const Label = styled(TextInput)`
   width: 200px;
 `;
@@ -34,8 +42,9 @@ export const RSPCardCover = styled(Card.Cover)`
   background-color: white;
 `;
 
-export const Info = styled.View`
-  padding: ${(props) => props.theme.space[1]};
+export const Info = styled.Text`
+  font-size: ${(props) => props.theme.fontSizes.caption};
+  text-transform: capitalize;
 `;
 
 export const Section = styled.View`
@@ -45,6 +54,7 @@ export const Section = styled.View`
 export const SmallSpace = styled.View`
   padding-left: 16px;
 `;
+export const InfoContainer = styled.View``;
 
 export const Rating = styled.View`
   flex-direction: row;
@@ -83,6 +93,12 @@ export const AuthButton = styled(Button).attrs({
   color: colors.brand.primary,
 })`
   padding: ${(props) => props.theme.space[2]};
+`;
+export const SmallAuthButton = styled(Button).attrs({
+  color: colors.brand.primary,
+})`
+  margin-vertical: 2px;
+  margin-horizontal: 5px;
 `;
 
 export const AuthInput = styled(TextInput)`
@@ -179,3 +195,8 @@ export const RSPListContainer = styled.View`
 export const PastAppointmentsFlatList = styled(FlatList).attrs((props) => ({
   contentContainerStyle: getStylesForProperty('padding', props.theme.space[3]),
 }))``;
+
+export const RSPAvatarContainer = styled.View`
+  margin-right: ${(props) => props.theme.space[2]};
+  padding: 0;
+`;

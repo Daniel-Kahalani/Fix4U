@@ -1,52 +1,53 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RefreshControl, TouchableOpacity } from 'react-native';
+import {
+  Button,
+  Text,
+  View,
+  RefreshControl,
+  TouchableOpacity,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { UserType } from '../../../infrastructure/utils/constants';
-// import RSPPastAppointment from './RSPPastAppointment';
-// import CustomerPastAppointment from './CustomerPastAppointment';
+import { SearchType } from '../../../infrastructure/utils/constants';
+import RSPInfoCard from './RSPInfoCard';
 
 import Spacer from '../../../components/utils/Spacer';
 import FadeInView from '../../../components/animations/FadeInView';
-import { SearchResultFlatList } from '../../../features/serachRsp/components/SearchStyles';
+import { SearchResultFlatList } from '../styles/searchResultStyles';
 
 export default function SearchResultList({ refreshing, handleRefresh }) {
-  const { info } = useSelector((state) => state.user);
-  const { pastAppointments } = useSelector((state) => state.history);
+  const { loading, error, results } = useSelector((state) => state.searchRSP);
   const navigation = useNavigation();
 
+  const handlePress1 = (item) => {
+    console.log('. result: ' + results);
+    console.log('. result[0]: ' + results[0]);
+    console.log('. item.businessName: ' + item.businessName);
+    console.log('. item.rspId: ' + item.rspId);
+    console.log('. item.location: ' + item.location);
+  };
   return (
     <SearchResultFlatList
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }
-      data={pastAppointments}
+      data={results}
       renderItem={({ item }) => (
-        // <TouchableOpacity
-        //   onPress={() =>
-        //     navigation.navigate('PastAppointmentDetails', {
-        //       pastAppointment: item,
-        //     })
-        //   }
-        // >
-        <Spacer position='bottom'>
-          <FadeInView>
-            {/* {info.userType === UserType.RSP ? (
-              <RSPPastAppointment
-                pastAppointment={item}
-                isFullDispaly={false}
-              />
-            ) : (
-              <CustomerPastAppointment
-                pastAppointment={item}
-                isFullDispaly={false}
-              />
-            )} */}
-          </FadeInView>
-        </Spacer>
-        // </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('RspDetails', {
+              rsp: item,
+            })
+          }
+        >
+          <Spacer position='bottom'>
+            <FadeInView>
+              <RSPInfoCard rsp={item} isFullDisplay={false} />
+            </FadeInView>
+          </Spacer>
+        </TouchableOpacity>
       )}
-      keyExtractor={(item) => item.searchId}
+      keyExtractor={(item) => item.rspId}
     />
   );
 }

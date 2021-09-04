@@ -12,7 +12,6 @@ export default function ScreenRSPScreen({ navigation }) {
   return (
     <SearchBackground>
       <SearchCover />
-      <Title>Search RSP</Title>
       <MenuContainer>
         <AuthButton
           icon='account-clock'

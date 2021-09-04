@@ -36,6 +36,7 @@ export default function StatsScreen() {
   const handlePress3 = async () => {
     const resultAction = await dispatch(
       sendAppointmentRequest({
+        faultType: 'Appliances',
         customerName: 'avi',
         customerId: 'gylgNmuG0R',
         // customerId: 'ryvZ69Uxxv',
