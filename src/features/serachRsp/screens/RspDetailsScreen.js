@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { ScrollView } from 'react-native';
 import RSPInfoCard from '../components/RSPInfoCard';
-
 import {
   RspDetailsContainer,
   RspDetailsBackground,
@@ -10,20 +9,20 @@ import {
 } from '../styles/RspDetailsStyles';
 
 export default function RspDetailsScreen({ route }) {
-  const { results } = useSelector((state) => state.searchRSP);
-  const { rsp } = route.params;
+  const { rsp, searchInput } = route.params;
 
   // const { searchDetails } = route.params;
-
-  console.log('//////////////////////////////////// results ' + results);
-  console.log('//////////////////////////////////// rsp ' + rsp);
 
   return (
     <RspDetailsBackground>
       <RspDetailsCover>
         <ScrollView>
           <RspDetailsContainer>
-            <RSPInfoCard rsp={rsp} isFullDisplay={true} />
+            <RSPInfoCard
+              rsp={rsp}
+              isFullDisplay={true}
+              searchInput={searchInput}
+            />
           </RspDetailsContainer>
         </ScrollView>
       </RspDetailsCover>

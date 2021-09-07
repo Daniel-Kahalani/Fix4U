@@ -4,14 +4,9 @@ import RspExtendedInfoCard from './RspExtendedInfoCard';
 import Spacer from '../../../components/utils/Spacer';
 
 import {
-  SmallTitle,
   RSPCard,
-  RSPCardCover,
   Info,
-  Section,
   Rating,
-  SectionEnd,
-  Address,
   CardContainer,
   RSPAvatarContainer,
   Title,
@@ -21,30 +16,25 @@ import RSPText from '../styles/searchResultStyles';
 import star from '../../../../assets/star';
 import { SvgXml } from 'react-native-svg';
 
-export default function RSPInfoCard({ rsp, isFullDisplay }) {
-  const { businessName, fullName, rating, rspId, visitCost, location } = rsp;
+export default function RSPInfoCard({ rsp, isFullDisplay, searchInput }) {
+  const { businessName, fullName, rating, visitCost, businessAddress } = rsp;
   let i = 0;
   const ratingArray = Array.from(new Array(Math.round(rating)));
-  console.log('888888888888888888888888888888888888888' + location);
+  if (searchInput) {
+  }
   return (
     <RSPCard elevation={2}>
       <CardContainer>
         <RSPAvatarContainer>
-          <Title>{businessName ? businessName : 'Sagi BusinessName'}</Title>
+          <Title>{businessName}</Title>
         </RSPAvatarContainer>
         <InfoContainer>
-          {/* <Title variant='label'>{businessName}</Title> */}
           <Info>{`RSP Name: ${fullName}`}</Info>
-          <Info>{`visitCost: ${visitCost}`}</Info>
-          <Info>{`Rsp ID: ${rspId}`}</Info>
+          <Info>{`Business Address: ${businessAddress}`}</Info>
+          <Info>{`Visit Cost: ${visitCost}`}</Info>
           <Rating>
             {ratingArray.map(() => (
-              <SvgXml
-                xml={star}
-                width={20}
-                height={20}
-                key={(++i).toString()}
-              />
+              <SvgXml xml={star} width={20} height={20} key={++i} />
             ))}
           </Rating>
         </InfoContainer>
@@ -52,7 +42,11 @@ export default function RSPInfoCard({ rsp, isFullDisplay }) {
       {isFullDisplay && (
         <>
           <Spacer size='large'>
-            <RspExtendedInfoCard rsp={rsp} isFullDisplayed={true} />
+            <RspExtendedInfoCard
+              rsp={rsp}
+              isFullDisplayed={true}
+              searchInput={searchInput}
+            />
           </Spacer>
         </>
       )}

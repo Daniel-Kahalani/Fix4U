@@ -6,8 +6,13 @@ import { ScrollView, View, SafeAreaView, FlatList } from 'react-native';
 import { Card } from 'react-native-paper';
 import MultiSelect from 'react-native-multiple-select';
 import { getStylesForProperty } from 'css-to-react-native';
+
+export const Feedbacklist = styled(FlatList).attrs((props) => ({
+  contentContainerStyle: getStylesForProperty('padding', props.theme.space[3]),
+}))``;
+
 export const SearchBackground = styled.ImageBackground.attrs({
-  source: require('../../../../assets/backgrounds/home.jpg'),
+  source: require('../../../../assets/backgrounds/main.jpeg'),
 })`
   flex: 1;
   align-items: center;
@@ -16,10 +21,6 @@ export const SearchBackground = styled.ImageBackground.attrs({
 export const CardContainer = styled.View`
   flex-direction: row;
   padding: ${(props) => props.theme.space[3]};
-`;
-export const FeedbackView = styled.View`
-borderBottomColor: 'black',
-borderBottomWidth: 1,
 `;
 
 export const Label = styled(TextInput)`
@@ -94,6 +95,7 @@ export const AuthButton = styled(Button).attrs({
 })`
   padding: ${(props) => props.theme.space[2]};
 `;
+
 export const SmallAuthButton = styled(Button).attrs({
   color: colors.brand.primary,
 })`
@@ -140,6 +142,12 @@ export const ExpertiseContainer = styled(View)`
   margin-top: 15px;
   padding: ${(props) => props.theme.space[3]};
   flex: 1;
+`;
+export const FeedbackView = styled(View)`
+  padding: ${(props) => props.theme.space[4]};
+  flex: 1;
+  margin-vertical: 8px;
+  margin-horizontal: 8px;
 `;
 
 export const GrowContainer = styled(View)`
@@ -199,4 +207,18 @@ export const PastAppointmentsFlatList = styled(FlatList).attrs((props) => ({
 export const RSPAvatarContainer = styled.View`
   margin-right: ${(props) => props.theme.space[2]};
   padding: 0;
+`;
+
+export const BottomViewButton = styled.View`
+  flex: 1;
+  padding: 7px;
+  align-items: center;
+`;
+
+export const AbortButton = styled(Button).attrs({
+  color: colors.brand.primary,
+})`
+  padding: ${(props) => props.theme.space[2]};
+  position: absolute;
+  bottom: 35px;
 `;

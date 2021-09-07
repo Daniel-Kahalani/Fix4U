@@ -9,6 +9,7 @@ import SearchByAvailabilityScreen from '../../../features/serachRsp/screens/Sear
 import SearchByNameScreen from '../../../features/serachRsp/screens/SearchByNameScreen';
 import RspDetailsScreen from '../../../features/serachRsp/screens/RspDetailsScreen';
 import AppBar from '../../../components/utils/AppBar';
+import ReceiveAppointmentAnswerScreen from '../../../features/serachRsp/screens/ReceiveAppointmentAnswerScreen';
 
 const SearchStack = createStackNavigator();
 
@@ -44,6 +45,10 @@ export default function SearchNavigator() {
         name='RspDetails'
         component={RspDetailsScreen}
         options={{ title: 'Search Result' }}
+      />
+      <SearchStack.Screen
+        name='ReceiveAppointmentAnswer'
+        component={ReceiveAppointmentAnswerScreen}
       />
     </SearchStack.Navigator>
   );

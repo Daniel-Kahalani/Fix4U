@@ -14,7 +14,9 @@ export default function NoResults({ refreshing, handelRefresh }) {
     <>
       <RefreshScrollView
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handelRefresh} />
+          <RefreshControl
+            refreshing={refreshing} /*onRefresh={handelRefresh} */
+          />
         }
       />
       <AnimationContainer>
@@ -27,7 +29,7 @@ export default function NoResults({ refreshing, handelRefresh }) {
           />
         </AnimationWrapper>
         <MsgContainer>
-          <AnimationMsg>No Appointments Was Scheduled</AnimationMsg>
+          <AnimationMsg>There is no RSP available</AnimationMsg>
         </MsgContainer>
       </AnimationContainer>
     </>

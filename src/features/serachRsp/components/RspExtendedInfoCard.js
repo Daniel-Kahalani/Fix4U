@@ -1,45 +1,49 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, Button, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { Divider, List } from 'react-native-paper';
-import Spacer from '../../../components/utils/Spacer';
+import { useSelector, useDispatch } from 'react-redux';
 import {
-  RSPAvatarContainer,
-  AuthButton,
+  ErrorContainer,
   SmallAuthButton,
   Rating,
+  FeedbackView,
 } from './SearchStyles';
+import { useNavigation } from '@react-navigation/native';
 import star from '../../../../assets/star';
 import { SvgXml } from 'react-native-svg';
+import { sendAppointmentRequest } from '../slices/searchRSPSlice';
 
-export const convertAvailableHoursToString = (value) => {
-  let stringOfHours = '';
-  for (const hour in value) {
-    stringOfHours += value.toString() + '\n';
-  }
-  console.log(stringOfHours);
-  return stringOfHours;
-};
-
-export default function RspExtendedInfoCard({ rsp, isFullDisplayed }) {
-  console.log('IN RspExtendedInfoCard');
-  const { rating, rspId, visitCost, votes, availableHours, recentFeedbacks } =
-    rsp;
-
+export default function RspExtendedInfoCard({ rsp, searchInput }) {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const { availableHours, recentFeedbacks, rspId } = rsp;
   const [expandTechnicalInfo, setExpandTechnicalInfo] = useState(false);
   const [expandRSPInfo, setExpandRSPInfo] = useState(false);
-  console.log('IN RspExtendedInfoCard recentFeedbacks = ' + recentFeedbacks);
-  console.log(
-    'IN RspExtendedInfoCard rating = ' + recentFeedbacks[0].get('rating')
-  );
-  console.log(
-    'IN RspExtendedInfoCard rating = ' +
-      Math.round(recentFeedbacks[0].get('rating'))
-  );
-  const handleSearchButtonClick = () => {};
+  const { info } = useSelector((state) => state.user);
+
+  const handleButtonClick = async (desiredHour) => {
+    const resultAction = await dispatch(
+      sendAppointmentRequest({
+        customerName: info.fullName,
+        faultType: searchInput.faultType,
+        customerId: info.specificUserId,
+        faultDescripton: searchInput.description,
+        rspId: rspId,
+        date: searchInput.date,
+        time: desiredHour,
+        location: searchInput.location,
+      })
+    );
+
+    if (sendAppointmentRequest.fulfilled.match(resultAction)) {
+      navigation.navigate('ReceiveAppointmentAnswer');
+    } else {
+      navigation.navigate('ReceiveAppointmentAnswer');
+    }
+  };
   let i = 0;
-  const ratingArray = Array.from(
-    new Array(Math.round(recentFeedbacks[0].get('rating')))
-  );
+  const { error } = useSelector((state) => state.searchRSP);
+
   return (
     <ScrollView>
       <List.Accordion
@@ -54,7 +58,7 @@ export default function RspExtendedInfoCard({ rsp, isFullDisplayed }) {
             <View key={value}>
               <SmallAuthButton
                 mode='contained'
-                onPress={handleSearchButtonClick(value)}
+                onPress={() => handleButtonClick(value)}
               >
                 {value}
               </SmallAuthButton>
@@ -64,7 +68,7 @@ export default function RspExtendedInfoCard({ rsp, isFullDisplayed }) {
         />
         <Divider />
       </List.Accordion>
-      {isFullDisplayed && recentFeedbacks.length !== 0 && (
+      {recentFeedbacks.length !== 0 && (
         <>
           <Divider />
           <List.Accordion
@@ -75,25 +79,34 @@ export default function RspExtendedInfoCard({ rsp, isFullDisplayed }) {
             expanded={expandRSPInfo}
             onPress={() => setExpandRSPInfo(!expandRSPInfo)}
           >
-            {/* <List.Item title='Rating' description={customerFeedback.rating} /> */}
             <Divider />
             <List.Item
               title='Recent Feedbacks:'
               description={recentFeedbacks.map((value) => (
-                <View key={value}>
-                  <Text>{value.get('customerName')}:</Text>
-
-                  <Text>{value.get('description')}</Text>
-                  <Rating>
-                    {ratingArray.map(() => (
-                      <SvgXml key={++i} xml={star} width={20} height={20} />
-                    ))}
-                  </Rating>
-                </View>
+                <FeedbackView key={value.get('appointmentId')}>
+                  <Text>{value.get('customerName')}</Text>
+                  <View>
+                    <Text>{value.get('description')}</Text>
+                  </View>
+                  <View>
+                    <Rating>
+                      {Array.from(
+                        new Array(Math.round(value.get('rating')))
+                      ).map(() => (
+                        <SvgXml key={++i} xml={star} width={20} height={20} />
+                      ))}
+                    </Rating>
+                  </View>
+                </FeedbackView>
               ))}
               descriptionNumberOfLines={60}
             />
             <Divider />
+            {error && (
+              <ErrorContainer size='large'>
+                <Text variant='error'>{error.message}</Text>
+              </ErrorContainer>
+            )}
           </List.Accordion>
         </>
       )}

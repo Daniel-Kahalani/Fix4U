@@ -15,21 +15,21 @@ import Spacer from '../../../components/utils/Spacer';
 import FadeInView from '../../../components/animations/FadeInView';
 import { SearchResultFlatList } from '../styles/searchResultStyles';
 
-export default function SearchResultList({ refreshing, handleRefresh }) {
+export default function SearchResultList({
+  refreshing,
+  handleRefresh,
+  searchInput,
+}) {
   const { loading, error, results } = useSelector((state) => state.searchRSP);
   const navigation = useNavigation();
 
-  const handlePress1 = (item) => {
-    console.log('. result: ' + results);
-    console.log('. result[0]: ' + results[0]);
-    console.log('. item.businessName: ' + item.businessName);
-    console.log('. item.rspId: ' + item.rspId);
-    console.log('. item.location: ' + item.location);
-  };
   return (
     <SearchResultFlatList
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        <RefreshControl
+          refreshing={refreshing}
+          // onRefresh={handleRefresh(searchInput.searchType)}
+        />
       }
       data={results}
       renderItem={({ item }) => (
@@ -37,12 +37,17 @@ export default function SearchResultList({ refreshing, handleRefresh }) {
           onPress={() =>
             navigation.navigate('RspDetails', {
               rsp: item,
+              searchInput: searchInput,
             })
           }
         >
           <Spacer position='bottom'>
             <FadeInView>
-              <RSPInfoCard rsp={item} isFullDisplay={false} />
+              <RSPInfoCard
+                rsp={item}
+                isFullDisplay={false}
+                searchInput={searchInput}
+              />
             </FadeInView>
           </Spacer>
         </TouchableOpacity>
