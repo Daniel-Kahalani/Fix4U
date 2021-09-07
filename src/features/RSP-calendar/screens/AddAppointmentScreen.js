@@ -52,7 +52,6 @@ export default function AddAppointmentScreen({ navigation }) {
   const [date, setDate] = useState(null);
   const [isDatePickerShow, setIsDatePickerShow] = useState(false);
   const [isAddedAppointment, setIsAddedAppointment] = useState(false);
-  //const { error, loading } = useSelector((state) => state.calendar);
 
   const dispatch = useDispatch();
 

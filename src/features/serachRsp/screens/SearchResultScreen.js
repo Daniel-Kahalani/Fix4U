@@ -1,55 +1,78 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, Button } from 'react-native';
+import { Button, Text, View, FlatList, RefreshControl } from 'react-native';
 import { RSPInfoCard } from '../components/RSPInfoCard';
-import { SafeArea, RSPListContainer } from '../components/SearchStyles';
+import {
+  SafeArea,
+  RSPListContainer,
+  AuthButton,
+} from '../components/SearchStyles';
 import { Spacer } from '../../../components/utils/Spacer';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, clearError } from '../slices/searchRSPSlice';
+import { getRSPAvailableHours } from '../slices/searchRSPSlice';
+import { getAvailableRSPs } from '../slices/searchRSPSlice';
+import { colors } from '../../../infrastructure/theme/colors';
 
-const RSPList = styled(FlatList).attrs({
-  contentContainerStyle: {
-    padding: 16,
-  },
-})``;
+import NoResults from '../components/NoResults';
+import {
+  SearchResultContainer,
+  SearchResultBackground,
+  SearchResultCover,
+  ErrorIconContainer,
+  ErrorIcon,
+  Title,
+  RefreshScrollView,
+} from '../styles/searchResultStyles';
+import { AbortButton, BottomViewButton } from '../components/SearchStyles';
+
+import { login, clearError } from '../slices/searchRSPSlice';
+import { SearchType } from '../../../infrastructure/utils/constants';
+import SearchResultList from '../components/SearchResultList';
 
 export default function SearchResultScreen({ navigation, route }) {
   const dispatch = useDispatch();
-  const { error, results } = useSelector((state) => state.searchRSP);
+  const { loading, error, results } = useSelector((state) => state.searchRSP);
   useEffect(() => {
     navigation.addListener('beforeRemove', (e) => {
       dispatch(clearError());
     });
   }, [dispatch, navigation]);
 
-  const handlePress1 = () => {
-    console.log('. result: ' + results);
-    console.log('. faultType: ' + route.params.faultType);
-    console.log('. date: ' + route.params.date);
-  };
+  const [refreshing, setRefreshing] = useState(false);
+
   return (
-    <SafeArea>
-      <View>
-        <Button onPress={handlePress1} title='test' />
-        {error && (
-          <Text>
-            {error.message} {error.code}
-          </Text>
-        )}
-      </View>
-      <RSPList
-        data={[
-          { name: 1 },
-          { name: 2 },
-          { name: 3 },
-          { name: 4 },
-          { name: 5 },
-          { name: 6 },
-        ]}
-        renderItem={() => <RSPInfoCard />} //to do add wrapping spacer
-        keyExtractor={(item) => item.name}
-        contentContainerStyle={{ padding: 16 }}
-      />
-    </SafeArea>
+    <SearchResultContainer>
+      <SearchResultBackground>
+        <SearchResultCover>
+          {!loading &&
+            (error ? (
+              <>
+                <RefreshScrollView
+                  refreshControl={<RefreshControl refreshing={refreshing} />}
+                />
+                <ErrorIconContainer>
+                  <ErrorIcon icon='close' bg={colors.ui.error} />
+                  <Title variant='body'>{error.message}</Title>
+                </ErrorIconContainer>
+                <BottomViewButton>
+                  <AbortButton
+                    mode='contained'
+                    onPress={() => navigation.navigate('MainSearch')}
+                  >
+                    Try Again
+                  </AbortButton>
+                </BottomViewButton>
+              </>
+            ) : results.length === 0 ? (
+              <NoResults refreshing={refreshing} />
+            ) : (
+              <SearchResultList
+                refreshing={refreshing}
+                searchInput={route.params}
+              />
+            ))}
+        </SearchResultCover>
+      </SearchResultBackground>
+    </SearchResultContainer>
   );
 }

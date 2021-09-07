@@ -159,6 +159,7 @@ const searchRSPSlice = createSlice({
       state.appointmentStatus = action.payload;
     },
     [getAppointmentRequestStatus.rejected]: (state, action) => {
+      state.appointmentStatus = AppointmentStatus.REJECTED;
       state.error = {
         message: action.payload.message,
         code: action.payload.code,
@@ -169,6 +170,7 @@ const searchRSPSlice = createSlice({
       state.loading = false;
     },
     [abortAppointmentRequest.rejected]: (state, action) => {
+      state.appointmentStatus = AppointmentStatus.REJECTED;
       state.error = {
         message: action.payload.message,
         code: action.payload.code,

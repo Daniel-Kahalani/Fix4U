@@ -32,10 +32,36 @@ export default function StatsScreen() {
     setRefreshing(false);
   };
 
-  const handleMonthsRangeSelected = (value) => {
-    setBarChartWidth(value < 9 ? screenWidth : screenWidth * 2);
-    setNumOfMonths(value);
-    dispatch(getAppointmentsPerMonth(value));
+<<<<<<< HEAD
+  const handlePress3 = async () => {
+    const resultAction = await dispatch(
+      sendAppointmentRequest({
+        faultType: 'Appliances',
+        customerName: 'avi',
+        customerId: 'gylgNmuG0R',
+        // customerId: 'ryvZ69Uxxv',
+        faultDescripton: 'computer EXPLODED',
+        rspId: 'GxRhrf3b2U',
+        // rspId: '3Ujj8LaiSI',
+        date: '29/08/21',
+        time: '09:00',
+        location: 'tel aviv',
+      })
+    );
+    if (sendAppointmentRequest.fulfilled.match(resultAction)) {
+      let intervalId1 = setInterval(async () => {
+        let result = await dispatch(getAppointmentRequestStatus());
+        if (result.payload !== AppointmentStatus.PENDING) {
+          clearInterval(intervalId1);
+          //activate fucntions according to the result.payload (approved/rejected)
+        }
+      }, 6000);
+      setTimeout(async () => {
+        clearInterval(intervalId1);
+        dispatch(abortAppointmentRequest());
+      }, 50000);
+    }
+
   };
 
   return (

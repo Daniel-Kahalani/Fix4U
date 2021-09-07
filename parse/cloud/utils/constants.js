@@ -21,6 +21,6 @@ const AppointmentType = {
 Object.freeze(AppointmentType);
 module.exports.AppointmentType = AppointmentType;
 
-module.exports.NUM_OF_SEARCH_RESULTS = 3;
+module.exports.NUM_OF_SEARCH_RESULTS = 15;
 module.exports.NUM_OF_PAST_APPOINTMENTS = 15;
 module.exports.NUM_OF_RECENT_RSP_FEEDBACKS = 3;
