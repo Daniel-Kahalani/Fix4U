@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Avatar, Divider, Portal } from 'react-native-paper';
 import {
   AppointmentCardContainer,
@@ -15,15 +15,37 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import Spacer from '../../../components/utils/Spacer.js';
 import { RemoveAppointmentDialog } from './RemoveAppointmentDialog.js';
 import { useNavigation } from '@react-navigation/native';
+import { AppointmentType } from '../../../infrastructure/utils/constants';
 
 export const AppointmentCard = ({ appointment }) => {
-  const { appointmentId, startTime, endTime, title, description } = appointment;
-  const iconSize = 28;
-  const clientAvatarText = title.toString().slice(0, 1).toUpperCase();
+  const {
+    appointmentId,
+    startTime,
+    endTime,
+    appointmentType,
+    title,
+    description,
+  } = appointment;
+  const iconSize = 30;
+  const appointmentTypeAvatar = appointmentType
+    .toString()
+    .slice(0, 1)
+    .toUpperCase();
 
   const [isRemoveDialogVisible, setRemoveDialogVisible] = useState(false);
 
   const navigation = useNavigation();
+
+  const styles = StyleSheet.create({
+    avatar: {
+      backgroundColor:
+        appointmentType === AppointmentType.PERSONAL
+          ? 'blue'
+          : appointmentType === AppointmentType.SUPPLIER
+          ? 'purple'
+          : 'red',
+    },
+  });
 
   return (
     <AppointmentCardContainer>
@@ -56,7 +78,11 @@ export const AppointmentCard = ({ appointment }) => {
       </ButtonsSection>
       <AppointmentInfoCard elevation={1}>
         <AvatarContainer>
-          <Avatar.Text size={24} label={clientAvatarText} />
+          <Avatar.Text
+            style={styles.avatar}
+            size={24}
+            label={appointmentTypeAvatar}
+          />
         </AvatarContainer>
         <Info>
           <Time>

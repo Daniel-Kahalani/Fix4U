@@ -2,6 +2,9 @@
 /* eslint-disable no-undef */
 
 const { UserType } = require('../utils/constants.js');
+const {
+  createCustomAppointmentsForAgenda,
+} = require('../utils/createCustomAppointmentsForAgenda.js');
 
 Parse.Cloud.define('loadAppointmentsByMonth', async (request) => {
   const { month, year, specificUserId, userType } = request.params;
@@ -15,9 +18,21 @@ Parse.Cloud.define('loadAppointmentsByMonth', async (request) => {
     const date = appointment.get('date');
     const appointmentMonth = parseInt(date.slice(5, 7));
     const appointmentYear = parseInt(date.slice(0, 4));
-    return appointmentYear === year && appointmentMonth === month;
+    return (
+      appointmentYear === year &&
+      (appointmentMonth === month ||
+        appointmentMonth === month + 1 ||
+        appointmentMonth === month - 1)
+    );
   });
-  return await createCustomRSPAppointments(appointmentsArr);
+  const customAppointmentsArr = await createCustomRSPAppointments(
+    appointmentsArr
+  );
+  return await createCustomAppointmentsForAgenda(
+    customAppointmentsArr,
+    year,
+    month
+  );
 });
 
 async function createCustomRSPAppointments(appointmentsArr) {

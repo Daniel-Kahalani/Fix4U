@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { ActivityIndicator, Colors, HelperText } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
+import Picker from '../../../components/utils/Picker.js';
 import Spacer from '../../../components/utils/Spacer';
 import {
   Cover,
@@ -28,10 +28,14 @@ import {
   createAppointmentTypeArray,
   convertTimeToNum,
 } from '../utils.js';
-import { addAppointment } from '../slices/calendarSlice.js';
+import { addAppointment, loadAppointments } from '../slices/calendarSlice.js';
+import { AppointmentStatus } from '../../../infrastructure/utils/constants.js';
 
 const appointmentTypeArray = createAppointmentTypeArray();
-const appointmentTypePlaceholder = 'Select Type Of Appointment';
+const appointmentTypePlaceholder = {
+  label: 'Select Type Of Appointment',
+  value: null,
+};
 
 export default function AddAppointmentScreen({ navigation }) {
   const [startTimeChoosen, setStartTimeChoosen] = useState('');
@@ -41,10 +45,8 @@ export default function AddAppointmentScreen({ navigation }) {
   const [endTime, setEndTime] = useState(null);
   const [isEndTimePickerShow, setIsEndTimePickerShow] = useState(false);
   const [appointmentType, setAppointmentType] = useState(
-    appointmentTypePlaceholder
+    appointmentTypePlaceholder.value
   );
-  const [isAppointmentTypePickerOpen, setIsAppointmentTypePickerOpen] =
-    useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [errorCheck, setErrorCheck] = useState(false);
@@ -52,12 +54,16 @@ export default function AddAppointmentScreen({ navigation }) {
   const [date, setDate] = useState(null);
   const [isDatePickerShow, setIsDatePickerShow] = useState(false);
   const [isAddedAppointment, setIsAddedAppointment] = useState(false);
-  //const { error, loading } = useSelector((state) => state.calendar);
+  const { loading } = useSelector((state) => state.calendar);
 
   const dispatch = useDispatch();
 
-  const addNewAppointment = (appointment) => {
-    dispatch(addAppointment({ ...appointment }));
+  const addNewAppointment = async (appointment) => {
+    await dispatch(addAppointment({ ...appointment }));
+    const year = parseInt(appointment.date.slice(0, 4), 10);
+    const month = parseInt(appointment.date.slice(5, 7), 10);
+    await dispatch(loadAppointments({ year, month }));
+    console.log(`loading appointments... ${year}, ${month}`);
   };
 
   useEffect(() => {
@@ -70,6 +76,7 @@ export default function AddAppointmentScreen({ navigation }) {
     return !dateChoosen ||
       !startTimeChoosen ||
       !endTimeChoosen ||
+      hasTimeErrors() ||
       !appointmentType ||
       !title ||
       !description
@@ -81,7 +88,7 @@ export default function AddAppointmentScreen({ navigation }) {
     setDateChoosen('');
     setStartTimeChoosen('');
     setEndTimeChoosen('');
-    setAppointmentType(appointmentTypePlaceholder);
+    setAppointmentType(appointmentTypePlaceholder.value);
     setTitle('');
     setDescription('');
     setErrorCheck(false);
@@ -90,7 +97,7 @@ export default function AddAppointmentScreen({ navigation }) {
 
   const handleAddAppointmentButtonClick = () => {
     setErrorCheck(true);
-    if (hasInputErrors() === false) {
+    if (!hasInputErrors()) {
       addNewAppointment({
         date: dateChoosen,
         startTime: startTimeChoosen,
@@ -98,6 +105,7 @@ export default function AddAppointmentScreen({ navigation }) {
         appointmentType: appointmentType,
         title: title,
         description: description,
+        status: AppointmentStatus.APPROVED,
       });
       clearInput();
       setIsAddedAppointment(true);
@@ -147,9 +155,9 @@ export default function AddAppointmentScreen({ navigation }) {
   };
 
   const hasTimeErrors = () => {
-    return (
-      convertTimeToNum(endTimeChoosen) <= convertTimeToNum(startTimeChoosen)
-    );
+    const startTimeNum = convertTimeToNum(startTimeChoosen);
+    const endTimeNum = convertTimeToNum(endTimeChoosen);
+    return endTimeNum <= startTimeNum;
   };
 
   return (
@@ -253,19 +261,17 @@ export default function AddAppointmentScreen({ navigation }) {
                   ? 'End Time Is Missing!'
                   : 'End Time must be after Start Time!'}
               </HelperText>
-              <DropDownPicker
-                open={isAppointmentTypePickerOpen}
-                setOpen={setIsAppointmentTypePickerOpen}
-                value={appointmentType}
-                setValue={setAppointmentType}
-                items={appointmentTypeArray}
-                defaultIndex={0}
+              <Picker
                 placeholder={appointmentTypePlaceholder}
+                items={appointmentTypeArray}
+                onValueChange={setAppointmentType}
+                value={appointmentType}
               />
               <HelperText
                 type='error'
                 visible={
-                  errorCheck && appointmentType === appointmentTypePlaceholder
+                  errorCheck &&
+                  appointmentType === appointmentTypePlaceholder.value
                 }
               >
                 Appointment Type Is Missing!
@@ -300,16 +306,9 @@ export default function AddAppointmentScreen({ navigation }) {
                 </HelperText>
               </Spacer>
               <Spacer size='small'>
-                <AuthButton
-                  icon='calendar-plus'
-                  mode='contained'
-                  onPress={handleAddAppointmentButtonClick}
-                >
-                  Add
-                </AuthButton>
-                {/* {!loading ? (
+                {!loading ? (
                   <AuthButton
-                    //icon='account-search'
+                    icon='calendar-plus'
                     mode='contained'
                     onPress={handleAddAppointmentButtonClick}
                   >
@@ -317,7 +316,7 @@ export default function AddAppointmentScreen({ navigation }) {
                   </AuthButton>
                 ) : (
                   <ActivityIndicator animating={true} color={Colors.blue300} />
-                )} */}
+                )}
               </Spacer>
             </SafeScrollView>
           </Container>

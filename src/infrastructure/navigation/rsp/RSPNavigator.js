@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { loadPhoto } from '../../../features/account/slices/userSlice';
 import { getPastAppointments } from '../../../features/history/slices/historySlice';
 import { getNotifications } from '../../../features/inbox/slices/inboxSlice';
+import { loadAppointments } from '../../../features/RSP-calendar/slices/calendarSlice';
 
 import * as Notifications from 'expo-notifications';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -51,6 +52,10 @@ export default function RSPNavigator(props) {
     dispatch(loadPhoto());
     dispatch(getPastAppointments());
     dispatch(getNotifications());
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+    dispatch(loadAppointments({ year, month }));
   }, [dispatch]);
 
   return (

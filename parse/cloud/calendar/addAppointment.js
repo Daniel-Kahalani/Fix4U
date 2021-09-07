@@ -11,6 +11,7 @@ Parse.Cloud.define('addAppointment', async (request) => {
     appointmentType,
     title,
     description,
+    status,
     specificUserId,
     userType,
   } = request.params;
@@ -22,6 +23,7 @@ Parse.Cloud.define('addAppointment', async (request) => {
   Appointment.set('title', title);
   Appointment.set('description', description);
   Appointment.set('rspID', specificUserId);
+  Appointment.set('status', status);
   try {
     let result = await (await Appointment.save()).toJSON();
     await addAppointmentToRSP(result.objectId, specificUserId, userType);

@@ -17,6 +17,13 @@ export const SnackBarType = {
 };
 Object.freeze(SnackBarType);
 
+export const AppointmentType = {
+  PERSONAL: 'Personal',
+  SUPPLIER: 'Supplier',
+  CUSTOMER: 'Customer',
+};
+Object.freeze(AppointmentType);
+
 export const expertiseArr = [
   { name: 'Plumbing' },
   { name: 'Gas' },

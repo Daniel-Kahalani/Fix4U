@@ -4,19 +4,20 @@ import { Card } from 'react-native-paper';
 export const AppointmentCardContainer = styled.View`
   flex-direction: row-reverse;
   justify-content: flex-start;
-  margin-bottom: 5%;
+  margin-bottom: 1%;
   border-top-width: 2px;
   border-top-color: #dddddd;
   padding: 15px;
+  border-radius: 10px;
 `;
 
 export const AvatarContainer = styled.View`
   flex: 3;
   flex-direction: column;
   flex-wrap: wrap;
-  width: 60%;
-  height: 60%;
-  margin: 3%;
+  width: 70%;
+  height: 70%;
+  margin: 4%;
 `;
 
 export const ButtonsSection = styled.View`
@@ -30,7 +31,7 @@ export const AppointmentInfoCard = styled(Card)`
   flex-direction: row-reverse;
   background-color: ${(props) => props.theme.colors.ui.quaternary};
   width: 70%;
-  margin-right: 10%;
+  margin-right: 4%;
 `;
 
 export const AppointmentInfoCardCover = styled(Card.Cover)`

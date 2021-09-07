@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const EmptyDateContainer = styled.View`
+  justify-content: center;
   align-items: center;
   margin: 5%;
   border-top-width: 2px;

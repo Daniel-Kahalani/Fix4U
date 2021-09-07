@@ -1,13 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable dot-notation */
-/* eslint-disable no-array-constructor */
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Agenda } from 'react-native-calendars';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Spacer from '../../../components/utils/Spacer.js';
 import { AppointmentCard } from './AppointmentCard.js';
 import { EmptyDateContainer, Title } from '../styles/RSPAgendaStyles.js';
+import { loadAppointments } from '../slices/calendarSlice.js';
 
 const renderItem = (item) => {
   return (
@@ -25,81 +23,62 @@ const renderEmptyDate = () => {
   );
 };
 
-const addEmptyDatesToAppointments = (appointmentsObj, year, month) => {
-  let numOfDaysInMonth = days(month, year);
-  for (let day = 1; day < numOfDaysInMonth; day++) {
-    let dateKey = year + '-' + padWithZero(month) + '-' + padWithZero(day);
-    if (!appointmentsObj[dateKey]) {
-      appointmentsObj[dateKey] = new Array();
-    }
-  }
-  return appointmentsObj;
-};
-
-const padWithZero = (num) => {
-  return num < 10 ? '0' + num : num.toString();
-};
-
-const days = function (month, year) {
-  return new Date(year, month, 0).getDate();
-};
-
-export default function RSPAgenda({ handleLoadAppointments }) {
+export default function RSPAgenda() {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [loadedMonth, setLoadedMonth] = useState(null);
-  const [loadedYear, setLoadedYear] = useState(null);
+  const [loadedMonth, setLoadedMonth] = useState(new Date().getMonth() + 1);
+  const [loadedYear, setLoadedYear] = useState(new Date().getFullYear());
+  const [refreshing, setRefreshing] = useState(false);
+  const [isAgendaVisible, setIsAgendaVisible] = useState(true);
   const { appointments } = useSelector((state) => state.calendar);
-  const [customAppointments, setCustomAppointments] = useState({});
 
-  const createCustomAppointments = (year, month) => {
-    //console.log(`loading appointments: ${year} - ${month}`);
-    handleLoadAppointments(year, month).then((result) => {
-      let appointmentsObj = {};
-      const appointmentsArr = result.payload;
-      for (let appointment of appointmentsArr) {
-        let key = appointment['date'];
-        if (!appointmentsObj[key]) {
-          appointmentsObj[key] = new Array();
-        }
-        appointmentsObj[key].push(appointment);
-      }
-      appointmentsObj = addEmptyDatesToAppointments(
-        appointmentsObj,
-        year,
-        month
-      );
-      setCustomAppointments(appointmentsObj);
-    });
+  const dispatch = useDispatch();
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    console.log(`refreshing... ${loadedMonth}, ${loadedYear}`);
+    loadRSPAppointments(loadedYear, loadedMonth);
+    console.log(`loading appointments... ${loadedMonth}, ${loadedYear}`);
+    setRefreshing(false);
+    console.log('done refreshing !');
+  }, [dispatch]);
+
+  const loadRSPAppointments = async (year, month) => {
+    await dispatch(loadAppointments({ year, month }));
   };
 
-  useEffect(() => {
-    createCustomAppointments(loadedYear, loadedMonth);
-    console.log(`appointments changed: ${JSON.stringify(appointments)}`);
-  }, [loadedYear, loadedMonth, appointments]);
+  const dayChange = (day) => {
+    const { year, month } = day;
+    if (
+      (loadedYear !== year ||
+        parseInt(loadedMonth, 10) > parseInt(month, 10) + 1 ||
+        parseInt(loadedMonth, 10) < parseInt(month, 10) - 1) &&
+      isAgendaVisible
+    ) {
+      setLoadedMonth(month);
+      setLoadedYear(year);
+      loadRSPAppointments(loadedYear, loadedMonth);
+      console.log(`loading appointments... ${loadedMonth}, ${loadedYear}`);
+    }
+  };
 
   return (
     <Agenda
-      loadItemsForMonth={(date) => {
-        if (date.month !== loadedMonth) {
-          //console.log(`loaded month: ${loadedMonth}`);
-          //console.log(`current month: ${date.month}`);
-          setLoadedMonth(date.month);
-        }
-        if (date.year !== loadedYear) {
-          //console.log(`loaded year: ${loadedYear}`);
-          //console.log(`current year: ${date.year}`);
-          setLoadedYear(date.year);
-        }
-      }}
-      items={customAppointments}
+      loadItemsForMonth={dayChange}
+      items={appointments}
       selected={selectedDate}
       onDayPress={(date) => {
-        if (selectedDate !== date) {
+        if (date !== selectedDate) {
           setSelectedDate(date);
         }
       }}
+      onDayChange={dayChange}
       renderItem={renderItem}
       renderEmptyDate={renderEmptyDate}
+      pastScrollRange={24}
+      futureScrollRange={24}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+      onCalendarToggled={(flag) => setIsAgendaVisible(flag)}
     />
   );
 }

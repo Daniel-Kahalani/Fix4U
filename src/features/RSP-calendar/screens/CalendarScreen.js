@@ -3,29 +3,39 @@ import { View, StyleSheet } from 'react-native';
 import { FAB, Portal } from 'react-native-paper';
 import RSPAgenda from '../components/RSPAgenda.js';
 import { colors } from '../../../infrastructure/theme/colors.js';
-import { useDispatch } from 'react-redux';
-import { loadAppointments } from '../slices/calendarSlice.js';
+import Snackbar from '../../../components/utils/Snackbar.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { SnackBarType } from '../../../infrastructure/utils/constants.js';
+import { clearRemoveAppointmentSnackbar } from '../slices/calendarSlice.js';
 
-export default function CalendarScreen({ route, navigation }) {
+export default function CalendarScreen({ navigation }) {
+  const { isAppointmentRemoved } = useSelector((state) => state.calendar);
   const dispatch = useDispatch();
-
-  const loadRSPAppointments = async (year, month) => {
-    return await dispatch(loadAppointments({ year, month }));
-  };
 
   return (
     <Portal.Host>
       <View style={styles.agenda}>
-        <RSPAgenda handleLoadAppointments={loadRSPAppointments} />
+        <RSPAgenda />
         <FAB
           style={styles.fab}
-          small
-          color={colors.brand.secondary}
+          color={colors.brand.primary}
           icon='plus'
           onPress={() => {
             navigation.navigate('AddAppointment');
           }}
         />
+        <Snackbar
+          visible={isAppointmentRemoved}
+          style={styles.snackbar}
+          type={SnackBarType.SUCCESS}
+          onDismiss={() => dispatch(clearRemoveAppointmentSnackbar())}
+          action={{
+            label: 'Dismiss',
+            onPress: () => dispatch(clearRemoveAppointmentSnackbar()),
+          }}
+        >
+          Appointment have removed successfuly
+        </Snackbar>
       </View>
     </Portal.Host>
   );
@@ -35,10 +45,9 @@ const styles = StyleSheet.create({
   agenda: {
     height: 600,
   },
-  modal: {
+  snackbar: {
     position: 'absolute',
-    top: 50,
-    right: '50',
+    bottom: 10,
   },
   fab: {
     position: 'absolute',

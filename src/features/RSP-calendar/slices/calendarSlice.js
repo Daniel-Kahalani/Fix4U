@@ -2,24 +2,25 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Parse from 'parse/react-native';
 
 const initialState = {
-  appointments: [],
+  appointments: {},
   error: null,
   loading: null,
+  isAppointmentRemoved: false,
 };
 
 export const addAppointment = createAsyncThunk(
   'calendar/addAppointment',
-  async (appointmentInput, { rejectWithValue }) => {
+  async (appointmentInput, { getState, rejectWithValue }) => {
     try {
-      const generalUser = await Parse.User.currentAsync();
-      let userInfo = generalUser
-        ? await Parse.Cloud.run('getUserDataByGeneraUser', {
-            generalUser: JSON.stringify(generalUser),
-          })
-        : null;
+      const {
+        user: {
+          info: { specificUserId, userType },
+        },
+      } = getState();
       const appointment = await Parse.Cloud.run('addAppointment', {
         ...appointmentInput,
-        ...userInfo,
+        specificUserId,
+        userType,
       });
       return appointment;
     } catch (e) {
@@ -30,20 +31,20 @@ export const addAppointment = createAsyncThunk(
 
 export const loadAppointments = createAsyncThunk(
   'calendar/loadAppointments',
-  async ({ year, month }, { rejectWithValue }) => {
+  async ({ year, month }, { getState, rejectWithValue }) => {
     try {
-      const generalUser = await Parse.User.currentAsync();
-      let userInfo = generalUser
-        ? await Parse.Cloud.run('getUserDataByGeneraUser', {
-            generalUser: JSON.stringify(generalUser),
-          })
-        : null;
-      const appointmentsArr = await Parse.Cloud.run('loadAppointmentsByMonth', {
+      const {
+        user: {
+          info: { specificUserId, userType },
+        },
+      } = getState();
+      const appointmentsObj = await Parse.Cloud.run('loadAppointmentsByMonth', {
         year,
         month,
-        ...userInfo,
+        specificUserId,
+        userType,
       });
-      return appointmentsArr;
+      return appointmentsObj;
     } catch (e) {
       rejectWithValue(e);
     }
@@ -52,17 +53,17 @@ export const loadAppointments = createAsyncThunk(
 
 export const deleteAppointment = createAsyncThunk(
   'calendar/deleteAppointment',
-  async ({ appointmentId }, { rejectWithValue }) => {
+  async ({ appointmentId }, { getState, rejectWithValue }) => {
     try {
-      const generalUser = await Parse.User.currentAsync();
-      let userInfo = generalUser
-        ? await Parse.Cloud.run('getUserDataByGeneraUser', {
-            generalUser: JSON.stringify(generalUser),
-          })
-        : null;
+      const {
+        user: {
+          info: { specificUserId, userType },
+        },
+      } = getState();
       const appointment = await Parse.Cloud.run('deleteAppointment', {
         appointmentId,
-        ...userInfo,
+        specificUserId,
+        userType,
       });
       return appointment;
     } catch (e) {
@@ -73,17 +74,17 @@ export const deleteAppointment = createAsyncThunk(
 
 export const editAppointment = createAsyncThunk(
   'calendar/editAppointment',
-  async (appointmentInput, { rejectWithValue }) => {
+  async (appointmentInput, { getState, rejectWithValue }) => {
     try {
-      const generalUser = await Parse.User.currentAsync();
-      let userInfo = generalUser
-        ? await Parse.Cloud.run('getUserDataByGeneraUser', {
-            generalUser: JSON.stringify(generalUser),
-          })
-        : null;
+      const {
+        user: {
+          info: { specificUserId, userType },
+        },
+      } = getState();
       const appointment = await Parse.Cloud.run('editAppointment', {
         ...appointmentInput,
-        ...userInfo,
+        specificUserId,
+        userType,
       });
       return appointment;
     } catch (e) {
@@ -99,6 +100,15 @@ const calendarSlice = createSlice({
     clearError(state, action) {
       state.error = null;
     },
+    clearCalendar(state, action) {
+      state.pastAppointments = initialState.appointments;
+      state.error = initialState.error;
+      state.loading = initialState.loading;
+      state.isAppointmentRemoved = initialState.isAppointmentRemoved;
+    },
+    clearRemoveAppointmentSnackbar(state, action) {
+      state.isAppointmentRemoved = false;
+    },
   },
   extraReducers: {
     [addAppointment.pending]: (state, action) => {
@@ -107,7 +117,7 @@ const calendarSlice = createSlice({
     },
     [addAppointment.fulfilled]: (state, action) => {
       state.loading = false;
-      state.appointments = action.payload;
+      state.error = null;
     },
     [addAppointment.rejected]: (state, action) => {
       state.loading = false;
@@ -122,6 +132,7 @@ const calendarSlice = createSlice({
     },
     [loadAppointments.fulfilled]: (state, action) => {
       state.loading = false;
+      state.error = null;
       state.appointments = action.payload;
     },
     [loadAppointments.rejected]: (state, action) => {
@@ -138,7 +149,7 @@ const calendarSlice = createSlice({
     [deleteAppointment.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
-      state.appointments = action.payload;
+      state.isAppointmentRemoved = true;
     },
     [deleteAppointment.rejected]: (state, action) => {
       state.loading = false;
@@ -146,11 +157,11 @@ const calendarSlice = createSlice({
         message: action.payload.message,
         code: action.payload.code,
       };
+      state.isAppointmentRemoved = false;
     },
     [editAppointment.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
-      state.appointments = action.payload;
     },
     [editAppointment.rejected]: (state, action) => {
       state.loading = false;
@@ -166,6 +177,7 @@ const calendarSlice = createSlice({
   },
 });
 
-export const { clearError } = calendarSlice.actions;
+export const { clearError, clearCalendar, clearRemoveAppointmentSnackbar } =
+  calendarSlice.actions;
 
 export default calendarSlice.reducer;

@@ -2,7 +2,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Paragraph, Dialog } from 'react-native-paper';
-import { deleteAppointment } from '../slices/calendarSlice';
+import { deleteAppointment, loadAppointments } from '../slices/calendarSlice';
 
 export const RemoveAppointmentDialog = ({
   isVisible,
@@ -16,6 +16,11 @@ export const RemoveAppointmentDialog = ({
 
   const deleteRSPAppointment = async (appointmentId) => {
     await dispatch(deleteAppointment({ appointmentId }));
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+    await dispatch(loadAppointments({ year, month }));
+    console.log(`loading appointments... ${year}, ${month}`);
   };
 
   const handleDeleteButtonClick = () => {

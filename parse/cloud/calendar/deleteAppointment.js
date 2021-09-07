@@ -8,7 +8,9 @@ Parse.Cloud.define('deleteAppointment', async (request) => {
     await deleteAppointmentFromRSP(appointmentId, specificUserId, userType);
     let query = new Parse.Query('Appointment');
     const appointment = await query.get(appointmentId);
-    return await appointment.destroy({ useMasterKey: true });
+    let result = await appointment.toJSON();
+    await appointment.destroy({ useMasterKey: true });
+    return result;
   } catch (e) {
     throw new Error('Error while deleting Appointment');
   }
@@ -31,6 +33,6 @@ async function deleteAppointmentFromRSP(
     specificUser.set('appointments', userAppointments);
     await specificUser.save();
   } catch (e) {
-    throw new Error('Error while deleting appointment from RSP');
+    throw new Error(e);
   }
 }
