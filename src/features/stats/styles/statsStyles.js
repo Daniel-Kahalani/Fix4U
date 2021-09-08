@@ -77,6 +77,8 @@ const chartConfig = {
 export const BarChart = styled(NativeBarChart).attrs({
   chartConfig: chartConfig,
   height: 220,
+  fromZero: true,
+  showValuesOnTopOfBars: true,
 })`
   margin-vertical: 8px;
 `;
