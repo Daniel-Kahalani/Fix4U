@@ -19,6 +19,7 @@ export default function Charts({
     { label: 'Last 9 months', value: 9 },
     { label: 'Last 12 months', value: 12 },
   ];
+
   return (
     <>
       <Title>Appointments Per Month</Title>
@@ -37,7 +38,11 @@ export default function Charts({
 
       {charts && (
         <ScrollView horizontal={true}>
-          <BarChart width={barChartWidth} data={charts.appointmentsPerMonth} />
+          <BarChart
+            width={barChartWidth}
+            data={charts.appointmentsPerMonth}
+            formatYLabel={(num) => Math.floor(num)}
+          />
         </ScrollView>
       )}
       <Title>Appointmens By Fault Type</Title>
