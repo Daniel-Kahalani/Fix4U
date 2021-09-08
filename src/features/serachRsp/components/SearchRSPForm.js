@@ -44,15 +44,6 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
   const [expertiseType, setExpertiseType] = useState(expertiseTypePlaceholder);
   const [errorCheck, setErrorCheck] = useState(false);
 
-  const clearInput = () => {
-    setBusinessName('');
-    setDateChosen('');
-    setDescription('');
-    setLocation('');
-    setSelection(false);
-    setErrorCheck(false);
-  };
-
   const showDatePicker = () => {
     setDate(new Date());
     setIsDatePickerShow(true);
@@ -90,7 +81,7 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
     return (
       (!isSelected && !dateChosen) ||
       !location ||
-      description <= 10 ||
+      description.length <= 10 ||
       expertiseType === null ||
       hasSearchInputErrors()
     );
@@ -120,7 +111,6 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
           searchType,
         });
       }
-      clearInput();
     }
   };
 
@@ -222,7 +212,7 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
         multiline={true}
         onChangeText={(u) => setDescription(u)}
       />
-      <HelperText type='error' visible={errorCheck && description <= 10}>
+      <HelperText type='error' visible={errorCheck && description.length <= 10}>
         Must enter at least 10 characters
       </HelperText>
       {error && (

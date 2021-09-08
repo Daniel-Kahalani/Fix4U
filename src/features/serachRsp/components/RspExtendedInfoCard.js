@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import star from '../../../../assets/star';
 import { SvgXml } from 'react-native-svg';
 import { sendAppointmentRequest } from '../slices/searchRSPSlice';
+import ErrorText from '../../../components/utils/Text';
 
 export default function RspExtendedInfoCard({ rsp, searchInput }) {
   const dispatch = useDispatch();
@@ -67,6 +68,11 @@ export default function RspExtendedInfoCard({ rsp, searchInput }) {
           descriptionNumberOfLines={15}
         />
         <Divider />
+        {error && (
+          <ErrorContainer size='large'>
+            <ErrorText variant='error'>{error.message}</ErrorText>
+          </ErrorContainer>
+        )}
       </List.Accordion>
       {recentFeedbacks.length !== 0 && (
         <>
@@ -102,11 +108,6 @@ export default function RspExtendedInfoCard({ rsp, searchInput }) {
               descriptionNumberOfLines={60}
             />
             <Divider />
-            {error && (
-              <ErrorContainer size='large'>
-                <Text variant='error'>{error.message}</Text>
-              </ErrorContainer>
-            )}
           </List.Accordion>
         </>
       )}

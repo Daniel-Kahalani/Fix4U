@@ -20,7 +20,6 @@ import { AbortButton, BottomViewButton } from '../components/SearchStyles';
 export default function ReceiveAppointmentAnswerScreen({ navigation }) {
   const dispatch = useDispatch();
   const { appointmentStatus } = useSelector((state) => state.searchRSP);
-  const [intervals, setIntervals] = useState([]);
 
   useEffect(() => {
     let intervalId1 = setInterval(async () => {
@@ -29,27 +28,16 @@ export default function ReceiveAppointmentAnswerScreen({ navigation }) {
         clearInterval(intervalId1);
       }
     }, 6000);
-    let intrevalId2 = setTimeout(async () => {
+    setTimeout(async () => {
       clearInterval(intervalId1);
       dispatch(abortAppointmentRequest());
     }, 50000);
-    setIntervals([intervalId1, intrevalId2]);
   }, [dispatch]);
 
   const handleAbortButtonClick = () => {
     abortAppointmentRequest();
     navigation.navigate('MainSearch');
   };
-
-  useEffect(() => {
-    navigation.addListener('beforeRemove', (e) => {
-      intervals.forEach((interval) => {
-        console.log('clear');
-        clearInterval(interval);
-      });
-      console.log('useEffect');
-    });
-  }, [navigation, intervals]);
 
   return (
     <SafeArea>

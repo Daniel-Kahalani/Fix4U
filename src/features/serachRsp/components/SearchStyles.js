@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Button, TextInput, ToggleButton } from 'react-native-paper';
+import { Button, TextInput, ToggleButton, Divider } from 'react-native-paper';
 import Text from '../../../components/utils/Text';
 import { colors } from '../../../infrastructure/theme/colors';
 import { ScrollView, View, SafeAreaView, FlatList } from 'react-native';
@@ -118,7 +118,7 @@ export const SmallAuthInput = styled(TextInput)`
 
 export const Title = styled(Text)`
   font-size: 30px;
-  text-align: center;
+  text-transform: capitalize;
 `;
 
 export const SmallTitle = styled(Text)`
@@ -221,4 +221,9 @@ export const AbortButton = styled(Button).attrs({
   padding: ${(props) => props.theme.space[2]};
   position: absolute;
   bottom: 35px;
+`;
+
+export const BlackDivider = styled(Divider)`
+  color: black;
+  height: 2px;
 `;

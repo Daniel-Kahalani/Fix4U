@@ -1,5 +1,4 @@
 import React from 'react';
-import { Text, Image } from 'react-native';
 import RspExtendedInfoCard from './RspExtendedInfoCard';
 import Spacer from '../../../components/utils/Spacer';
 
@@ -8,11 +7,10 @@ import {
   Info,
   Rating,
   CardContainer,
-  RSPAvatarContainer,
   Title,
   InfoContainer,
+  BlackDivider,
 } from './SearchStyles';
-import RSPText from '../styles/searchResultStyles';
 import star from '../../../../assets/star';
 import { SvgXml } from 'react-native-svg';
 
@@ -25,10 +23,9 @@ export default function RSPInfoCard({ rsp, isFullDisplay, searchInput }) {
   return (
     <RSPCard elevation={2}>
       <CardContainer>
-        <RSPAvatarContainer>
-          <Title>{businessName}</Title>
-        </RSPAvatarContainer>
         <InfoContainer>
+          <Title>{businessName}</Title>
+          <BlackDivider />
           <Info>{`RSP Name: ${fullName}`}</Info>
           <Info>{`Business Address: ${businessAddress}`}</Info>
           <Info>{`Visit Cost: ${visitCost}`}</Info>
