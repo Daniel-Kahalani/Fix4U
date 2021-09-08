@@ -19,9 +19,7 @@ import { AbortButton, BottomViewButton } from '../components/SearchStyles';
 
 export default function ReceiveAppointmentAnswerScreen({ navigation }) {
   const dispatch = useDispatch();
-  const { error, loading, appointmentStatus } = useSelector(
-    (state) => state.searchRSP
-  );
+  const { appointmentStatus } = useSelector((state) => state.searchRSP);
   const [intervals, setIntervals] = useState([]);
 
   useEffect(() => {
