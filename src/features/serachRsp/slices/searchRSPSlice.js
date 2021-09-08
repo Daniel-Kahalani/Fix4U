@@ -79,7 +79,9 @@ export const abortAppointmentRequest = createAsyncThunk(
       const { searchRSP } = getState();
       const query = new Parse.Query('Appointment');
       const appointment = await query.get(searchRSP.appointmentRequestId);
-      await appointment.destroy();
+      if (appointment.get('status') === AppointmentStatus.PENDING) {
+        await appointment.destroy();
+      }
       return;
     } catch (e) {
       if (e.code !== 101) {
