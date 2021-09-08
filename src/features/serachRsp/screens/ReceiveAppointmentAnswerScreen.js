@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import SafeArea from '../../../components/utils/SafeArea';
 import {
   MainContainer,
@@ -16,15 +16,14 @@ import {
 } from '../slices/searchRSPSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AbortButton, BottomViewButton } from '../components/SearchStyles';
-import { Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
-export default function ReceiveAppointmentAnswerScreen() {
+export default function ReceiveAppointmentAnswerScreen({ navigation }) {
   const dispatch = useDispatch();
   const { error, loading, appointmentStatus } = useSelector(
     (state) => state.searchRSP
   );
-  const navigation = useNavigation();
+  const [intervals, setIntervals] = useState([]);
+
   useEffect(() => {
     let intervalId1 = setInterval(async () => {
       let result = await dispatch(getAppointmentRequestStatus());
@@ -32,16 +31,27 @@ export default function ReceiveAppointmentAnswerScreen() {
         clearInterval(intervalId1);
       }
     }, 6000);
-    setTimeout(async () => {
+    let intrevalId2 = setTimeout(async () => {
       clearInterval(intervalId1);
       dispatch(abortAppointmentRequest());
     }, 50000);
+    setIntervals([intervalId1, intrevalId2]);
   }, [dispatch]);
 
   const handleAbortButtonClick = () => {
     abortAppointmentRequest();
     navigation.navigate('MainSearch');
   };
+
+  useEffect(() => {
+    navigation.addListener('beforeRemove', (e) => {
+      intervals.forEach((interval) => {
+        console.log('clear');
+        clearInterval(interval);
+      });
+      console.log('useEffect');
+    });
+  }, [navigation, intervals]);
 
   return (
     <SafeArea>
