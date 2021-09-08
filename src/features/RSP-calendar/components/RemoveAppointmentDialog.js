@@ -20,7 +20,6 @@ export const RemoveAppointmentDialog = ({
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
     await dispatch(loadAppointments({ year, month }));
-    console.log(`loading appointments... ${year}, ${month}`);
   };
 
   const handleDeleteButtonClick = () => {

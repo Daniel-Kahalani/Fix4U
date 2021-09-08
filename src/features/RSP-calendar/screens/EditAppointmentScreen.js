@@ -64,7 +64,6 @@ export default function EditAppointmentScreen({ route, navigation }) {
     const year = parseInt(appointment.date.slice(0, 4), 10);
     const month = parseInt(appointment.date.slice(5, 7), 10);
     await dispatch(loadAppointments({ year, month }));
-    console.log(`loading appointments... ${year}, ${month}`);
   };
 
   useEffect(() => {

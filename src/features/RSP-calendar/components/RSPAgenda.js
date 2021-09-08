@@ -35,11 +35,8 @@ export default function RSPAgenda() {
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    console.log(`refreshing... ${loadedMonth}, ${loadedYear}`);
     loadRSPAppointments(loadedYear, loadedMonth);
-    console.log(`loading appointments... ${loadedMonth}, ${loadedYear}`);
     setRefreshing(false);
-    console.log('done refreshing !');
   }, [dispatch]);
 
   const loadRSPAppointments = async (year, month) => {
@@ -57,7 +54,6 @@ export default function RSPAgenda() {
       setLoadedMonth(month);
       setLoadedYear(year);
       loadRSPAppointments(loadedYear, loadedMonth);
-      console.log(`loading appointments... ${loadedMonth}, ${loadedYear}`);
     }
   };
 

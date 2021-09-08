@@ -18,7 +18,6 @@ export default function CalendarScreen({ navigation }) {
         <RSPAgenda />
         <FAB
           style={styles.fab}
-          color={colors.brand.primary}
           icon='plus'
           onPress={() => {
             navigation.navigate('AddAppointment');
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
   },
   snackbar: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 30,
   },
   fab: {
     position: 'absolute',
@@ -55,5 +54,6 @@ const styles = StyleSheet.create({
     top: 490,
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    backgroundColor: colors.brand.primary,
   },
 });

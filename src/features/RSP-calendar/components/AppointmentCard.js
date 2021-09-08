@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar, Divider, Portal } from 'react-native-paper';
 import {
   AppointmentCardContainer,
@@ -8,6 +8,7 @@ import {
   Time,
   Info,
   Title,
+  CustomerDetails,
   ButtonsSection,
 } from '../styles/AppointmentCardStyles.js';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,6 +26,8 @@ export const AppointmentCard = ({ appointment }) => {
     appointmentType,
     title,
     description,
+    customerName,
+    location,
   } = appointment;
   const iconSize = 30;
   const appointmentTypeAvatar = appointmentType
@@ -56,31 +59,35 @@ export const AppointmentCard = ({ appointment }) => {
           appointmentId={appointmentId}
         />
       </Portal>
-      <ButtonsSection>
-        <Spacer size='large'>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('EditAppointment', appointment)}
-          >
-            <FontAwesome5 name='edit' size={iconSize} color='black' />
-          </TouchableOpacity>
-        </Spacer>
-        <Spacer size='large'>
-          <TouchableOpacity
-            onPress={() => setRemoveDialogVisible(!isRemoveDialogVisible)}
-          >
-            <Ionicons
-              name='remove-circle-outline'
-              size={iconSize}
-              color={'black'}
-            />
-          </TouchableOpacity>
-        </Spacer>
-      </ButtonsSection>
+      {appointmentType !== AppointmentType.CUSTOMER && (
+        <ButtonsSection>
+          <Spacer size='large'>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditAppointment', appointment)
+              }
+            >
+              <FontAwesome5 name='edit' size={iconSize} color='black' />
+            </TouchableOpacity>
+          </Spacer>
+          <Spacer size='large'>
+            <TouchableOpacity
+              onPress={() => setRemoveDialogVisible(!isRemoveDialogVisible)}
+            >
+              <Ionicons
+                name='remove-circle-outline'
+                size={iconSize}
+                color={'black'}
+              />
+            </TouchableOpacity>
+          </Spacer>
+        </ButtonsSection>
+      )}
       <AppointmentInfoCard elevation={1}>
         <AvatarContainer>
           <Avatar.Text
             style={styles.avatar}
-            size={24}
+            size={28}
             label={appointmentTypeAvatar}
           />
         </AvatarContainer>
@@ -91,6 +98,18 @@ export const AppointmentCard = ({ appointment }) => {
             </Text>
             <Divider />
           </Time>
+          {appointmentType === AppointmentType.CUSTOMER && (
+            <View>
+              <CustomerDetails>
+                <Text variant='label'>{customerName}</Text>
+                <Divider />
+              </CustomerDetails>
+              <Title>
+                <Text variant='label'>{location}</Text>
+                <Divider />
+              </Title>
+            </View>
+          )}
           <Title>
             <Text variant='label'>{title}</Text>
             <Divider />
