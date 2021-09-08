@@ -22,6 +22,6 @@ Parse.Cloud.define('editAppointment', async (request) => {
     let result = await (await Appointment.save()).toJSON();
     return result;
   } catch (error) {
-    throw new Error(`Error while updating Appointment ID : ${AppointmentId}`);
+    throw new Error('Error while updating Appointment');
   }
 });

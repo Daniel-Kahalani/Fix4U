@@ -22,14 +22,20 @@ export default function RSPCalendarNavigator({ navigation }) {
         ...TransitionPresets.SlideFromRightIOS,
       }}
     >
-      <CalendarStack.Screen name='Calendar' component={CalendarScreen} />
+      <CalendarStack.Screen
+        name='Calendar'
+        component={CalendarScreen}
+        options={{ title: 'Calendar' }}
+      />
       <CalendarStack.Screen
         name='AddAppointment'
         component={AddAppointmentScreen}
+        options={{ title: 'Add Appointment' }}
       />
       <CalendarStack.Screen
         name='EditAppointment'
         component={EditAppointmentScreen}
+        options={{ title: 'Edit Appointment' }}
       />
     </CalendarStack.Navigator>
   );

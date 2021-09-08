@@ -1,11 +1,10 @@
-/* eslint-disable no-shadow */
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { ActivityIndicator, Colors, HelperText } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
+import Picker from '../../../components/utils/Picker.js';
 import Spacer from '../../../components/utils/Spacer';
 import {
   Cover,
@@ -22,20 +21,22 @@ import {
   AnimationWrapper,
   MsgContainer,
   BackButtonContainer,
-} from '../styles/AddAppointmentScreenStyles.js';
+} from '../styles/EditAppointmentScreenStyles.js';
 import {
   convertDateToString,
   convertTimeToString,
   createAppointmentTypeArray,
   convertTimeToNum,
 } from '../utils.js';
-import { editAppointment } from '../slices/calendarSlice.js';
+import { editAppointment, loadAppointments } from '../slices/calendarSlice.js';
 
 const appointmentTypeArray = createAppointmentTypeArray();
-const appointmentTypePlaceholder = 'Select Type Of Appointment';
+const appointmentTypePlaceholder = {
+  label: 'Select Type Of Appointment',
+  value: null,
+};
 
 export default function EditAppointmentScreen({ route, navigation }) {
-  console.log(route.params);
   const [startTimeChoosen, setStartTimeChoosen] = useState(
     route.params.startTime
   );
@@ -47,8 +48,6 @@ export default function EditAppointmentScreen({ route, navigation }) {
   const [appointmentType, setAppointmentType] = useState(
     route.params.appointmentType
   );
-  const [isAppointmentTypePickerOpen, setIsAppointmentTypePickerOpen] =
-    useState(false);
   const [title, setTitle] = useState(route.params.title);
   const [description, setDescription] = useState(route.params.description);
   const [errorCheck, setErrorCheck] = useState(false);
@@ -56,12 +55,15 @@ export default function EditAppointmentScreen({ route, navigation }) {
   const [date, setDate] = useState(null);
   const [isDatePickerShow, setIsDatePickerShow] = useState(false);
   const [isUpdatedAppointment, setIsUpdatedAppointment] = useState(false);
-  //const { error, loading } = useSelector((state) => state.calendar);
+  const { loading } = useSelector((state) => state.calendar);
 
   const dispatch = useDispatch();
 
   const editRSPAppointment = async (appointment) => {
     await dispatch(editAppointment(appointment));
+    const year = parseInt(appointment.date.slice(0, 4), 10);
+    const month = parseInt(appointment.date.slice(5, 7), 10);
+    await dispatch(loadAppointments({ year, month }));
   };
 
   useEffect(() => {
@@ -74,6 +76,7 @@ export default function EditAppointmentScreen({ route, navigation }) {
     return !dateChoosen ||
       !startTimeChoosen ||
       !endTimeChoosen ||
+      hasTimeErrors() ||
       !appointmentType ||
       !title ||
       !description
@@ -85,7 +88,7 @@ export default function EditAppointmentScreen({ route, navigation }) {
     setDateChoosen('');
     setStartTimeChoosen('');
     setEndTimeChoosen('');
-    setAppointmentType(appointmentTypePlaceholder);
+    setAppointmentType(appointmentTypePlaceholder.value);
     setTitle('');
     setDescription('');
     setErrorCheck(false);
@@ -152,9 +155,9 @@ export default function EditAppointmentScreen({ route, navigation }) {
   };
 
   const hasTimeErrors = () => {
-    return (
-      convertTimeToNum(endTimeChoosen) <= convertTimeToNum(startTimeChoosen)
-    );
+    const startTimeNum = convertTimeToNum(startTimeChoosen);
+    const endTimeNum = convertTimeToNum(endTimeChoosen);
+    return endTimeNum <= startTimeNum;
   };
 
   return (
@@ -258,19 +261,17 @@ export default function EditAppointmentScreen({ route, navigation }) {
                   ? 'End Time Is Missing!'
                   : 'End Time must be after Start Time!'}
               </HelperText>
-              <DropDownPicker
-                open={isAppointmentTypePickerOpen}
-                setOpen={setIsAppointmentTypePickerOpen}
-                value={appointmentType}
-                setValue={setAppointmentType}
-                items={appointmentTypeArray}
-                defaultIndex={0}
+              <Picker
                 placeholder={appointmentTypePlaceholder}
+                items={appointmentTypeArray}
+                onValueChange={setAppointmentType}
+                value={appointmentType}
               />
               <HelperText
                 type='error'
                 visible={
-                  errorCheck && appointmentType === appointmentTypePlaceholder
+                  errorCheck &&
+                  appointmentType === appointmentTypePlaceholder.value
                 }
               >
                 Appointment Type Is Missing!
@@ -305,24 +306,17 @@ export default function EditAppointmentScreen({ route, navigation }) {
                 </HelperText>
               </Spacer>
               <Spacer size='small'>
-                <AuthButton
-                  icon='content-save-edit-outline'
-                  mode='contained'
-                  onPress={handleSaveButtonClick}
-                >
-                  Save
-                </AuthButton>
-                {/* {!loading ? (
+                {!loading ? (
                   <AuthButton
-                    //icon='account-search'
+                    icon='content-save-edit-outline'
                     mode='contained'
-                    onPress={handleAddAppointmentButtonClick}
+                    onPress={handleSaveButtonClick}
                   >
-                    Add
+                    Save
                   </AuthButton>
                 ) : (
                   <ActivityIndicator animating={true} color={Colors.blue300} />
-                )} */}
+                )}
               </Spacer>
             </SafeScrollView>
           </Container>

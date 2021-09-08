@@ -21,6 +21,7 @@ import {
   SettingsItem,
   Title,
 } from '../styles/settingStyles';
+import { clearCalendar } from '../../RSP-calendar/slices/calendarSlice';
 
 export default function SettingsScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ export default function SettingsScreen({ navigation }) {
     dispatch(clearHistory());
     dispatch(clearInbox());
     dispatch(clearSearchRSP());
+    dispatch(clearCalendar());
   };
 
   return (

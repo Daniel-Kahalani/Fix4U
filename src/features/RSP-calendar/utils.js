@@ -1,13 +1,15 @@
 import { rspAppointmentTypeArr } from '../../infrastructure/utils/constants';
 
 export const convertDateToString = (value) => {
+  const year = value.getFullYear();
   const month = value.getMonth() + 1;
+  const day = value.getDate();
   return (
-    value.getFullYear() +
+    year +
     '-' +
     (month > 9 ? month : '0' + month) +
     '-' +
-    value.getDate()
+    (day > 9 ? day : '0' + day)
   );
 };
 
