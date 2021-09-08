@@ -4,7 +4,7 @@ import { loadPhoto } from '../../../features/account/slices/userSlice';
 import { getPastAppointments } from '../../../features/history/slices/historySlice';
 import { getNotifications } from '../../../features/inbox/slices/inboxSlice';
 import { loadAppointments } from '../../../features/RSP-calendar/slices/calendarSlice';
-
+import { getChartStats } from '../../../features/stats/slices/statsSlices';
 import * as Notifications from 'expo-notifications';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from '../../theme/colors';
@@ -49,13 +49,17 @@ export default function RSPNavigator(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadPhoto());
-    dispatch(getPastAppointments());
-    dispatch(getNotifications());
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth() + 1;
-    dispatch(loadAppointments({ year, month }));
+    async function fetchData() {
+      dispatch(loadPhoto());
+      dispatch(getNotifications());
+      await dispatch(getPastAppointments());
+      dispatch(getChartStats());
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1;
+      dispatch(loadAppointments({ year, month }));
+    }
+    fetchData();
   }, [dispatch]);
 
   return (

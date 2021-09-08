@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../account/slices/userSlice';
 import { clearHistory } from '../../history/slices/historySlice';
 import { clearInbox } from '../../inbox/slices/inboxSlice';
+import { clearStats } from '../../stats/slices/statsSlices';
+
 import {
   clearSearchRSP,
   abortAppointmentRequest,
@@ -27,8 +29,9 @@ export default function SettingsScreen({ navigation }) {
   const isRsp = info.userType === UserType.RSP ? true : false;
 
   const handleLogout = async () => {
-    await dispatch(abortAppointmentRequest);
+    await dispatch(abortAppointmentRequest());
     await dispatch(logout());
+    dispatch(clearStats());
     dispatch(clearHistory());
     dispatch(clearInbox());
     dispatch(clearSearchRSP());

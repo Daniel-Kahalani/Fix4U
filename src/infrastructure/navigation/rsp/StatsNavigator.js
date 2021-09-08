@@ -19,7 +19,7 @@ export default function StatsNavigator({ route, navigation }) {
       <StatsStack.Screen
         name='Stats'
         component={StatsScreen}
-        options={{ title: 'Stats' }}
+        options={{ title: 'Statistics & Analysis' }}
       />
     </StatsStack.Navigator>
   );

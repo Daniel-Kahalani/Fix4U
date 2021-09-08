@@ -9,6 +9,7 @@ import {
   SearchContainer,
   ScrollBackground,
   Title,
+  SafeScrollView,
 } from '../components/SearchStyles.js';
 
 export default function SearchByNameScreen({ route, navigation }) {
@@ -21,23 +22,32 @@ export default function SearchByNameScreen({ route, navigation }) {
     });
   }, [dispatch, navigation]);
 
-  const performSearch = (searchInput) => {
-    dispatch(getRSPAvailableHours({ ...searchInput, ...route.params }));
+  // const performSearch = (searchInput) => {
+  //   dispatch(getRSPAvailableHours({ ...searchInput, ...route.params }));
+  // };
+
+  const performSearch = async (searchInput) => {
+    const resultAction = await dispatch(
+      getRSPAvailableHours({ ...searchInput, ...route.params })
+    );
+    if (getRSPAvailableHours.fulfilled.match(resultAction)) {
+      navigation.navigate('SearchResult', searchInput);
+    } else {
+      navigation.navigate('SearchResult', searchInput);
+    }
   };
 
   return (
     <ScrollBackground>
-      {/* <SearchCover /> */}
-      <Title>Search By Name</Title>
-      <Spacer size='large' />
-      {/* <SafeScrollView> */}
-      <SearchContainer>
-        <SearchRSPForm
-          searchType={SearchType.NAME}
-          handleSearch={performSearch}
-        />
-      </SearchContainer>
-      {/* </SafeScrollView> */}
+      <SafeScrollView>
+        <Spacer size='large' />
+        <SearchContainer>
+          <SearchRSPForm
+            searchType={SearchType.NAME}
+            handleSearch={performSearch}
+          />
+        </SearchContainer>
+      </SafeScrollView>
     </ScrollBackground>
   );
 }

@@ -8,7 +8,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#5C6EB4"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -18,7 +18,7 @@
     ],
     "notification":{
       "icon": "./assets/iconPush.png",
-      "color":"#696AC3"
+      "color":"#FFFFFF"
     },
     "ios": {
       "supportsTablet": true

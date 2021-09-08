@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SearchType } from '../../../infrastructure/utils/constants';
 import { ActivityIndicator, Colors, HelperText } from 'react-native-paper';
@@ -12,13 +12,14 @@ import {
 } from '../components/SearchStyles';
 import { expertiseArr } from '../../../infrastructure/utils/constants';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { CheckBox, View } from 'react-native';
 import {
   SmallAuthInput,
   Section,
   SmallSpace,
 } from '../components/SearchStyles.js';
+import Picker from '../../../components/utils/Picker';
+
 const createExpertiseTypeArray = () => {
   let expertiseTypeArray = [];
   expertiseArr.forEach((element) => {
@@ -40,10 +41,17 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
   const [isDatePickerShow, setIsDatePickerShow] = useState(false);
   const [location, setLocation] = useState('');
   const [isSelected, setSelection] = useState(false);
-  const [isExpertiseTypePickerOpen, setIsExpertiseTypePickerOpen] =
-    useState(false);
   const [expertiseType, setExpertiseType] = useState(expertiseTypePlaceholder);
   const [errorCheck, setErrorCheck] = useState(false);
+
+  const clearInput = () => {
+    setBusinessName('');
+    setDateChosen('');
+    setDescription('');
+    setLocation('');
+    setSelection(false);
+    setErrorCheck(false);
+  };
 
   const showDatePicker = () => {
     setDate(new Date());
@@ -64,10 +72,7 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
     return dateStr;
   };
   const hasSearchInputErrors = () => {
-    return (
-      (searchType === SearchType.NAME && !businessName) ||
-      (searchType === SearchType.LOCATION && !location)
-    );
+    return searchType === SearchType.NAME && !businessName;
   };
 
   const convertDateToString = (value) => {
@@ -84,6 +89,7 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
   const hasInputErrors = () => {
     return (
       (!isSelected && !dateChosen) ||
+      !location ||
       description <= 10 ||
       expertiseType === null ||
       hasSearchInputErrors()
@@ -95,24 +101,26 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
     const faultType = expertiseType;
     let date;
     isSelected ? (date = chooseToday()) : (date = dateChosen);
-    console.log('dateChosen: ' + date);
     if (!hasInputErrors()) {
       if (searchType === SearchType.NAME) {
-        console.log('in SearchType === SearchType.NAME ');
-        console.log('expertiseType ' + expertiseType);
         handleSearch({
           businessName,
+          location,
           faultType,
           description,
           date,
+          searchType,
         });
       } else {
-        console.log('in SearchType === SearchType.LOCATION ');
         handleSearch({
+          location,
           faultType,
+          description,
           date,
+          searchType,
         });
       }
+      clearInput();
     }
   };
 
@@ -129,20 +137,24 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
           onChangeText={(u) => setBusinessName(u)}
         />
       ) : (
-        <AuthInput
-          label='Location'
-          value={location}
-          textContentType='name'
-          keyboardType='default'
-          autoCapitalize='none'
-          onChangeText={(u) => setLocation(u)}
-        />
+        <></>
       )}
       <HelperText
         type='error'
         visible={errorCheck && hasSearchInputErrors(searchType)}
       >
-        Value must be entered!
+        Business name must be entered!
+      </HelperText>
+      <AuthInput
+        label='Address'
+        value={location}
+        textContentType='name'
+        keyboardType='default'
+        autoCapitalize='none'
+        onChangeText={(u) => setLocation(u)}
+      />
+      <HelperText type='error' visible={errorCheck && !location}>
+        Address is invalid!
       </HelperText>
       <View>
         <Section>
@@ -181,20 +193,23 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
           </Section>
         )}
       </View>
-      <HelperText type='error' visible={errorCheck && !dateChosen}>
+      <HelperText
+        type='error'
+        visible={errorCheck && !isSelected && !dateChosen}
+      >
         Date Is Missing!
       </HelperText>
       <>
-        <DropDownPicker
-          open={isExpertiseTypePickerOpen}
-          setOpen={setIsExpertiseTypePickerOpen}
-          value={expertiseType}
-          setValue={setExpertiseType}
+        <Picker
+          placeholder={{
+            label: 'Select fault type',
+            value: null,
+            color: 'Black',
+          }}
           items={expertiseTypeArray}
-          defaultIndex={0}
-          placeholder={expertiseTypePlaceholder}
+          onValueChange={(value) => setExpertiseType(value)}
+          value={expertiseType}
         />
-
         <HelperText type='error' visible={errorCheck && expertiseType === null}>
           Must choose expertise
         </HelperText>

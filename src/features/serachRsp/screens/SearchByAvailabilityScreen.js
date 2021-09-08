@@ -10,9 +10,10 @@ import {
   SearchContainer,
   ScrollBackground,
   Title,
+  SafeScrollView,
 } from '../components/SearchStyles.js';
 
-export default function SearchByNameScreen({ route, navigation }) {
+export default function SearchByAvailabilityScreen({ route, navigation }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,36 +22,28 @@ export default function SearchByNameScreen({ route, navigation }) {
     });
   }, [dispatch, navigation]);
 
-  // const clearInput = () => {
-  //   setDateChoosen('');
-  //   setStartTimeChoosen('');
-  //   setEndTimeChoosen('');
-  //   setAppointmentType(appointmentTypePlaceholder);
-  //   setTitle('');
-  //   setDescription('');
-  //   setErrorCheck(false);
-  // };
-
   const performSearch = async (searchInput) => {
     const resultAction = await dispatch(
       getAvailableRSPs({ ...searchInput, ...route.params })
     );
     if (getAvailableRSPs.fulfilled.match(resultAction)) {
       navigation.navigate('SearchResult', searchInput);
+    } else {
+      navigation.navigate('SearchResult', searchInput);
     }
   };
 
   return (
     <ScrollBackground>
-      {/* <SearchCover /> */}
-      <Title>Search By Availability</Title>
-      <Spacer size='large' />
-      <SearchContainer>
-        <SearchRSPForm
-          searchType={SearchType.Location}
-          handleSearch={performSearch}
-        />
-      </SearchContainer>
+      <SafeScrollView>
+        <Spacer size='large' />
+        <SearchContainer>
+          <SearchRSPForm
+            searchType={SearchType.Location}
+            handleSearch={performSearch}
+          />
+        </SearchContainer>
+      </SafeScrollView>
     </ScrollBackground>
   );
 }

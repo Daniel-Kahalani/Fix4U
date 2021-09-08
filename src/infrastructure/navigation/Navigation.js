@@ -9,7 +9,6 @@ import CustomerNavigator from './customer/CustomerNavigator';
 import '../../../assets/backgrounds/home.jpg';
 import '../../../assets/backgrounds/main.jpeg';
 
-
 export default function Navigation() {
   const dispatch = useDispatch();
   const { isAuthenticated, info } = useSelector((state) => state.user);
