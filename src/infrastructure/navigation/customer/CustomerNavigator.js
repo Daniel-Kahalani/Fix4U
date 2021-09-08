@@ -8,7 +8,6 @@ import { getPastAppointments } from '../../../features/history/slices/historySli
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import SearchNavigator from './SearchNavigator';
 import HistoryNavigator from '../common/HistoryNavigator';
-import StatsNavigator from '../rsp/StatsNavigator';
 import SettingsNavigator from '../common/SettingsNavigator';
 
 const Tab = createBottomTabNavigator();
@@ -51,7 +50,6 @@ export default function CustomerNavigator() {
     >
       <Tab.Screen name='Search' component={SearchNavigator} />
       <Tab.Screen name='History' component={HistoryNavigator} />
-      <Tab.Screen name='Stats' component={StatsNavigator} />
       <Tab.Screen name='Settings' component={SettingsNavigator} />
     </Tab.Navigator>
   );

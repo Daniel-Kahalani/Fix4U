@@ -6,6 +6,7 @@ import {
   getNotifications,
 } from '../slices/inboxSlice';
 import { SnackBarType } from '../../../infrastructure/utils/constants';
+import { loadAppointments } from '../../../features/RSP-calendar/slices/calendarSlice';
 import NotificationCardInfo from './NotificationCardInfo';
 import Loader from '../../../components/utils/Loader';
 import Text from '../../../components/utils/Text';
@@ -45,6 +46,13 @@ export default function Notification({
       const message = acceptAppointment.fulfilled.match(resultAction)
         ? 'The appointment was scheduled and added to your calendar'
         : resultAction.payload.message;
+      if (acceptAppointment.fulfilled.match(resultAction)) {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth() + 1;
+        dispatch(loadAppointments({ year, month }));
+      }
+
       navigateToInboxScreen(message, type);
     }
   };
