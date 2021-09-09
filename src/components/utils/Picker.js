@@ -20,7 +20,7 @@ const pickerStyles = StyleSheet.create({
 export default function Picker({ placeholder, items, onValueChange, value }) {
   return (
     <RNPickerSelect
-      placeholder={placeholder}
+      placeholder={placeholder ? placeholder : {}}
       items={items}
       onValueChange={onValueChange}
       style={pickerStyles}

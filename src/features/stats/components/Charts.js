@@ -25,11 +25,6 @@ export default function Charts({
       <Title>Appointments Per Month</Title>
       <Spacer>
         <Picker
-          placeholder={{
-            label: 'Choose a range of months...',
-            value: null,
-            color: 'black',
-          }}
           items={monthsRange}
           onValueChange={handleMonthsRangeSelected}
           value={numOfMonths}
