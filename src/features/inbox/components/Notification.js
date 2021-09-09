@@ -32,7 +32,7 @@ export default function Notification({
 }) {
   const dispatch = useDispatch();
 
-  const { title, startTime, endTime, date } = notification.attributes;
+  const { startTime, endTime, date } = notification.attributes;
   const { loading, error } = useSelector((state) => state.inbox);
   const handleAccept = async () => {
     const resultAction = await dispatch(acceptAppointment(notification.id));
@@ -79,7 +79,7 @@ export default function Notification({
           <NotificationIcon icon='calendar-clock' />
         </NotificationAvatarContainer>
         <InfoContainer>
-          <Title variant='label'>{title}</Title>
+          <Title variant='label'>Customer Appointment</Title>
           <Info>{`Date: ${date}`}</Info>
           <Info>{`Time: ${startTime}-${endTime}`}</Info>
         </InfoContainer>
