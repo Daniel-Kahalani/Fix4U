@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { clearError, getAvailableRSPs } from '../slices/searchRSPSlice';
 import Spacer from '../../../components/utils/Spacer';
-import { expertiseArr } from '../../../infrastructure/utils/constants';
 import SearchRSPForm from '../components/SearchRSPForm';
 import { SearchType } from '../../../infrastructure/utils/constants';
 
 import {
   SearchContainer,
   ScrollBackground,
-  Title,
   SafeScrollView,
 } from '../components/SearchStyles.js';
 
@@ -27,6 +25,8 @@ export default function SearchByAvailabilityScreen({ route, navigation }) {
       getAvailableRSPs({ ...searchInput, ...route.params })
     );
     if (getAvailableRSPs.fulfilled.match(resultAction)) {
+      navigation.navigate('SearchResult', searchInput);
+    } else {
       navigation.navigate('SearchResult', searchInput);
     }
   };

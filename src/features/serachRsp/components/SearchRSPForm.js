@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SearchType } from '../../../infrastructure/utils/constants';
 import { ActivityIndicator, Colors, HelperText } from 'react-native-paper';
@@ -34,7 +34,7 @@ const expertiseTypePlaceholder = 'Select expertise';
 
 export default function SearchRSPForm({ searchType, handleSearch }) {
   const { error, loading } = useSelector((state) => state.user);
-  const [businessName, setBusinessName] = useState('');
+  const [businessNameFromUser, setBusinessNameFromUser] = useState('');
   const [dateChosen, setDateChosen] = useState('');
   const [description, setDescription] = useState('');
   const [pickerDate, setDate] = useState(null);
@@ -63,7 +63,7 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
     return dateStr;
   };
   const hasSearchInputErrors = () => {
-    return searchType === SearchType.NAME && !businessName;
+    return searchType === SearchType.NAME && !businessNameFromUser;
   };
 
   const convertDateToString = (value) => {
@@ -91,6 +91,7 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
     setErrorCheck(true);
     const faultType = expertiseType;
     let date;
+    let businessName = businessNameFromUser.toLowerCase();
     isSelected ? (date = chooseToday()) : (date = dateChosen);
     if (!hasInputErrors()) {
       if (searchType === SearchType.NAME) {
@@ -119,12 +120,12 @@ export default function SearchRSPForm({ searchType, handleSearch }) {
       {searchType === SearchType.NAME ? (
         <AuthInput
           label='Business name'
-          value={businessName}
+          value={businessNameFromUser}
           textContentType='name'
           keyboardType='default'
           autoCapitalize='none'
           autoFocus={true}
-          onChangeText={(u) => setBusinessName(u)}
+          onChangeText={(u) => setBusinessNameFromUser(u)}
         />
       ) : (
         <></>
