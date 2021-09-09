@@ -81,12 +81,14 @@ export const abortAppointmentRequest = createAsyncThunk(
       const appointment = await query.get(searchRSP.appointmentRequestId);
       if (appointment.get('status') === AppointmentStatus.PENDING) {
         await appointment.destroy();
+        return AppointmentStatus.REJECTED;
       }
-      return;
+      return AppointmentStatus.APPROVED;
     } catch (e) {
       if (e.code !== 101) {
         throw rejectWithValue(e);
       }
+      throw rejectWithValue(e);
     }
   }
 );
@@ -168,7 +170,7 @@ const searchRSPSlice = createSlice({
       };
     },
     [abortAppointmentRequest.fulfilled]: (state, action) => {
-      state.appointmentStatus = AppointmentStatus.REJECTED;
+      state.appointmentStatus = action.payload;
       state.loading = false;
     },
     [abortAppointmentRequest.rejected]: (state, action) => {
