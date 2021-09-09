@@ -39,8 +39,6 @@ export default function RspExtendedInfoCard({ rsp, searchInput }) {
 
     if (sendAppointmentRequest.fulfilled.match(resultAction)) {
       navigation.navigate('ReceiveAppointmentAnswer');
-    } else {
-      navigation.navigate('ReceiveAppointmentAnswer');
     }
   };
   let i = 0;
