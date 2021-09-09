@@ -7,6 +7,7 @@ import {
   SmallAuthButton,
   Rating,
   FeedbackView,
+  Info,
 } from './SearchStyles';
 import { useNavigation } from '@react-navigation/native';
 import star from '../../../../assets/star';
@@ -90,7 +91,7 @@ export default function RspExtendedInfoCard({ rsp, searchInput }) {
               title='Recent Feedbacks:'
               description={recentFeedbacks.map((value) => (
                 <FeedbackView key={value.get('appointmentId')}>
-                  <Text>{value.get('customerName')}</Text>
+                  <Info>{value.get('customerName')}</Info>
                   <View>
                     <Text>{value.get('description')}</Text>
                   </View>

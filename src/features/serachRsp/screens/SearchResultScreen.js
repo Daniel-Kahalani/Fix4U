@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Text, View, FlatList, RefreshControl } from 'react-native';
-import { RSPInfoCard } from '../components/RSPInfoCard';
-import {
-  SafeArea,
-  RSPListContainer,
-  AuthButton,
-} from '../components/SearchStyles';
-import { Spacer } from '../../../components/utils/Spacer';
-import styled from 'styled-components/native';
+import { RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getRSPAvailableHours } from '../slices/searchRSPSlice';
-import { getAvailableRSPs } from '../slices/searchRSPSlice';
 import { colors } from '../../../infrastructure/theme/colors';
 
 import NoResults from '../components/NoResults';
@@ -25,8 +15,7 @@ import {
 } from '../styles/searchResultStyles';
 import { AbortButton, BottomViewButton } from '../components/SearchStyles';
 
-import { login, clearError } from '../slices/searchRSPSlice';
-import { SearchType } from '../../../infrastructure/utils/constants';
+import { clearError } from '../slices/searchRSPSlice';
 import SearchResultList from '../components/SearchResultList';
 
 export default function SearchResultScreen({ navigation, route }) {
