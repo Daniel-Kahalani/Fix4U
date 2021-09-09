@@ -28,8 +28,6 @@ export default function SearchByAvailabilityScreen({ route, navigation }) {
     );
     if (getAvailableRSPs.fulfilled.match(resultAction)) {
       navigation.navigate('SearchResult', searchInput);
-    } else {
-      navigation.navigate('SearchResult', searchInput);
     }
   };
 

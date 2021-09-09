@@ -32,8 +32,6 @@ export default function SearchByNameScreen({ route, navigation }) {
     );
     if (getRSPAvailableHours.fulfilled.match(resultAction)) {
       navigation.navigate('SearchResult', searchInput);
-    } else {
-      navigation.navigate('SearchResult', searchInput);
     }
   };
 
