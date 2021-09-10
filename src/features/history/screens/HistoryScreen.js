@@ -21,6 +21,7 @@ export default function HistoryScreen({ navigation, route }) {
     (state) => state.history
   );
   const [refreshing, setRefreshing] = useState(false);
+  console.log(pastAppointments);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
