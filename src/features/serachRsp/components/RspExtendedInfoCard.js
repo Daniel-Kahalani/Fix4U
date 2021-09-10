@@ -52,25 +52,33 @@ export default function RspExtendedInfoCard({ rsp, searchInput }) {
         expanded={expandTechnicalInfo}
         onPress={() => setExpandTechnicalInfo(!expandTechnicalInfo)}
       >
-        <List.Item
-          title='Select the desired Hour:'
-          description={availableHours.map((value) => (
-            <View key={value}>
-              <SmallAuthButton
-                mode='contained'
-                onPress={() => handleButtonClick(value)}
-              >
-                {value}
-              </SmallAuthButton>
-            </View>
-          ))}
-          descriptionNumberOfLines={15}
-        />
-        <Divider />
-        {error && (
-          <ErrorContainer size='large'>
-            <ErrorText variant='error'>{error.message}</ErrorText>
-          </ErrorContainer>
+        {availableHours.length !== 0 ? (
+          <>
+            <List.Item
+              title='Select the desired Hour:'
+              description={availableHours.map((value) => (
+                <View key={value}>
+                  <SmallAuthButton
+                    mode='contained'
+                    onPress={() => handleButtonClick(value)}
+                  >
+                    {value}
+                  </SmallAuthButton>
+                </View>
+              ))}
+              descriptionNumberOfLines={15}
+            />
+            <Divider />
+            {error && (
+              <ErrorContainer size='large'>
+                <ErrorText variant='error'>{error.message}</ErrorText>
+              </ErrorContainer>
+            )}
+          </>
+        ) : (
+          <>
+            <Info> RSP is full, please try another day </Info>
+          </>
         )}
       </List.Accordion>
       {recentFeedbacks.length !== 0 && (
