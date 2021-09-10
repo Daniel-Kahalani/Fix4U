@@ -17,7 +17,7 @@ export default function FeedbackScreen({ route, navigation }) {
   const {
     appointmentId,
     rspID: rspId,
-    rspName,
+    rsp: { rspName },
     customerID: customerId,
     customerName,
   } = route.params;

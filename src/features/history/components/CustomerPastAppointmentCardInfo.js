@@ -26,7 +26,7 @@ export default function CustomerPastAppointmentCardInfo({ pastAppointment }) {
 
       <Divider />
       <List.Accordion
-        title='Servie Provider Info'
+        title='Servies Provider Info'
         left={(props) => <List.Icon {...props} icon='account-details' />}
         expanded={expandRSPInfo}
         onPress={() => setExpandRSPInfo(!expandRSPInfo)}

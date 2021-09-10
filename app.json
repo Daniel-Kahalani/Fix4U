@@ -18,7 +18,7 @@
     ],
     "notification":{
       "icon": "./assets/iconPush.png",
-      "color":"#FFFFFF"
+      "color":"#696AC3"
     },
     "ios": {
       "supportsTablet": true
