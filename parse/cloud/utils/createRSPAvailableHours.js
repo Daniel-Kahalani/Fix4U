@@ -19,7 +19,6 @@ module.exports.createRSPAvailableHours = async (rspId, date) => {
 
   const query = Parse.Query.or(query1, query2);
   const appointments = await query.find();
-
   let availableHours = findTwoHoursWindow(createHoursArray(), appointments);
   return availableHours.map((time) => convertTimeToStr(time));
 };
