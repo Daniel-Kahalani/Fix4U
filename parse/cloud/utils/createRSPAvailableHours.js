@@ -7,15 +7,28 @@ const {
 const { AppointmentStatus } = require('./constants');
 
 module.exports.createRSPAvailableHours = async (rspId, date) => {
-  const query = new Parse.Query('Appointment');
-  query.equalTo('rspID', rspId);
-  query.equalTo('date', date);
-  query.equalTo('status', AppointmentStatus.APPROVED);
+  const query1 = new Parse.Query('Appointment');
+  query1.equalTo('rspID', rspId);
+  query1.equalTo('date', date);
+  query1.equalTo('status', AppointmentStatus.APPROVED);
 
+  const query2 = new Parse.Query('Appointment');
+  query2.equalTo('rspID', rspId);
+  query2.equalTo('date', convertDateFormat(date));
+  query2.equalTo('status', AppointmentStatus.APPROVED);
+
+  const query = Parse.Query.or(query1, query2);
   const appointments = await query.find();
+
   let availableHours = findTwoHoursWindow(createHoursArray(), appointments);
   return availableHours.map((time) => convertTimeToStr(time));
 };
+
+function convertDateFormat(date) {
+  const dateArr = date.split('/');
+  const formatedDate = `20${dateArr[2]}-${dateArr[1]}-${dateArr[0]}`;
+  return formatedDate;
+}
 
 function createHoursArray(startTime = 8, endTime = 17) {
   let hoursArrays = [];
