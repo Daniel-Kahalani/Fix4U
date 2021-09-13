@@ -13,4 +13,14 @@ const AppointmentStatus = {
 Object.freeze(AppointmentStatus);
 module.exports.AppointmentStatus = AppointmentStatus;
 
-module.exports.NUM_OF_SEARCH_RESULTS = 3;
+const AppointmentType = {
+  PERSONAL: 'Personal',
+  SUPPLIER: 'Supplier',
+  CUSTOMER: 'Customer',
+};
+Object.freeze(AppointmentType);
+module.exports.AppointmentType = AppointmentType;
+
+module.exports.NUM_OF_SEARCH_RESULTS = 15;
+module.exports.NUM_OF_PAST_APPOINTMENTS = 15;
+module.exports.NUM_OF_RECENT_RSP_FEEDBACKS = 3;

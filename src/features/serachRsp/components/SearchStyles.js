@@ -1,18 +1,28 @@
 import styled from 'styled-components/native';
-import { Button, TextInput, ToggleButton } from 'react-native-paper';
+import { Button, TextInput, ToggleButton, Divider } from 'react-native-paper';
 import Text from '../../../components/utils/Text';
 import { colors } from '../../../infrastructure/theme/colors';
-import { ScrollView, View, SafeAreaView } from 'react-native';
+import { ScrollView, View, SafeAreaView, FlatList } from 'react-native';
 import { Card } from 'react-native-paper';
 import MultiSelect from 'react-native-multiple-select';
+import { getStylesForProperty } from 'css-to-react-native';
+
+export const Feedbacklist = styled(FlatList).attrs((props) => ({
+  contentContainerStyle: getStylesForProperty('padding', props.theme.space[3]),
+}))``;
 
 export const SearchBackground = styled.ImageBackground.attrs({
-  source: require('../../../../assets/backgrounds/home.jpg'),
+  source: require('../../../../assets/backgrounds/main.jpeg'),
 })`
   flex: 1;
   align-items: center;
   justify-content: center;
 `;
+export const CardContainer = styled.View`
+  flex-direction: row;
+  padding: ${(props) => props.theme.space[3]};
+`;
+
 export const Label = styled(TextInput)`
   width: 200px;
 `;
@@ -33,8 +43,9 @@ export const RSPCardCover = styled(Card.Cover)`
   background-color: white;
 `;
 
-export const Info = styled.View`
-  padding: ${(props) => props.theme.space[1]};
+export const Info = styled.Text`
+  font-size: ${(props) => props.theme.fontSizes.caption};
+  text-transform: capitalize;
 `;
 
 export const Section = styled.View`
@@ -44,6 +55,7 @@ export const Section = styled.View`
 export const SmallSpace = styled.View`
   padding-left: 16px;
 `;
+export const InfoContainer = styled.View``;
 
 export const Rating = styled.View`
   flex-direction: row;
@@ -67,6 +79,7 @@ export const SearchContainer = styled.View`
   border-radius: 15px;
   padding: ${(props) => props.theme.space[3]};
   margin-top: ${(props) => props.theme.space[2]};
+  margin-bottom: ${(props) => props.theme.space[2]};
   border: solid 2px black;
   margin-right: 5px;
   margin-left: 5px;
@@ -83,13 +96,29 @@ export const AuthButton = styled(Button).attrs({
   padding: ${(props) => props.theme.space[2]};
 `;
 
+export const SmallAuthButton = styled(Button).attrs({
+  color: colors.brand.primary,
+})`
+  margin-vertical: 2px;
+  margin-horizontal: 5px;
+`;
+
 export const AuthInput = styled(TextInput)`
   width: 300px;
 `;
 
+export const LargeAuthInput = styled(TextInput)`
+  width: 300px;
+  height: 200px;
+  text-align: left;
+`;
+export const SmallAuthInput = styled(TextInput)`
+  width: 180px;
+`;
+
 export const Title = styled(Text)`
   font-size: 30px;
-  text-align: center;
+  text-transform: capitalize;
 `;
 
 export const SmallTitle = styled(Text)`
@@ -113,6 +142,12 @@ export const ExpertiseContainer = styled(View)`
   margin-top: 15px;
   padding: ${(props) => props.theme.space[3]};
   flex: 1;
+`;
+export const FeedbackView = styled(View)`
+  padding: ${(props) => props.theme.space[4]};
+  flex: 1;
+  margin-vertical: 8px;
+  margin-horizontal: 8px;
 `;
 
 export const GrowContainer = styled(View)`
@@ -146,15 +181,14 @@ export const RegisterMultiSelect = styled(MultiSelect).attrs({
 })``;
 
 export const ScrollBackground = styled.ImageBackground.attrs({
-  source: require('../../../../assets/backgrounds/home.jpg'),
+  source: require('../../../../assets/backgrounds/main.jpeg'),
 })`
   flex: 1;
+  align-items: center;
+  justify-content: center;
 `;
 
-export const SafeScrollView = styled(ScrollView)`
-  margin-top: 15px;
-  margin-bottom: 15px;
-`;
+export const SafeScrollView = styled(ScrollView)``;
 
 export const SafeArea = styled(SafeAreaView)`
   flex: 1;
@@ -164,4 +198,32 @@ export const RSPListContainer = styled.View`
   flex: 1;
   padding: ${(props) => props.theme.space[3]}
   background-color: blue;
+`;
+
+export const PastAppointmentsFlatList = styled(FlatList).attrs((props) => ({
+  contentContainerStyle: getStylesForProperty('padding', props.theme.space[3]),
+}))``;
+
+export const RSPAvatarContainer = styled.View`
+  margin-right: ${(props) => props.theme.space[2]};
+  padding: 0;
+`;
+
+export const BottomViewButton = styled.View`
+  flex: 1;
+  padding: 7px;
+  align-items: center;
+`;
+
+export const AbortButton = styled(Button).attrs({
+  color: colors.brand.primary,
+})`
+  padding: ${(props) => props.theme.space[2]};
+  position: absolute;
+  bottom: 35px;
+`;
+
+export const BlackDivider = styled(Divider)`
+  color: black;
+  height: 2px;
 `;

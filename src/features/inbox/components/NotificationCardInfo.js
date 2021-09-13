@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Divider, List } from 'react-native-paper';
-
+import { CapitalizeListItem } from '../styles/notificationStyles';
 export default function NotificationCardInfo({ notification }) {
   const { customerName, location, description } = notification.attributes;
   const [expandTechnicalInfo, setExpandTechnicalInfo] = useState(false);
@@ -29,9 +29,9 @@ export default function NotificationCardInfo({ notification }) {
         expanded={expandCustomerInfo}
         onPress={() => setExpandCustomerInfo(!expandCustomerInfo)}
       >
-        <List.Item title='Name' description={customerName} />
+        <CapitalizeListItem title='Name' description={customerName} />
         <Divider />
-        <List.Item title='Location' description={location} />
+        <CapitalizeListItem title='Location' description={location} />
         <Divider />
       </List.Accordion>
     </ScrollView>

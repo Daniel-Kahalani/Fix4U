@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import { colors } from '../../../infrastructure/theme/colors';
-import { Card, Avatar, Button } from 'react-native-paper';
+import { Card, Avatar, Button, List } from 'react-native-paper';
+import Text from '../../../components/utils/Text';
 
 export const NotificationCard = styled(Card)`
   background-color: ${(props) => props.theme.colors.bg.primary};
@@ -8,12 +9,11 @@ export const NotificationCard = styled(Card)`
   align-self: center;
 `;
 export const CardContainer = styled.View`
-  flex: 1;
   flex-direction: row;
   padding: ${(props) => props.theme.space[3]};
 `;
 
-export const NotificationIconContainer = styled.View`
+export const NotificationAvatarContainer = styled.View`
   margin-right: ${(props) => props.theme.space[2]};
 `;
 
@@ -25,8 +25,13 @@ export const NotificationIcon = styled(Avatar.Icon).attrs({
 
 export const InfoContainer = styled.View``;
 
+export const Title = styled(Text)`
+  text-transform: capitalize;
+`;
+
 export const Info = styled.Text`
   font-size: ${(props) => props.theme.fontSizes.caption};
+  text-transform: capitalize;
 `;
 
 export const ErrorContainer = styled.View`
@@ -36,6 +41,10 @@ export const ErrorContainer = styled.View`
   margin-top: ${(props) => props.theme.space[2]};
   margin-bottom: ${(props) => props.theme.space[2]};
 `;
+
+export const CapitalizeListItem = styled(List.Item).attrs({
+  descriptionStyle: { textTransform: 'capitalize' },
+})``;
 
 export const CardActions = styled(Card.Actions)`
   flex: 1;

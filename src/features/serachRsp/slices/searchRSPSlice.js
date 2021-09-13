@@ -79,12 +79,16 @@ export const abortAppointmentRequest = createAsyncThunk(
       const { searchRSP } = getState();
       const query = new Parse.Query('Appointment');
       const appointment = await query.get(searchRSP.appointmentRequestId);
-      await appointment.destroy();
-      return;
+      if (appointment.get('status') === AppointmentStatus.PENDING) {
+        await appointment.destroy();
+        return AppointmentStatus.REJECTED;
+      }
+      return AppointmentStatus.APPROVED;
     } catch (e) {
       if (e.code !== 101) {
         throw rejectWithValue(e);
       }
+      throw rejectWithValue(e);
     }
   }
 );
@@ -95,6 +99,13 @@ const searchRSPSlice = createSlice({
   reducers: {
     clearError(state, action) {
       state.error = null;
+    },
+    clearSearchRSP(state, action) {
+      state.results = initialState.results;
+      state.error = initialState.error;
+      state.loading = initialState.loading;
+      state.appointmentRequestId = initialState.appointmentRequestId;
+      state.appointmentStatus = initialState.appointmentStatus;
     },
   },
   extraReducers: {
@@ -152,16 +163,18 @@ const searchRSPSlice = createSlice({
       state.appointmentStatus = action.payload;
     },
     [getAppointmentRequestStatus.rejected]: (state, action) => {
+      state.appointmentStatus = AppointmentStatus.REJECTED;
       state.error = {
         message: action.payload.message,
         code: action.payload.code,
       };
     },
     [abortAppointmentRequest.fulfilled]: (state, action) => {
-      state.appointmentStatus = AppointmentStatus.REJECTED;
+      state.appointmentStatus = action.payload;
       state.loading = false;
     },
     [abortAppointmentRequest.rejected]: (state, action) => {
+      state.appointmentStatus = AppointmentStatus.REJECTED;
       state.error = {
         message: action.payload.message,
         code: action.payload.code,
@@ -170,7 +183,7 @@ const searchRSPSlice = createSlice({
   },
 });
 
-export const { clearError } = searchRSPSlice.actions;
+export const { clearError, clearSearchRSP } = searchRSPSlice.actions;
 
 export default searchRSPSlice.reducer;
 
@@ -179,11 +192,27 @@ results structure
 
 Array[
   Object {
-  "rspId":String
-  "fullname": String,
-  "businessName": String,
-  "visitCost": Number,
-  "rank":Number,
-  "availableHours": [String],
+    "availableHours": Array [String],
+    "businessName": String,
+    "businessAddress",String,
+    "fullName": String,
+    "rating": Number,
+    "recentFeedbacks": Array [
+      Object {
+        "appointmentId": String,
+        "createdAt": Date,
+        "customerId": String,
+        "customerName": String,
+        "description": String,
+        "objectId": String,
+        "rating": Number,
+        "rspId": String,
+        "rspName": String,
+        "updatedAt": Date,
+      },
+    ],
+    "rspId": "String",
+    "visitCost": Number,
+    "votes": Number,
 }]
 */

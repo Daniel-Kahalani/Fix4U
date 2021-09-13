@@ -17,6 +17,13 @@ export const SnackBarType = {
 };
 Object.freeze(SnackBarType);
 
+export const AppointmentType = {
+  PERSONAL: 'Personal',
+  SUPPLIER: 'Supplier',
+  CUSTOMER: 'Customer',
+};
+Object.freeze(AppointmentType);
+
 export const expertiseArr = [
   { name: 'Plumbing' },
   { name: 'Gas' },
@@ -32,4 +39,25 @@ export const rspAppointmentTypeArr = [
   { name: 'Personal' },
   { name: 'Supplier' },
   { name: 'Customer' },
+];
+
+export const SearchType = {
+  LOCATION: 'location',
+  NAME: 'name',
+};
+
+export const monthNames = [
+  null,
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jum',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
 ];

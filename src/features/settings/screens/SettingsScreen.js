@@ -1,6 +1,14 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../account/slices/userSlice';
+import { clearHistory } from '../../history/slices/historySlice';
+import { clearInbox } from '../../inbox/slices/inboxSlice';
+import { clearStats } from '../../stats/slices/statsSlices';
+
+import {
+  clearSearchRSP,
+  abortAppointmentRequest,
+} from '../../serachRsp/slices/searchRSPSlice';
 import { UserType } from '../../../infrastructure/utils/constants';
 import { colors } from '../../../infrastructure/theme/colors';
 import { TouchableOpacity, ScrollView } from 'react-native';
@@ -13,6 +21,7 @@ import {
   SettingsItem,
   Title,
 } from '../styles/settingStyles';
+import { clearCalendar } from '../../RSP-calendar/slices/calendarSlice';
 
 export default function SettingsScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -20,9 +29,13 @@ export default function SettingsScreen({ navigation }) {
   const isRsp = info.userType === UserType.RSP ? true : false;
 
   const handleLogout = async () => {
-    /// add function that delete all store reducres
-    // add abort appointment ?
+    await dispatch(abortAppointmentRequest());
     await dispatch(logout());
+    dispatch(clearStats());
+    dispatch(clearHistory());
+    dispatch(clearInbox());
+    dispatch(clearSearchRSP());
+    dispatch(clearCalendar());
   };
 
   return (

@@ -1,44 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { FAB } from 'react-native-paper';
-import { AddAppointmentModal } from '../components/AddAppointmentModal.js';
+import { FAB, Portal } from 'react-native-paper';
 import RSPAgenda from '../components/RSPAgenda.js';
 import { colors } from '../../../infrastructure/theme/colors.js';
-import { useDispatch } from 'react-redux';
-import { addAppointment, loadAppointments } from '../slices/calendarSlice.js';
+import Snackbar from '../../../components/utils/Snackbar.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { SnackBarType } from '../../../infrastructure/utils/constants.js';
+import { clearRemoveAppointmentSnackbar } from '../slices/calendarSlice.js';
 
-export default function CalendarScreen() {
+export default function CalendarScreen({ navigation }) {
+  const { isAppointmentRemoved } = useSelector((state) => state.calendar);
   const dispatch = useDispatch();
 
-  const addNewAppointment = (appointment) => {
-    dispatch(addAppointment({ ...appointment }));
-  };
-
-  const loadRSPAppointments = async (year, month) => {
-    return await dispatch(loadAppointments({ year, month }));
-  };
-
-  const [isFormVisible, setFormVisible] = useState(false);
-
   return (
-    <View style={styles.agenda}>
-      <RSPAgenda handleLoadAppointments={loadRSPAppointments} />
-      <AddAppointmentModal
-        style={styles.modal}
-        isModalVisible={isFormVisible}
-        setModalVisible={setFormVisible}
-        handleAddAppointment={addNewAppointment}
-      />
-      <FAB
-        style={styles.fab}
-        small
-        color={colors.brand.secondary}
-        icon='plus'
-        onPress={() => {
-          setFormVisible(true);
-        }}
-      />
-    </View>
+    <Portal.Host>
+      <View style={styles.agenda}>
+        <RSPAgenda />
+        <FAB
+          style={styles.fab}
+          icon='plus'
+          onPress={() => {
+            navigation.navigate('AddAppointment');
+          }}
+        />
+        <Snackbar
+          visible={isAppointmentRemoved}
+          style={styles.snackbar}
+          type={SnackBarType.SUCCESS}
+          onDismiss={() => dispatch(clearRemoveAppointmentSnackbar())}
+          action={{
+            label: 'Dismiss',
+            onPress: () => dispatch(clearRemoveAppointmentSnackbar()),
+          }}
+        >
+          Appointment have removed successfuly
+        </Snackbar>
+      </View>
+    </Portal.Host>
   );
 }
 
@@ -46,10 +44,9 @@ const styles = StyleSheet.create({
   agenda: {
     height: 600,
   },
-  modal: {
+  snackbar: {
     position: 'absolute',
-    top: 50,
-    right: '50',
+    bottom: 30,
   },
   fab: {
     position: 'absolute',
@@ -57,5 +54,6 @@ const styles = StyleSheet.create({
     top: 490,
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    backgroundColor: colors.brand.primary,
   },
 });

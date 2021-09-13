@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { NavigationContainer } from '@react-navigation/native';
-import AccountNavigator from './AccountNavigator';
 import { isLoggedIn } from '../../features/account/slices/userSlice';
 import { UserType } from '../utils/constants';
-import RSPNavigator from './RSPNavigator';
-import CustomerNavigator from './CustomerNavigator';
+import { NavigationContainer } from '@react-navigation/native';
+import AccountNavigator from './common/AccountNavigator';
+import RSPNavigator from './rsp/RSPNavigator';
+import CustomerNavigator from './customer/CustomerNavigator';
 import '../../../assets/backgrounds/home.jpg';
+import '../../../assets/backgrounds/main.jpeg';
 
 export default function Navigation() {
   const dispatch = useDispatch();

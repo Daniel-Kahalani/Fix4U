@@ -1,11 +1,11 @@
-/* eslint-disable dot-notation */
-/* eslint-disable no-array-constructor */
-
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
 import { Agenda } from 'react-native-calendars';
+import { useDispatch, useSelector } from 'react-redux';
 import Spacer from '../../../components/utils/Spacer.js';
 import { AppointmentCard } from './AppointmentCard.js';
-import { EmptyDateContainer, Title } from './RSPAgendaStyles.js';
+import { EmptyDateContainer, Title } from '../styles/RSPAgendaStyles.js';
+import { loadAppointments } from '../slices/calendarSlice.js';
 
 const renderItem = (item) => {
   return (
@@ -23,69 +23,58 @@ const renderEmptyDate = () => {
   );
 };
 
-const addEmptyDatesToAppointments = (appointmentsObj, year, month) => {
-  let numOfDaysInMonth = days(month, year);
-  for (let day = 1; day < numOfDaysInMonth; day++) {
-    let dateKey = year + '-' + padWithZero(month) + '-' + padWithZero(day);
-    if (!appointmentsObj[dateKey]) {
-      appointmentsObj[dateKey] = new Array();
-    }
-  }
-  return appointmentsObj;
-};
-
-const padWithZero = (num) => {
-  return num < 10 ? '0' + num : num.toString();
-};
-
-const days = function (month, year) {
-  return new Date(year, month, 0).getDate();
-};
-
-export default function RSPAgenda({ handleLoadAppointments }) {
+export default function RSPAgenda() {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [loadedMonth, setLoadedMonth] = useState(null);
-  const [loadedYear, setLoadedYear] = useState(null);
-  const [appointments, setAppointments] = useState({});
+  const [loadedMonth, setLoadedMonth] = useState(new Date().getMonth() + 1);
+  const [loadedYear, setLoadedYear] = useState(new Date().getFullYear());
+  const [refreshing, setRefreshing] = useState(false);
+  const [isAgendaVisible, setIsAgendaVisible] = useState(true);
+  const { appointments } = useSelector((state) => state.calendar);
 
-  const loadAppointments = (year, month) => {
-    handleLoadAppointments(year, month).then((result) => {
-      let appointmentsObj = {};
-      const appointmentsArr = result.payload;
-      for (let appointment of appointmentsArr) {
-        let key = appointment['date'];
-        if (!appointmentsObj[key]) {
-          appointmentsObj[key] = new Array();
-        }
-        appointmentsObj[key].push(appointment);
-      }
-      appointmentsObj = addEmptyDatesToAppointments(
-        appointmentsObj,
-        year,
-        month
-      );
-      setAppointments(appointmentsObj);
-    });
+  const dispatch = useDispatch();
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    loadRSPAppointments(loadedYear, loadedMonth);
+    setRefreshing(false);
+  }, [dispatch]);
+
+  const loadRSPAppointments = async (year, month) => {
+    await dispatch(loadAppointments({ year, month }));
+  };
+
+  const dayChange = (day) => {
+    const { year, month } = day;
+    if (
+      (loadedYear !== year ||
+        parseInt(loadedMonth, 10) > parseInt(month, 10) + 1 ||
+        parseInt(loadedMonth, 10) < parseInt(month, 10) - 1) &&
+      isAgendaVisible
+    ) {
+      setLoadedMonth(month);
+      setLoadedYear(year);
+      loadRSPAppointments(loadedYear, loadedMonth);
+    }
   };
 
   return (
     <Agenda
-      loadItemsForMonth={(date) => {
-        if (loadedMonth !== date.month || loadedYear !== date.year) {
-          loadAppointments(date.year, date.month);
-          setLoadedMonth(date.month);
-          setLoadedYear(date.year);
-        }
-      }}
+      loadItemsForMonth={dayChange}
       items={appointments}
       selected={selectedDate}
       onDayPress={(date) => {
-        if (selectedDate !== date) {
+        if (date !== selectedDate) {
           setSelectedDate(date);
         }
       }}
+      onDayChange={dayChange}
       renderItem={renderItem}
       renderEmptyDate={renderEmptyDate}
+      pastScrollRange={24}
+      futureScrollRange={24}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+      onCalendarToggled={(flag) => setIsAgendaVisible(flag)}
     />
   );
 }

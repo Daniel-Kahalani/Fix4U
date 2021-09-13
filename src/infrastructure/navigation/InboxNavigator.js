@@ -7,10 +7,12 @@ import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
+import { usePushNotification } from '../utils/usePushNotification';
 
 const SettingsStack = createStackNavigator();
 
 export default function SettingsNavigator({ route, navigation }) {
+  usePushNotification(navigation);
   return (
     <SettingsStack.Navigator
       screenOptions={{

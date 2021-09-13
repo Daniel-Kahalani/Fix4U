@@ -7,7 +7,6 @@ import {
   ScrollBackground,
   SettingCover,
   EditContainer,
-  Title,
   FormContainer,
 } from '../styles/settingStyles';
 
@@ -32,9 +31,8 @@ export default function EditPersonalProfileScreen({ route, navigation }) {
       <SettingCover />
       <ScrollView>
         <EditContainer>
-          <Title>Personal Information</Title>
           <FormContainer>
-            {<EditPersonalProfileForm handleUpdate={updateInfo} />}
+            <EditPersonalProfileForm handleUpdate={updateInfo} />
           </FormContainer>
         </EditContainer>
       </ScrollView>

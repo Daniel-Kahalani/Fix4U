@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { AppointmentStatus } from '../../../infrastructure/utils/constants';
 import Parse from 'parse/react-native';
+import { ParseError } from '../../../infrastructure/utils/ParseError';
 
 const initialState = {
   notifications: [],
@@ -13,7 +14,6 @@ export const getNotifications = createAsyncThunk(
   'inbox/getNotifications',
   async (_, { getState, rejectWithValue }) => {
     try {
-      console.log('load notifications');
       const query = new Parse.Query('Appointment');
       const { user } = getState();
       query.equalTo('rspID', user.info.specificUserId);
@@ -21,7 +21,12 @@ export const getNotifications = createAsyncThunk(
       const notifications = await query.find();
       return notifications;
     } catch (e) {
-      throw rejectWithValue(e);
+      throw rejectWithValue(
+        new ParseError(
+          440,
+          'Unable to load your inbox,\n please try to refresh'
+        )
+      );
     }
   }
 );
@@ -35,7 +40,20 @@ export const acceptAppointment = createAsyncThunk(
       appointment.set({ status: AppointmentStatus.APPROVED });
       await appointment.save();
     } catch (e) {
-      throw rejectWithValue(e);
+      if (e.code === 101) {
+        throw rejectWithValue(
+          new ParseError(
+            441,
+            'Unable to schedule an appointment because the customer has been cancel his request'
+          )
+        );
+      }
+      throw rejectWithValue(
+        new ParseError(
+          442,
+          'Unable to accept the appointment, please try again'
+        )
+      );
     }
   }
 );
@@ -49,7 +67,15 @@ export const declineAppointment = createAsyncThunk(
       appointment.set({ status: AppointmentStatus.REJECTED });
       await appointment.save();
     } catch (e) {
-      throw rejectWithValue(e);
+      if (e.code === 101) {
+        return;
+      }
+      throw rejectWithValue(
+        new ParseError(
+          443,
+          'Unable to reject the appointment, please try again'
+        )
+      );
     }
   }
 );
@@ -60,6 +86,12 @@ const inboxSlice = createSlice({
   reducers: {
     clearError(state, action) {
       state.error = null;
+    },
+    clearInbox(state, action) {
+      state.notifications = initialState.notifications;
+      state.error = initialState.error;
+      state.loading = initialState.loading;
+      state.success = initialState.success;
     },
   },
   extraReducers: {
@@ -116,28 +148,29 @@ const inboxSlice = createSlice({
   },
 });
 
-export const { clearError } = inboxSlice.actions;
+export const { clearError, clearInbox } = inboxSlice.actions;
 
 export default inboxSlice.reducer;
 
 /*
 notifications structure
 
---------customer-------------
 Array[
   Object {
-  "objectId": String,
-  "rspID": String,
-  "customerID": String,
-  "customerName": String,
-  "title": String,
-  "description": String,
-  "date": String,
-  "startTime": String,
-  "endTime": String,
-  "location": String,
-  "status": String,
-  "location": String,
-  "appointmentType": String,
+    "appointmentType": String,
+    "createdAt": String,
+    "customerID": String,
+    "customerName": String,
+    "date": String,
+    "description": String,
+    "endTime": String,
+    "isFeedbacked": Boolean,
+    "location": String,
+    "objectId": String,
+    "rspID": String,
+    "startTime": String,
+    "status": String,
+    "title": String,
+    "updatedAt": String,
 }]
 */
