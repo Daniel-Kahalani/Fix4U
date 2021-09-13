@@ -1,7 +1,7 @@
 # Fix4U
 
 Hi!
-Fix4U a is app for connect between customers and service providers.
+Fix4U a is an app for connect between customers and service providers.
 customers can find an available service providers in a fast and easy way, 
 and service provider gets a schedule management and new customers appointment offers. 
 it was develop using react native,and back4app
